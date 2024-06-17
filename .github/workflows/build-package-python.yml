@@ -1,0 +1,92 @@
+name: Build and Package the Python Commons Base package to Dev Registry
+on:
+  push:
+    branches: [ main ]
+env:
+  DEV_REGISTRY: ghcr.io/noaa-gsl/idss/commons/python
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        app:
+          - python-base
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set ENV Variables
+      shell: bash
+      run: |
+        DATE=$(git show -s --format=%cd --date=format:'%Y-%m-%d.%H:%M:%S.%z' ${{ github.sha }})
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            # PR build
+            echo "BRANCH=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+            echo "VERSION=dev-${{ github.sha }}-$DATE" >> $GITHUB_ENV
+          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            # Handle differences between branches/tags
+            if [[ "${GITHUB_REF}" == *"heads"* ]]; then
+              # Branch build
+              echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+              echo "VERSION=dev-${{ github.sha }}-$DATE" >> $GITHUB_ENV
+            elif [[ "${GITHUB_REF}" == *"tags"* ]]; then
+              # Tag build
+              echo "BRANCH=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            else
+              echo "ERROR: Unanticipated Git Ref"
+              exit 1
+            fi
+          else
+            echo "ERROR: Unanticipated GitHub Event"
+            exit 1
+          fi
+
+    - name: Create App Names
+      env:
+        APP: '${{matrix.app}}'
+      run: |
+        echo "APP_LOWERCASE=${APP,,}" >> $GITHUB_ENV
+
+    - name: Build Image
+      run: |
+        docker build \
+          --build-arg APPNAME=${{matrix.app}} \
+          --build-arg BUILDVER="${{env.VERSION}}" \
+          --build-arg COMMITBRANCH=${{env.BRANCH}} \
+          --build-arg COMMITSHA=${{github.sha}} \
+          -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}} \
+          -f ./docker/python/Dockerfile .
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: '${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}}'
+        format: 'table'
+        #exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+        # this requires public repo / additional config
+        #format: 'sarif'
+        #output: 'trivy-results.sarif'
+
+     # GSL isn't paying for this support with private repositories
+#    - name: Upload Trivy scan results to GitHub Security tab
+#      uses: github/codeql-action/upload-sarif@v2
+#      with:
+#        sarif_file: 'trivy-results.sarif'
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{github.actor}}
+        password: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Push Image to Dev Registry
+      run: |
+        docker push ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}}
