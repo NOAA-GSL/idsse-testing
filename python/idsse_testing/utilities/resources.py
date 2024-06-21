@@ -13,10 +13,37 @@
 
 import csv
 import json
+import numpy as np
+
 from collections.abc import Sequence
 from importlib import resources
 from os import path
 from typing import TextIO
+
+from idsse.common.sci.netcdf_io import read_netcdf
+
+def get_package_path(package: str) -> str:
+    """Get file path from package/filename
+
+     Args:
+         package (str): name of test package
+
+     Returns:
+         str: The package path from the installed package
+    """
+    return str([x for x in resources.files(package).iterdir() if x.is_file()][0].parent)
+
+def get_filepath(package: str, filename: str) -> str:
+    """Get file path from package/filename
+
+     Args:
+         package (str): name of test package containing the file
+         filename (str): name of test resource to load from the package directory
+
+     Returns:
+         str: The filepath from the installed package
+    """
+    return str(resources.files(package).joinpath(filename))
 
 def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Sequence[any]]:
     """Load test resource/data from file into python object
@@ -32,9 +59,11 @@ def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Seque
         dict | Sequence[Sequence[any]]: Appropriate data type based on resource file type.
         For example, .json returns a dict, .csv returns a list of lists
     """
-    file_stream = resources.files(package).joinpath(filename).open('r')
     _, file_extension = path.splitext(filename)
-
+    if file_extension == '.nc':
+        return _load_netcdf_resource(resources.files(package).joinpath(filename))
+    print(filename, file_extension)
+    file_stream = resources.files(package).joinpath(filename).open('r')
     if file_extension == '.json':
         return _load_json_resource(file_stream)
     if file_extension == '.csv':
@@ -43,11 +72,16 @@ def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Seque
 
 
 def _load_json_resource(stream: TextIO) -> dict:
-    """utility to load JSON file from test/resources directory into dict object"""
+    """utility to load JSON file from package into dict object"""
     return json.load(stream)
 
 
 def _load_csv_resource(stream: TextIO) -> Sequence[Sequence[any]]:
-    """utility to load CSV file from test/resources directory into 2D array of floats"""
+    """utility to load CSV file from package into 2D array of floats"""
     file_reader = csv.reader(stream)
     return [list(map(float, row)) for row in file_reader]
+
+
+def _load_netcdf_resource(filename: str) -> tuple[dict, np.ndarray]:
+    """utility to load NetCDF file from package"""
+    return read_netcdf(filename)
