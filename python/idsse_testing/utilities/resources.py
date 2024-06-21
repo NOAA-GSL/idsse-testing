@@ -13,7 +13,6 @@
 
 import csv
 import json
-import numpy as np
 
 from collections.abc import Sequence
 from importlib import resources
@@ -21,6 +20,8 @@ from os import path
 from typing import TextIO
 
 from idsse.common.sci.netcdf_io import read_netcdf
+
+import numpy as np
 
 def get_package_path(package: str) -> str:
     """Get file path from package/filename
