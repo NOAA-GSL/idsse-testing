@@ -26,6 +26,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pylint==2.17.5 flask==2.3.2 flask-cors==4.0.0 python-dateutil==2.8.2 pint==0.21 importlib-metadata==6.7.0 jsonschema==4.19.0 pika==1.3.1
 
+      - name: Checkout idss-engine-commons
+        uses: actions/checkout@v2
+        with:
+          repository: NOAA-GSL/idss-engine-commons
+          ref: main
+          path: commons/
+
+      - name: Install IDSSE python commons
+        working-directory: commons/python/idsse_common
+        run: python setup.py install
+
       - name: Set PYTHONPATH for pylint
         run: |
           echo "PYTHONPATH=python/idsse_testing/" >> $GITHUB_ENV
