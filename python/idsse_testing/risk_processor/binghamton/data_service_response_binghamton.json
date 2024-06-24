@@ -1,0 +1,92 @@
+{
+  "A:Raw": {
+    "filenames": {
+      "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR/Inches/gridstore-907024368.nc"
+    },
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "data_name": "Snowfall: 1hr accum (ASNOW)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "Inches",
+    "region": "CONUS",
+    "slice": "[1736:2136,762:1062]"
+  },
+  "A:ThreatLevel": {
+    "filenames": {
+      "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR.Criteria/ThreatLevel/gridstore-401831466.nc"
+    },
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "data_name": "Snowfall: 1hr accum (ASNOW)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[1736:2136,762:1062]"
+  },
+  "Binghamton, Snow": {
+    "filenames": {
+      "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore2098351630.nc"
+    },
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "data_name": "Snowfall: 1hr accum (ASNOW)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[1736:2136,762:1062]"
+  },
+  "request": {
+    "corrId": {
+      "originator": "IDSSe",
+      "uuid": "22222222-beec-467b-a0e6-9d215b715b97",
+      "issueDt": "2022-12-23T12:00:00.000Z"
+    },
+    "label": "Binghamton, Snow",
+    "sourceType": "join",
+    "sourceObj": {
+      "join": "OR",
+      "sources": [
+        {
+          "sourceType": "condition",
+          "label": "A:ThreatLevel",
+          "sourceObj": {
+            "relational": "GREATER THAN OR EQUAL",
+            "thresh": 0.01,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 0, 3, "Infinity"]
+            },
+            "source": {
+              "label": "A:Raw",
+              "sourceType": "data",
+              "sourceObj": {
+                "product": "NBM",
+                "field": "1 HR SNOWFALL",
+                "region": "CONUS",
+                "units": "INCHES",
+                "sliceCoords": [
+                  [-75.99682164316545, 42.100751285762954],
+                  [-75.82261820803978, 42.177520971578645]
+                ],
+                "minSize": [400, 300],
+                "minBuff": 50,
+                "validDt": "2022-12-23T13:00:00.000Z",
+                "issueDt": "2022-12-23T12:00:00.000Z"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

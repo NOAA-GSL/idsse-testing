@@ -1,0 +1,21 @@
+{
+    "request": {
+        "corrId": {
+            "originator": "IDSSe",
+            "uuid": "b6591cc7-8b33-4cd3-aa22-408c83ac5e3c",
+            "issueDt": "2023-01-10T06:00:00.000Z"
+        },
+        "sourceType": "valids",
+        "sourceObj": {
+            "field": "TEMPERATURE",
+            "product": "NBM.AWS.GRIB",
+            "issueDt": "2023-01-10T06:00:00.000Z",
+            "validDt": "2023-01-11T08:00:00.000Z"
+        }
+    },
+    "valids": [
+        "2023-01-11T06:00:00.000Z",
+        "2023-01-11T07:00:00.000Z",
+        "2023-01-11T08:00:00.000Z"
+    ]
+}

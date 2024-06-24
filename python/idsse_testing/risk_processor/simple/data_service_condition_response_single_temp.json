@@ -1,0 +1,97 @@
+{
+    "Abq TEMP": {
+        "filenames": {
+            "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc"
+        },
+        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
+        "issue_dt": "2022-11-11T13:00:00.000Z",
+        "proj_name": "NBM",
+        "region": "CONUS",
+        "slice": "[665:1065,413:813]",
+        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+        "units": "ThreatLevel",
+        "data_name": "Temperature: 2m",
+        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds",
+        "valid_dt": "2022-11-12T00:00:00.000Z"
+    },
+    "A:ThreatLevel": {
+        "filenames": {
+            "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-278843281.nc"
+        },
+        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
+        "issue_dt": "2022-11-11T13:00:00.000Z",
+        "proj_name": "NBM",
+        "region": "CONUS",
+        "slice": "[665:1065,413:813]",
+        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+        "units": "ThreatLevel",
+        "data_name": "Temperature: 2m",
+        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds",
+        "valid_dt": "2022-11-12T00:00:00.000Z"
+    },
+    "A:Raw": {
+        "filenames": {
+            "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore765661987.nc"
+        },
+        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
+        "issue_dt": "2022-11-11T13:00:00.000Z",
+        "proj_name": "NBM",
+        "region": "CONUS",
+        "slice": "[665:1065,413:813]",
+        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+        "units": "Fahrenheit",
+        "data_name": "Temperature: 2m",
+        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds",
+        "valid_dt": "2022-11-12T00:00:00.000Z"
+    },
+    "request": {
+        "corrId": {
+            "originator": "IDSSe",
+            "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
+            "issueDt": "2022-11-11T13:00:00.000Z"
+        },
+        "label": "Abq TEMP",
+        "sourceType": "join",
+        "sourceObj": {
+            "join": "OR",
+            "sources": [
+                {
+                    "sourceType": "condition",
+                    "label": "A:ThreatLevel",
+                    "sourceObj": {
+                        "relational": "GREATER THAN",
+                        "thresh": 30,
+                        "mapping": {
+                            "startWeight": [0, 1, 0],
+                            "endWeight": [0, 1, 0],
+                            "controlPoints": ["-Infinity", 0.0, 75.0, "Infinity"]
+                        },
+                        "source": {
+                            "sourceType": "units",
+                            "label": "A:Raw",
+                            "sourceObj": {
+                                "units": "DEG F",
+                                "source": {
+                                    "sourceType": "slice",
+                                    "sourceObj": {
+                                        "slice": "[665:1065,413:713]",
+                                        "source": {
+                                            "sourceType": "data",
+                                            "sourceObj": {
+                                                "product": "NBM",
+                                                "field": "TEMPERATURE",
+                                                "region": "CONUS",
+                                                "validDt": "2022-11-12T00:00:00.000Z",
+                                                "issueDt": "2022-11-11T13:00:00.000Z"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

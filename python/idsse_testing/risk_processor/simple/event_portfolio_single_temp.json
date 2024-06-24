@@ -1,0 +1,170 @@
+{
+    "corrId": {
+        "originator": "IDSSe",
+        "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
+        "issueDt": "2022-11-11T13:00:00.000Z"
+    },
+    "issueDt": "2022-11-11T13:00:00.000Z",
+    "location": {
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "KABQ"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -106.6083,
+                        35.0389
+                    ]
+                }
+            }
+        ]
+    },
+    "validDt": [
+        {
+            "start": "2022-11-12T00:00:00.000Z",
+            "end": "2022-11-12T00:00:00.000Z"
+        }
+    ],
+    "conditions": [
+        {
+            "name": "Abq TEMP",
+            "severity": "MODERATE",
+            "combined": "A",
+            "partsUsed": ["A"]
+        }
+    ],
+    "parts": [
+        {
+            "name": "A",
+            "duration": 0,
+            "arealPercentage": 0,
+            "region": "CONUS",
+            "product": {
+                "fcst": [
+                    "NBM"
+                ]
+            },
+            "field": "TEMPERATURE",
+            "units": "DEG F",
+            "relational": "GREATER THAN",
+            "thresh": 30,
+            "mapping": {
+                "min": 0.0,
+                "max": 75.0,
+                "clip": "true"
+            }
+        }
+    ],
+    "tags": {
+        "values": [
+            "Abq TEMP"
+        ],
+        "keyValues": {
+            "name": "Albuquerque International Airport Temp",
+            "nwsOffice": "BOU"
+        }
+    },
+    "riskResults": [
+        {
+            "evaluatedAt": "2022-11-11T13:00:01.000Z",
+            "conditionKey": "Abq TEMP",
+            "productKey": "NBM",
+            "locationKey": "Single Location",
+            "dataSummary": [
+                {
+                    "validDt": [
+                        "2022-11-12T00:00:00.000Z"
+                    ],
+                    "data": [                    
+                        {
+                            "name": "Abq TEMP",
+                            "type": "condition",
+                            "singleValue": [
+                                0.18964463472366333
+                            ],
+                            "geoDist": [
+                                {
+                                    "0.18964463472366333": 1
+                                }
+                            ]
+                        },
+                        {
+                            "name": "A",
+                            "type": "criteria",
+                            "singleValue": [
+                                0.18964463472366333
+                            ],
+                            "geoDist": [
+                                {
+                                    "0.18964463472366333": 1
+                                }
+                            ]
+                        },
+                        {
+                            "name": "A",
+                            "type": "raw",
+                            "singleValue": [
+                                38.53400802612305
+                            ],
+                            "geoDist": [
+                                {
+                                    "38.53400802612305": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "dataDescript": [
+                {
+                  "partName": "A",
+                  "productName": "NBM",
+                  "dataName": "Temperature: 2m",
+                  "dataLocation": "arn:aws:s3:::noaa-nbm-grib2-pds",
+                  "issueDt": "2022-11-11T13:00:00.000Z"
+                }
+            ],
+            "metaData": [
+                {
+                    "name": "Abq TEMP",
+                    "type": "condition",
+                    "states": [
+                        {
+                            "durationInMin": 0,
+                            "min": 0.18964463472366333,
+                            "minAt": "2022-11-12T00:00:00.000Z",
+                            "max": 0.18964463472366333,
+                            "startDt": "2022-11-12T00:00:00.000Z",
+                            "endDt": "2022-11-12T00:00:00.000Z",
+                            "maxAt": "2022-11-12T00:00:00.000Z",
+                            "empirical": "HIT",
+                            "geographical": "HIT",
+                            "temporal": "HIT"
+                        }
+                    ]
+                },
+                {
+                    "name": "A",
+                    "type": "criteria",
+                    "states": [
+                        {
+                            "durationInMin": 0,
+                            "min": 0.18964463472366333,
+                            "minAt": "2022-11-12T00:00:00.000Z",
+                            "max": 0.18964463472366333,
+                            "startDt": "2022-11-12T00:00:00.000Z",
+                            "endDt": "2022-11-12T00:00:00.000Z",
+                            "maxAt": "2022-11-12T00:00:00.000Z",
+                            "empirical": "HIT",
+                            "geographical": "HIT",
+                            "temporal": "HIT"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

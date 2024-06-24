@@ -1,0 +1,158 @@
+{
+    "dataSummary": [
+        {
+            "validDt": [
+                "2022-01-11T22:00:00.000Z",
+                "2022-01-11T23:00:00.000Z",
+                "2022-01-12T00:00:00.000Z",
+                "2022-01-12T01:00:00.000Z",
+                "2022-01-12T02:00:00.000Z"
+            ],
+            "data": [
+                {
+                    "name": "Some fictional condition",
+                    "type": "condition",
+                    "singleValue": [
+                        -0.29564464,
+                        -0.5432,
+                        0.995,
+                        0.4432,
+                        -0.0123
+                    ]
+                },
+                {
+                    "name": "Other condition",
+                    "type": "condition",
+                    "singleValue": [
+                        -1,
+                        -1,
+                        -1,
+                        0,
+                        0.5
+                    ]
+                },
+                {
+                    "name": "Raw data",
+                    "type": "raw",
+                    "singleValue": [
+                        12,
+                        34,
+                        45,
+                        56,
+                        78
+                    ]
+                }
+            ]
+        }
+    ],
+    "metaData": [
+        {
+            "name": "Some fictional condition",
+            "type": "condition",
+            "states": [
+                {
+                    "durationInMin": 50,
+                    "min": -0.5,
+                    "minAt": "2022-01-11T22:49:31.777Z",
+                    "max": -0.3,
+                    "startDt": "2022-01-11T22:00:00.000Z",
+                    "endDt": "2022-01-11T22:49:31.777Z",
+                    "maxAt": "2022-01-11T22:00:00.000Z",
+                    "empirical": "PROXIMAL",
+                    "geographical": "HIT",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 12,
+                    "min": -0.54,
+                    "minAt": "2022-01-11T23:00:00.000Z",
+                    "max": -0.5,
+                    "startDt": "2022-01-11T22:49:31.777Z",
+                    "endDt": "2022-01-11T23:01:41.105Z",
+                    "maxAt": "2022-01-11T22:49:31.777Z",
+                    "empirical": "MISS",
+                    "geographical": "HIT",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 20,
+                    "min": -0.5,
+                    "minAt": "2022-01-11T23:01:41.105Z",
+                    "max": 0.0,
+                    "startDt": "2022-01-11T23:01:41.105Z",
+                    "endDt": "2022-01-11T23:21:11.304Z",
+                    "maxAt": "2022-01-11T23:21:11.304Z",
+                    "empirical": "PROXIMAL",
+                    "geographical": "HIT",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 157,
+                    "min": 0.0,
+                    "minAt": "2022-01-11T23:21:11.304Z",
+                    "max": 1.0,
+                    "startDt": "2022-01-11T23:21:11.304Z",
+                    "endDt": "2022-01-12T01:58:22.788Z",
+                    "maxAt": "2022-01-12T00:00:00.000Z",
+                    "empirical": "HIT",
+                    "geographical": "HIT",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 2,
+                    "min": -0.01,
+                    "minAt": "2022-01-12T02:00:00.000Z",
+                    "max": 0.0,
+                    "startDt": "2022-01-12T01:58:22.788Z",
+                    "endDt": "2022-01-12T02:00:00.000Z",
+                    "maxAt": "2022-01-12T01:58:22.788Z",
+                    "empirical": "PROXIMAL",
+                    "geographical": "HIT",
+                    "temporal": "HIT"
+                }
+            ]
+        },
+        {
+            "name": "Other condition",
+            "type": "condition",
+            "states": [
+                {
+                    "durationInMin": 150,
+                    "min": -1.0,
+                    "minAt": "2022-01-11T22:00:00.000Z",
+                    "max": -0.5,
+                    "startDt": "2022-01-11T22:00:00.000Z",
+                    "endDt": "2022-01-12T00:30:00.000Z",
+                    "maxAt": "2022-01-12T00:30:00.000Z",
+                    "empirical": "MISS",
+                    "geographical": "PROXIMAL",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 30,
+                    "min": -0.5,
+                    "minAt": "2022-01-12T00:30:00.000Z",
+                    "max": 0.0,
+                    "startDt": "2022-01-12T00:30:00.000Z",
+                    "endDt": "2022-01-12T01:00:00.000Z",
+                    "maxAt": "2022-01-12T01:00:00.000Z",
+                    "empirical": "PROXIMAL",
+                    "geographical": "PROXIMAL",
+                    "temporal": "HIT"
+                },
+                {
+                    "durationInMin": 60,
+                    "min": 0.0,
+                    "minAt": "2022-01-12T01:00:00.000Z",
+                    "max": 0.5,
+                    "startDt": "2022-01-12T01:00:00.000Z",
+                    "endDt": "2022-01-12T02:00:00.000Z",
+                    "maxAt": "2022-01-12T02:00:00.000Z",
+                    "empirical": "HIT",
+                    "geographical": "PROXIMAL",
+                    "temporal": "HIT"
+                }
+            ]
+        }
+    ]
+}

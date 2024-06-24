@@ -1,0 +1,70 @@
+{
+    "corrId": {
+        "originator": "IDSSe",
+        "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
+        "issueDt": "2022-11-11T13:00:00.000Z"
+    },
+    "issueDt": "2022-11-11T13:00:00.000Z",
+    "location": {
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {
+                    "name": "KABQ"
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        -106.6083, 35.0389
+                    ]
+                }
+            }
+        ]
+    },
+    "validDt": [
+        {
+            "start": "2022-11-12T00:00:00.000Z",
+            "end": "2022-11-12T00:00:00.000Z"
+        }
+    ],
+    "conditions": [
+        {
+            "name": "Abq TEMP",
+            "severity": "MODERATE",
+            "combined": "A",
+            "partsUsed": ["A"]
+        }
+    ],
+    "parts": [
+        {
+            "name": "A",
+            "duration": 0,
+            "arealPercentage": 0,
+            "product": {
+                "fcst": [
+                    "NBM"
+                ]
+            },
+            "field": "TEMPERATURE",
+            "units": "DEG F",
+            "region": "CONUS",
+            "relational": "GREATER THAN",
+            "thresh": 30,
+            "mapping": {
+                "min": 0.0,
+                "max": 75.0,
+                "clip": "true"
+            }
+        }
+    ],
+    "tags": {
+        "values": [
+            "Abq TEMP"
+        ],
+        "keyValues": {
+            "name": "Albuquerque International Airport Temp",
+            "nwsOffice": "BOU"
+        }
+    }
+}
+
