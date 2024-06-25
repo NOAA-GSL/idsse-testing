@@ -35,7 +35,7 @@ jobs:
 
       - name: Install IDSSE python commons
         working-directory: commons/python/idsse_common
-        run: python setup.py install
+        run: pip install .
 
       - name: Set PYTHONPATH for pylint
         run: |
