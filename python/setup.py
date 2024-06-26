@@ -40,7 +40,7 @@ setup(name='idsse-testing',
                   ('idsse_testing.data_access.mrms_aws_grib', package_files('idsse_testing/data_access/mrms_aws_grib')),
                   ('idsse_testing.data_access.nbm_aws_grib', package_files('idsse_testing/data_access/nbm_aws_grib'))],
       include_package_data=True,
-      package_data={'':['*.json', '*.nc', '*.grib2*'],},
+      package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*'],},
       install_requires=[
         'importlib',
         'pika',
