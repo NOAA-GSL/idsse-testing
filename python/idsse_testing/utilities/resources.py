@@ -34,10 +34,10 @@ def get_package_path(package: str) -> str:
      Returns:
          str: The package path from the installed package
     """
-    path = resources.files(package)
-    if isinstance(path, pathlib.PosixPath):
-        return str(path)
-    return str(path._paths[0])
+    package_path = resources.files(package)
+    if isinstance(package_path, pathlib.PosixPath):
+        return str(package_path)
+    return str(package_path._paths[0])
 
 def get_filepath(package: str, filename: str) -> str:
     """Get file path from package/filename
