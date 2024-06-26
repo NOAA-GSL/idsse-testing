@@ -1,6 +1,18 @@
 """Setup to support installation as Python library"""
 import glob
+import os
 from setuptools import setup
+
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join(path, filename))
+    print(paths)
+    return paths
+
+
+print(package_files('idsse_testing/data_access/data_cache'))
 
 setup(name='idsse-testing',
       version='1.0',
@@ -10,7 +22,11 @@ setup(name='idsse-testing',
       author_email='@noaa.gov',
       license='MIT',
       python_requires=">=3.11",
-      packages=['idsse_testing.event_portfolios',
+      packages=['idsse_testing.data_access',
+                'idsse_testing.data_access.data_cache',
+                'idsse_testing.data_access.mrms_aws_grib',
+                'idsse_testing.data_access.nbm_aws_grib',
+                'idsse_testing.event_portfolios',
                 'idsse_testing.ims_request',
                 'idsse_testing.ims_response',
                 'idsse_testing.ims_service',
@@ -20,15 +36,17 @@ setup(name='idsse-testing',
                 'idsse_testing.risk_processor.simple',
 		'idsse_testing.risk_processor.syracuse',
                 'idsse_testing.utilities'],
-      data_files=[('idsse_testing/event_portfolios', glob.glob('event_portfolios/*.json')),
-                  ('idsse_testing/ims_response', glob.glob('ims_response/*.json')),
-                  ('idsse_testing/ims_request', glob.glob('ims_request/*.json'))],
+      data_files=[('idsse_testing.data_access.data_cache', package_files('idsse_testing/data_access/data_cache')),
+                  ('idsse_testing.data_access.mrms_aws_grib', package_files('idsse_testing/data_access/mrms_aws_grib')),
+                  ('idsse_testing.data_access.nbm_aws_grib', package_files('idsse_testing/data_access/nbm_aws_grib'))],
       include_package_data=True,
-      package_data={'':['*.json', '*.nc']},
+      package_data={'':['*.json', '*.nc', '*.grib2*'],},
       install_requires=[
         'importlib',
         'pika',
         'jsonschema',
+	'netcdf4',
+	'h5netcdf',
         'python-logging-rabbitmq'
       ],
       extras_require={

@@ -1,0 +1,103 @@
+{
+    "label": "data_requested",
+    "sourceType": "join",
+    "sourceObj": {
+        "join": "AND",
+        "sources": [
+            {
+                "sourceType": "condition",
+                "sourceObj": {
+                    "mapping": {
+                        "controlPoints": [
+                            "-Infinity",
+                            "30.000",
+                            "60.000",
+                            "Infinity"
+                        ],
+                        "startWeight": [
+                            0,
+                            1,
+                            0
+                        ],
+                        "endWeight": [
+                            0,
+                            1,
+                            0
+                        ]
+                    },
+                    "relational": "GT",
+                    "thresh": 45.0,
+                    "source": {
+                        "sourceType": "units",
+                        "sourceObj": {
+                            "units": "MilesPerHour",
+                            "source": {
+                                "sourceType": "slice",
+                                "sourceObj": {
+                                    "slice": "[910:1010,829:929]",
+                                    "source": {
+                                        "sourceType": "data",
+                                        "sourceObj": {
+                                            "product": "NBM",
+                                            "field": "WINDSPEED",
+                                            "region": "CONUS",
+                                            "issueDt": "2023-01-10T08:00:00.000Z",
+                                            "validDt": "2023-01-11T06:00:00.000Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "sourceType": "condition",
+                "sourceObj": {
+                    "mapping": {
+                        "controlPoints": [
+                            "-Infinity",
+                            "15.000",
+                            "45.000",
+                            "Infinity"
+                        ],
+                        "startWeight": [
+                            0,
+                            1,
+                            0
+                        ],
+                        "endWeight": [
+                            0,
+                            1,
+                            0
+                        ]
+                    },
+                    "relational": "LTE",
+                    "thresh": 30.0,
+                    "source": {
+                        "sourceType": "units",
+                        "sourceObj": {
+                            "units": "Fahrenheit",
+                            "source": {
+                                "sourceType": "slice",
+                                "sourceObj": {
+                                    "slice": "[829:929,910:1010]",
+                                    "source": {
+                                        "sourceType": "data",
+                                        "sourceObj": {
+                                            "product": "NBM",
+                                            "field": "TEMP",
+                                            "region": "CONUS",
+                                            "issueDt": "2023-01-10T08:00:00Z",
+                                            "validDt": "2023-01-11T06:00:00Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

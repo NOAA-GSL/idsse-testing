@@ -1,0 +1,119 @@
+{
+    "corrId": {
+        "issueDt": "2023-01-10T08:00:00Z",
+        "originator": "DASWebServer",
+        "uuid": "53430eaa-1db4-4095-bf13-a26e45223d9a"
+    },
+    "data_requested": {
+        "filenames": {
+            "Deterministic": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
+        },
+        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=41.05894633497196 +lon_ll=-106.02046021316575",
+        "issue_dt": "2023-01-10T08:00:00Z",
+        "proj_name": "NBM",
+        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+        "units": "Criteria",
+        "valid_dt": "2023-01-11T06:00:00Z"
+    },
+    "request": {
+        "label": "data_requested",
+        "sourceObj": {
+            "join": "AND",
+            "sources": [
+                {
+                    "sourceObj": {
+                        "mapping": {
+                            "controlPoints": [
+                                "-Infinity",
+                                "0.000",
+                                "20.000",
+                                "Infinity"
+                            ],
+                            "endWeight": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "startWeight": [
+                                0,
+                                1,
+                                0
+                            ]
+                        },
+                        "relational": "GT",
+                        "source": {
+                            "sourceObj": {
+                                "source": {
+                                    "sourceObj": {
+                                        "slice": "[829:929,910:1010]",
+                                        "source": {
+                                            "sourceObj": {
+                                                "field": "WINDSPEED",
+                                                "issueDt": "2023-01-10T08:00:00Z",
+                                                "product": "NBM",
+                                                "validDt": "2023-01-11T06:00:00Z"
+                                            },
+                                            "sourceType": "data"
+                                        }
+                                    },
+                                    "sourceType": "slice"
+                                },
+                                "units": "MilesPerHour"
+                            },
+                            "sourceType": "units"
+                        },
+                        "thresh": 5.0
+                    },
+                    "sourceType": "condition"
+                },
+                {
+                    "sourceObj": {
+                        "mapping": {
+                            "controlPoints": [
+                                "-Infinity",
+                                "15.000",
+                                "45.000",
+                                "Infinity"
+                            ],
+                            "endWeight": [
+                                0,
+                                1,
+                                0
+                            ],
+                            "startWeight": [
+                                0,
+                                1,
+                                0
+                            ]
+                        },
+                        "relational": "LTE",
+                        "source": {
+                            "sourceObj": {
+                                "source": {
+                                    "sourceObj": {
+                                        "slice": "[829:929,910:1010]",
+                                        "source": {
+                                            "sourceObj": {
+                                                "field": "TEMP",
+                                                "issueDt": "2023-01-10T08:00:00Z",
+                                                "product": "NBM",
+                                                "validDt": "2023-01-11T06:00:00Z"
+                                            },
+                                            "sourceType": "data"
+                                        }
+                                    },
+                                    "sourceType": "slice"
+                                },
+                                "units": "Fahrenheit"
+                            },
+                            "sourceType": "units"
+                        },
+                        "thresh": 30.0
+                    },
+                    "sourceType": "condition"
+                }
+            ]
+        },
+        "sourceType": "join"
+    }
+}

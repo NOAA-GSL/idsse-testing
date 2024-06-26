@@ -32,7 +32,7 @@ def get_package_path(package: str) -> str:
      Returns:
          str: The package path from the installed package
     """
-    return str([x for x in resources.files(package).iterdir() if x.is_file()][0].parent)
+    return str(resources.files(package)._paths[0])
 
 def get_filepath(package: str, filename: str) -> str:
     """Get file path from package/filename

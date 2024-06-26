@@ -1,0 +1,41 @@
+{
+    "issueDt": "2023-01-10T08:00:00.000Z",
+    "dataRequest": "A AND B",
+    "parts": [{
+        "relational": "GT",
+        "mapping": {"min": 0.0, "max": 20.0, "clip": "true"},
+        "units": "MilesPerHour",
+        "region": "CONUS",
+        "name": "A",
+        "arealPercentage": 0,
+        "field": "WINDSPEED",
+        "duration": 0,
+        "product": "NBM",
+        "thresh": 5
+    }, {
+        "relational": "LTE",
+        "mapping": {"min": 15.0, "max": 45.0, "clip": "true"},
+        "units": "Fahrenheit",
+        "region": "CONUS",
+        "name": "B",
+        "arealPercentage": 0,
+        "field": "TEMP",
+        "duration": 0,
+        "product": "NBM",
+        "thresh": 30
+    }],
+    "valids": [
+        "2023-01-11T06:00:00.000Z",
+        "2023-01-11T07:00:00.000Z"
+    ],
+    "bbox": {
+        "botLeft": [
+            910,
+            829
+        ],
+        "topRight": [
+            1010,
+            929
+        ]
+    }
+}

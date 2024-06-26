@@ -1,0 +1,8 @@
+{
+    "ProductTaskConfig": {
+        "productGetterNames": [
+            "NBM.AWS.GRIB",
+            "MRMS.AWS.GRIB"
+        ]
+    }
+}
