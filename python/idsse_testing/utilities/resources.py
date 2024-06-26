@@ -13,6 +13,7 @@
 
 import csv
 import json
+import pathlib
 
 from collections.abc import Sequence
 from importlib import resources
@@ -33,7 +34,10 @@ def get_package_path(package: str) -> str:
      Returns:
          str: The package path from the installed package
     """
-    return str(resources.files(package)._paths[0])
+    path = resources.files(package)
+    if isinstance(path, pathlib.PosixPath):
+        return str(path)
+    return str(path._paths[0])
 
 def get_filepath(package: str, filename: str) -> str:
     """Get file path from package/filename
