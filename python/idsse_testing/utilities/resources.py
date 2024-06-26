@@ -23,6 +23,7 @@ from idsse.common.sci.netcdf_io import read_netcdf
 
 import numpy as np
 
+# pylint: disable=protected-access
 def get_package_path(package: str) -> str:
     """Get file path from package/filename
 
