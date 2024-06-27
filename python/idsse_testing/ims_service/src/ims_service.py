@@ -28,6 +28,9 @@ logger = logging.getLogger(__name__)
 
 @app.route('/all-events', methods=['GET'])
 def profiles():
+    print('Received GET request for all events, with headers:', request.headers)
+    print('    request.args.keys are:', request.args.keys())
+
     logger.info('Received GET request for all events, with headers: %s', request.headers)
     logger.info('    request.args.keys are: %s', request.args.keys())
 
