@@ -76,6 +76,7 @@ if __name__ == '__main__':
         for file in glob('*.json', root_dir=profile_dir)
     ]
 
+    print('Loading canned support profiles from:', json_files)
     # json_files = sorted(glob('../profiles/*.json'))
     for json_file in json_files:
         with open(json_file, 'r', encoding="utf-8") as jf:
@@ -86,6 +87,8 @@ if __name__ == '__main__':
             for pro in profile['profiles']:
                 ims_request['profiles'].append(pro)
             # ims_request = ims_request | {os.path.basename(json_file).strip('.json') : profile}
+
+    print('Loaded profiles:', ims_request)
 
     # host=0.0.0.0 is required for flask to work properly in docker and k8s env
     app.run(host='0.0.0.0', port=5000)
