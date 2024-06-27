@@ -28,11 +28,18 @@ logger = logging.getLogger(__name__)
 
 @app.route('/all-events', methods=['GET'])
 def profiles():
+    print('----DEBUG----')
     print('Received GET request for all events, with headers:', request.headers)
     print('    request.args.keys are:', request.args.keys())
+    print('DEBUG: request.headers.get("X-Api-Key") =', request.headers.get("X-Api-Key"))
+    print('DEBUG: app.config["GSL_KEY"] =', app.config['GSL_KEY'])
+    print('DEBUG: request.args.get("dataSource") =', request.args.get('dataSource'))
 
-    logger.info('Received GET request for all events, with headers: %s', request.headers)
-    logger.info('    request.args.keys are: %s', request.args.keys())
+    # logger doesn't get printed in the deployed version for some reason
+    # since mock-ims is a temporary service, I'm not going to spend time debugging this
+    # and will just use print statements instead
+    #logger.info('Received GET request for all events, with headers: %s', request.headers)
+    #logger.info('    request.args.keys are: %s', request.args.keys())
 
     # First check for the key argument and that it matches the expected value...
     if request.headers.get("X-Api-Key") != app.config['GSL_KEY']:
