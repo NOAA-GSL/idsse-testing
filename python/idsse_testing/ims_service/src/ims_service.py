@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def profiles():
     logger.info('Received GET request for all events, with headers: %s', request.headers)
     logger.info('    request.args.keys are: %s', request.args.keys())
-    
+
     # First check for the key argument and that it matches the expected value...
     if request.headers.get("X-Api-Key") != app.config['GSL_KEY']:
         return jsonify({"message": "ERROR: Unauthorized"}), 401
