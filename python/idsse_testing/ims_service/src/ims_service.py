@@ -11,6 +11,7 @@
 # pylint: disable=missing-function-docstring,redefined-outer-name,protected-access
 # pylint: disable=unused-argument, disable=duplicate-code
 import json
+import logging
 
 from glob import glob
 from os import path
@@ -23,9 +24,13 @@ app.config['GSL_KEY'] = 'GSL_234386fd-eb0a-408f-9ea2-149506a742bf'
 # The joined profiles from the JSON examples...
 ims_request = {'errors': [], 'profiles': []}
 
+logger = logging.getLogger(__name__)
 
-@app.route('/all_events', methods=['GET'])
+@app.route('/all-events', methods=['GET'])
 def profiles():
+    logger.info('Received GET request for all events, with headers: %s', request.headers)
+    logger.info('    request.args.keys are: %s', request.args.keys())
+    
     # First check for the key argument and that it matches the expected value...
     if request.headers.get("X-Api-Key") != app.config['GSL_KEY']:
         return jsonify({"message": "ERROR: Unauthorized"}), 401
