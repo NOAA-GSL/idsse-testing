@@ -19,7 +19,7 @@ from os import path
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-app.config['GSL_KEY'] = 'GSL_234386fd-eb0a-408f-9ea2-149506a742bf'
+app.config['GSL_KEY'] = '8209c979-e3de-402e-a1f5-556d650ab889'
 
 # The joined profiles from the JSON examples...
 ims_request = {'errors': [], 'profiles': []}
