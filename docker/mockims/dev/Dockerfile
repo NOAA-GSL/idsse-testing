@@ -11,7 +11,7 @@ LABEL maintainer ${maintainer}
 WORKDIR /python/ims_service
 
 # Copy source files
-COPY ./python/idsse_testing/ims_service/src/ims_service.py /python/ims_service/
+COPY ./python/idsse_testing/ims_service/src/ims_service.py /app/app.py
 
 # (TEMPORARY) Copy canned criteria files. To be removed when integration with IMS API exists
 COPY ./python/idsse_testing/ims_service/profiles/*.json /python/profiles/
@@ -22,7 +22,7 @@ COPY ./python/idsse_testing/ims_service/profiles/*.json /python/profiles/
 #VOLUME /python/profiles
 
 # Run with flask (local only)
-#ENTRYPOINT [ "python3", "/python/ims_service/ims_service.py" ]
+#ENTRYPOINT [ "python3", "/app/app.py" ]
 
 # Run with gunicorn
 ENV PORT 5000
