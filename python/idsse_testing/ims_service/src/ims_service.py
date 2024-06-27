@@ -46,7 +46,9 @@ def profiles():
         return jsonify({"message": "ERROR: Unauthorized"}), 401
 
     if len(request.args.keys()) != 1 or request.args.get('dataSource') != 'NBM':
-        return jsonify({"message": "Bad Request : Invalid argument!"}), 400
+        # add one more check for ANY (currently IMS Gateway Request is using 'ANY')
+        if request.args.get('dataSource') != 'ANY':
+            return jsonify({"message": "Bad Request : Invalid argument!"}), 400
 
     # Return the profiles...
     return jsonify(ims_request)
