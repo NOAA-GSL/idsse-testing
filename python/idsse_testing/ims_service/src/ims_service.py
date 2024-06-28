@@ -18,20 +18,22 @@ from os import path
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-app.config['GSL_KEY'] = 'GSL_234386fd-eb0a-408f-9ea2-149506a742bf'
+app.config['GSL_KEY'] = '8209c979-e3de-402e-a1f5-556d650ab889'
 
 # The joined profiles from the JSON examples...
 ims_request = {'errors': [], 'profiles': []}
 
 
-@app.route('/all_events', methods=['GET'])
+@app.route('/all-events', methods=['GET'])
 def profiles():
     # First check for the key argument and that it matches the expected value...
     if request.headers.get("X-Api-Key") != app.config['GSL_KEY']:
         return jsonify({"message": "ERROR: Unauthorized"}), 401
 
     if len(request.args.keys()) != 1 or request.args.get('dataSource') != 'NBM':
-        return jsonify({"message": "Bad Request : Invalid argument!"}), 400
+        # add one more check for ANY (currently IMS Gateway Request is using 'ANY')
+        if request.args.get('dataSource') != 'ANY':
+            return jsonify({"message": "Bad Request : Invalid argument!"}), 400
 
     # Return the profiles...
     return jsonify(ims_request)
@@ -59,6 +61,7 @@ if __name__ == '__main__':
         for file in glob('*.json', root_dir=profile_dir)
     ]
 
+    print('Loading canned support profiles from:', json_files)
     # json_files = sorted(glob('../profiles/*.json'))
     for json_file in json_files:
         with open(json_file, 'r', encoding="utf-8") as jf:
