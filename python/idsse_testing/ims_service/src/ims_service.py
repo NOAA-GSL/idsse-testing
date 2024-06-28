@@ -66,7 +66,6 @@ def response():
     # Process the data or perform any desired actions
     return jsonify({"message": "POST request received successfully!"})
 
-
 if __name__ == '__main__':
     # Load the canned profiles from the resources directory into a single dictionary to form
     # one JSON response when queried by the IMS_request service.
@@ -92,3 +91,12 @@ if __name__ == '__main__':
 
     # host=0.0.0.0 is required for flask to work properly in docker and k8s env
     app.run(host='0.0.0.0', port=5000)
+
+# set up container run time with gunicorn
+elif 'gunicorn' in os.getenv('SERVER_SOFTWARE', default=''):
+    #app = Flask(__name__)
+    #app.config['GSL_KEY'] = '8209c979-e3de-402e-a1f5-556d650ab889'
+
+    print('TEST: Running from gunicorn main block')
+    print(app.config['GSL_KEY'])
+    print('----DEBUG----')
