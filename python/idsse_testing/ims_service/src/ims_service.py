@@ -17,7 +17,7 @@ import os
 from glob import glob
 from os import path
 
-from flask import Flask, Response, request, jsonify, current_app
+from flask import Flask, Response, request, jsonify
 from flask_cors import CORS
 
 # The joined profiles from the JSON examples...
@@ -32,7 +32,8 @@ ALLOWED_ORIGINS = [
 ]
 
 class IMSService:
-    
+    """Handles HTTP access to mock IMS service"""
+
     def profiles(self) -> Response:
         print('----DEBUG----')
         print('Received GET request for all events, with headers:', request.headers)
