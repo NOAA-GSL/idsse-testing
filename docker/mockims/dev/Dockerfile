@@ -11,10 +11,10 @@ LABEL maintainer ${maintainer}
 WORKDIR /python/ims_service
 
 # Copy source files
-COPY ./python/ims_service/src/ims_service.py /python/ims_service/
+COPY ./python/idsse_testing/ims_service/src/ims_service.py /python/ims_service/
 
 # (TEMPORARY) Copy canned criteria files. To be removed when integration with IMS API exists
-COPY ./python/ims_service/profiles/*.json /python/profiles/
+COPY ./python/idsse_testing/ims_service/profiles/*.json /python/profiles/
 
 # The volume mapping here is kind of strange for k8s deployment, because if we map an empty volume to /criteria
 # then the temp copy of json above will get blown away by the volume mapping...just omit it for k8s deployment
