@@ -8,11 +8,7 @@ def package_files(directory):
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join(path, filename))
-    print(paths)
     return paths
-
-
-print(package_files('idsse_testing/data_access/data_cache'))
 
 setup(name='idsse-testing',
       version='1.0',
@@ -22,23 +18,23 @@ setup(name='idsse-testing',
       author_email='@noaa.gov',
       license='MIT',
       python_requires=">=3.11",
-      packages=['idsse_testing.data_access',
-                'idsse_testing.data_access.data_cache',
-                'idsse_testing.data_access.mrms_aws_grib',
-                'idsse_testing.data_access.nbm_aws_grib',
-                'idsse_testing.event_portfolios',
-                'idsse_testing.ims_request',
-                'idsse_testing.ims_response',
-                'idsse_testing.ims_service',
-                'idsse_testing.risk_processor',
-                'idsse_testing.risk_processor.binghamton',
-                'idsse_testing.risk_processor.i87',
-                'idsse_testing.risk_processor.simple',
-		'idsse_testing.risk_processor.syracuse',
-                'idsse_testing.utilities'],
-      data_files=[('idsse_testing.data_access.data_cache', package_files('idsse_testing/data_access/data_cache')),
-                  ('idsse_testing.data_access.mrms_aws_grib', package_files('idsse_testing/data_access/mrms_aws_grib')),
-                  ('idsse_testing.data_access.nbm_aws_grib', package_files('idsse_testing/data_access/nbm_aws_grib'))],
+      packages=['idsse.testing.data_access',
+                'idsse.testing.data_access.data_cache',
+                'idsse.testing.data_access.mrms_aws_grib',
+                'idsse.testing.data_access.nbm_aws_grib',
+                'idsse.testing.event_portfolios',
+                'idsse.testing.ims_request',
+                'idsse.testing.ims_response',
+                'idsse.testing.ims_service',
+                'idsse.testing.risk_processor',
+                'idsse.testing.risk_processor.binghamton',
+                'idsse.testing.risk_processor.i87',
+                'idsse.testing.risk_processor.simple',
+                'idsse.testing.risk_processor.syracuse',
+                'idsse.testing.utils'],
+      data_files=[('idsse.testing.data_access.data_cache', package_files('idsse.testing/data_access/data_cache')),
+                  ('idsse.testing.data_access.mrms_aws_grib', package_files('idsse.testing/data_access/mrms_aws_grib')),
+                  ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse.testing/data_access/nbm_aws_grib'))],
       include_package_data=True,
       package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*'],},
       install_requires=[
