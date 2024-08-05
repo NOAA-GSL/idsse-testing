@@ -8,6 +8,7 @@ def package_files(directory):
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join(path, filename))
+    print(directory, paths)
     return paths
 
 setup(name='idsse-testing',
@@ -32,11 +33,14 @@ setup(name='idsse-testing',
                 'idsse.testing.risk_processor.simple',
                 'idsse.testing.risk_processor.syracuse',
                 'idsse.testing.utils'],
-      data_files=[('idsse.testing.data_access.data_cache', package_files('idsse.testing/data_access/data_cache')),
-                  ('idsse.testing.data_access.mrms_aws_grib', package_files('idsse.testing/data_access/mrms_aws_grib')),
-                  ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse.testing/data_access/nbm_aws_grib'))],
+      data_files=[('idsse.testing.data_access.data_cache', package_files('idsse/testing/data_access/data_cache')),
+                  ('idsse.testing.data_access.mrms_aws_grib', package_files('idsse/testing/data_access/mrms_aws_grib')),
+                  ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse/testing/data_access/nbm_aws_grib'))],
       include_package_data=True,
-      package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*'],},
+      package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*'],
+                    'idsse.testing.data_access.data_cache': package_files('idsse/testing/data_access/data_cache'),
+                    'idsse.testing.data_access.mrms_aws_grib': package_files('idsse/testing/data_access/mrms_aws_grib'),
+                    'idsse.testing.data_access.nbm_aws_grib': package_files('idsse/testing/data_access/nbm_aws_grib')},
       install_requires=[
         'pika',
         'jsonschema',
