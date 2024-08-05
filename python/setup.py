@@ -38,7 +38,6 @@ setup(name='idsse-testing',
       include_package_data=True,
       package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*'],},
       install_requires=[
-        'importlib',
         'pika',
         'jsonschema',
 	'netcdf4',
