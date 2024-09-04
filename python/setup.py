@@ -37,7 +37,7 @@ setup(name='idsse-testing',
       data_files=[('idsse.testing.data_access.data_cache', package_files('idsse/testing/data_access/data_cache')),
                   ('idsse.testing.data_access.mrms_aws_grib', package_files('idsse/testing/data_access/mrms_aws_grib')),
                   ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse/testing/data_access/nbm_aws_grib')),
-                  ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse/testing/data_access/validation'))],
+                  ('idsse.testing.data_access.validation', package_files('idsse/testing/data_access/validation'))],
       include_package_data=True,
       package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*']},
       install_requires=[
