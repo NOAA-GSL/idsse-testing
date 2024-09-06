@@ -1,25 +1,25 @@
 {
-    "label": "data_requested",
     "sourceType": "condition",
     "sourceObj": {
-      "mapping": {
-        "controlPoints": ["-Infinity", 30.0, 60.0, "Infinity"],
-        "startWeight": [0, 1, 0],
-        "endWeight": [0, 1, 0]
-      },
-      "relational": "GT",
-      "thresh": 45.0,
-      "source": {
-        "sourceType": "data",
-        "sourceObj": {
-          "product": "NBM",
-          "field": "WINDSPEED",
-          "region": "CONUS",
-          "slice": "[910:1010,829:929]",
-          "issueDt": "2023-01-10T08:00:00.000Z",
-          "validDt": "2023-01-11T06:00:00.000Z",
-          "units": "MilesPerHour"
+        "mapping": {
+            "controlPoints": ["-Infinity", 30.0, 60.0, "Infinity"],
+            "startWeight": [0, 1, 0],
+            "endWeight": [0, 1, 0]
+        },
+        "relational": "GT",
+        "thresh": 45.0,
+        "source": {
+            "sourceType": "data",
+            "sourceObj": {
+                "product": "NBM",
+                "units": "MilesPerHour",
+                "region": "CONUS",
+                "field": "WINDSPEED",
+                "issueDt": "2023-01-10T08:00:00.000Z",
+                "validDt": "2023-01-11T06:00:00.000Z",
+                "slice": "[910:1010,829:929]"
+            }
         }
-      }
-    }
+    },
+    "label": "data_requested"
 }
