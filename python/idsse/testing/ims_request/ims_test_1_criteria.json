@@ -1,1 +1,71 @@
-{"corrId": {"originator": "IMS", "uuid": "fd35adec-d2a0-49a9-a320-df20a7b6d681", "issueDt": "2024-01-02T03:00:00.000Z"}, "location": {"features": [{"geometry": {"coordinates": [-113.9595, 46.8571], "type": "Point"}, "properties": {"name": "Missoula"}, "type": "Feature"}]}, "validDt": ["2024-01-02T15:00:00.000Z", "2024-01-02T16:00:00.000Z"], "conditions": [{"name": "Minor", "severity": "MINOR", "combined": "A", "partsUsed": ["A"]}], "parts": [{"name": "A", "duration": 0, "arealPercentage": 0, "region": "CONUS", "product": {"fcst": ["NBM"]}, "field": "TEMP", "units": "DEG F", "relational": "LESS THAN", "thresh": 32, "mapping": {"min": 17, "max": 47, "clip": "true"}}], "tags": {"values": [], "keyValues": {"name": "GSL Test 1", "nwsOffice": "GSL"}}}
+{
+    "corrId": {
+        "originator": "IMS",
+        "uuid": "fd35adec-d2a0-49a9-a320-df20a7b6d681",
+        "issueDt": "2024-01-02T03:00:00.000Z"
+    },
+    "location": {
+        "features": [
+            {
+                "geometry": {
+                    "coordinates": [
+                        -113.9595,
+                        46.8571
+                    ],
+                    "type": "Point"
+                },
+                "properties": {
+                    "name": "Missoula"
+                },
+                "type": "Feature"
+            }
+        ]
+    },
+    "validDt": [
+        {
+            "times": [
+                "2024-01-02T15:00:00.000Z",
+                "2024-01-02T16:00:00.000Z"
+            ]
+        }
+    ],
+    "conditions": [
+        {
+            "name": "Minor",
+            "severity": "MINOR",
+            "combined": "A",
+            "partsUsed": [
+                "A"
+            ]
+        }
+    ],
+    "parts": [
+        {
+            "name": "A",
+            "duration": 0,
+            "arealPercentage": 0,
+            "region": "CONUS",
+            "product": {
+                "fcst": [
+                    "NBM"
+                ]
+            },
+            "field": "TEMP",
+            "units": "DEG F",
+            "relational": "LESS THAN",
+            "thresh": 32,
+            "mapping": {
+                "min": 17,
+                "max": 47,
+                "clip": "true"
+            }
+        }
+    ],
+    "tags": {
+        "values": [],
+        "keyValues": {
+            "name": "GSL Test 1",
+            "nwsOffice": "GSL"
+        }
+    }
+}
