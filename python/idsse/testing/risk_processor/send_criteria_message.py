@@ -159,7 +159,7 @@ if __name__ == '__main__':  # pragma: no cover
                         help='The exchange name to which this service will publish Criteria data.')
     parser.add_argument('--criteria_exch_type', dest='criteria_exch_type', default='direct',
                         help='The exchange type for Criteria data.')
-    parser.add_argument('--criteria_queue', dest='criteria_queue', default='ims_data',
+    parser.add_argument('--criteria_queue', dest='criteria_queue', default='criteria_data',
                         help='The queue where Criteria data will be published.')
 
     parser.add_argument('--path', dest='path',
