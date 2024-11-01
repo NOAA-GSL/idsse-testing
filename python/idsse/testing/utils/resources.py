@@ -68,12 +68,13 @@ def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Seque
     _, file_extension = path.splitext(filename)
     if file_extension == '.nc':
         return _load_netcdf_resource(resources.files(package).joinpath(filename))
-    print(filename, file_extension)
     file_stream = resources.files(package).joinpath(filename).open('r')
     if file_extension == '.json':
         return _load_json_resource(file_stream)
     if file_extension == '.csv':
         return _load_csv_resource(file_stream)
+    if file_extension == '.html':
+        return _load_html_resource(file_stream)
     raise ValueError(f'Unable to load test data from unsupported extension {file_extension}')
 
 
@@ -88,6 +89,6 @@ def _load_csv_resource(stream: TextIO) -> Sequence[Sequence[any]]:
     return [list(map(float, row)) for row in file_reader]
 
 
-def _load_netcdf_resource(filename: str) -> tuple[dict, np.ndarray]:
+def _load_html_resource(filestream: TextIO) -> str:
     """utility to load NetCDF file from package"""
-    return read_netcdf(filename)
+    return filestream.read()
