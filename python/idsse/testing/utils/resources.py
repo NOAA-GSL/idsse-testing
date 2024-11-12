@@ -89,6 +89,11 @@ def _load_csv_resource(stream: TextIO) -> Sequence[Sequence[any]]:
     return [list(map(float, row)) for row in file_reader]
 
 
+def _load_netcdf_resource(filename: str) -> tuple[dict, np.ndarray]:
+    """utility to load NetCDF file from package"""
+    return read_netcdf(filename)
+
+
 def _load_html_resource(filestream: TextIO) -> str:
     """utility to load NetCDF file from package"""
     return filestream.read()
