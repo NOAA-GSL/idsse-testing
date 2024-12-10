@@ -12,9 +12,9 @@ The complete twelve-factors methodologies that the IDSS Engine Project adheres t
 To support some standardization and best practices for IDSS Engine, developers should following the logging guide found under the docs directory [here](https://github.com/NOAA-GSL/idss-engine-commons)
 
 ## Build, Release, and Install
-The subsections below outline how to build the package within this project. 
+The subsections below outline how to build the package within this project.
 
 #### Build
-From the IDSS Engine Testing project python directory `idsse-testing/pythom/`:
+From the IDSS Engine Testing project python directory `idsse-testing/python/`:
 
-`$ pip imstall .`
+`$ pip install .`

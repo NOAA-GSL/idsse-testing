@@ -1,0 +1,78 @@
+{
+  "profiles": [
+    {
+      "id": "fd35adec-d2a0-49a9-a320-df20a7b6d681",
+      "name": "GSL Test 1",
+      "associatedOfficeId": "GSL",
+      "profileType": "LIMITED_EPISODIC",
+      "lifecycleStatus": "UNDEF",
+      "submissionStatus": "APPROVED",
+      "setting": {
+        "id": "09acfa26-c2b4-4b8f-8dc8-8c9afc7c66e0",
+        "name": "Missoula",
+        "driverType": "EVENT",
+        "locations": [
+          {
+            "createdAt": "2024-01-26T19:07:33.559672Z",
+            "creationMethod": "DRAWPOINT",
+            "editable": true,
+            "original": null,
+            "address": null,
+            "geometryType": "POINT",
+            "minElevation": 4124,
+            "maxElevation": 4124,
+            "lastModified": "2024-01-26T19:07:33.559675Z",
+            "name": "Missoula",
+            "notes": "",
+            "userData": null,
+            "validTime": null,
+            "geoShapeCreationMethod": "DRAWPOINT",
+            "geomAsString": "POINT (-113.9595 46.8571)"
+          }
+        ],
+        "timing": {
+          "start": null,
+          "duration": 0,
+          "rrule": ""
+        },
+        "nationalSecurity": false,
+        "website": "",
+        "numberOfPeople": 1
+      },
+      "impacts": [],
+      "nonImpactThresholds": {
+        "phrasesForAllSeverities": {
+          "MINOR": {
+            "severity": "MINOR",
+            "encodedRepresentation": "A",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "COLD",
+                "wwaProduct": "UNDEF",
+                "condition": "LESS_THAN",
+                "value": "32",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "DEG_F",
+                "dataSource": "",
+                "dataParameter": ""
+              }
+            }
+          }
+        },
+        "allTypesAsStrings": ["COLD"]
+      },
+      "maxLeadTime": 168,
+      "isLive": true,
+      "requestedServices": [],
+      "timeBuffer": 0,
+      "geoBuffer": 5.0,
+      "profileLevelActionPlans": [],
+      "maxLeadTimeAsString": "7 d"
+    }
+  ],
+  "errors": []
+}

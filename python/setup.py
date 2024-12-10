@@ -3,12 +3,14 @@ import glob
 import os
 from setuptools import setup
 
+
 def package_files(directory):
     paths = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join(path, filename))
     return paths
+
 
 setup(name='idsse-testing',
       version='1.0',
@@ -28,6 +30,7 @@ setup(name='idsse-testing',
                 'idsse.testing.ims_request',
                 'idsse.testing.ims_response',
                 'idsse.testing.ims_service',
+                'idsse.testing.nwsc_gateway',
                 'idsse.testing.risk_processor',
                 'idsse.testing.risk_processor.binghamton',
                 'idsse.testing.risk_processor.i87',
@@ -40,12 +43,12 @@ setup(name='idsse-testing',
                   ('idsse.testing.data_access.nbm_aws_grib', package_files('idsse/testing/data_access/nbm_aws_grib')),
                   ('idsse.testing.data_access.validation', package_files('idsse/testing/data_access/validation'))],
       include_package_data=True,
-      package_data={'':['*.csv', '*.json', '*.nc', '*.grib2*']},
+      package_data={'': ['*.csv', '*.json', '*.nc', '*.grib2*']},
       install_requires=[
         'pika',
         'jsonschema',
-	'netcdf4',
-	'h5netcdf',
+        'netcdf4',
+        'h5netcdf',
         'python-logging-rabbitmq'
       ],
       extras_require={
@@ -54,5 +57,4 @@ setup(name='idsse-testing',
           'pytest-cov',
         ]
       },
-      zip_safe=False,
-)
+      zip_safe=False)
