@@ -1,0 +1,189 @@
+{
+  "corrId": {
+    "originator": "IDSSe",
+    "uuid": "f177061e-4980-4299-9553-f2fe8cdd977f",
+    "issueDt": "2024-11-24T22:00:00.000Z"
+  },
+  "issueDt": "2024-11-24T22:00:00.000Z",
+  "location": {
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-71.010365, 42.3648]
+        },
+        "properties": {
+          "name": "Boston, Logan International Airport"
+        }
+      }
+    ]
+  },
+  "validDt": [
+    {
+      "start": "2024-11-24T22:00:00.000Z",
+      "end": "2024-11-25T03:00:00.000Z"
+    }
+  ],
+  "conditions": [
+    {
+      "name": "Moderate",
+      "severity": "MODERATE",
+      "combined": "A OR B OR C OR D OR E OR F OR G OR H",
+      "partsUsed": ["A", "B", "C", "D", "E", "F", "G", "H"]
+    }
+  ],
+  "parts": [
+    {
+      "name": "A",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "APPTEMP",
+      "units": "DEG F",
+      "relational": "LESS THAN",
+      "thresh": 50,
+      "mapping": {
+        "min": 35,
+        "max": 65,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "B",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "WINDSPEED",
+      "units": "MPH",
+      "relational": "GREATER THAN",
+      "thresh": 10,
+      "mapping": {
+        "min": 0,
+        "max": 20,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "C",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "WINDGUST",
+      "units": "MPH",
+      "relational": "GREATER THAN OR EQUAL",
+      "thresh": 5,
+      "mapping": {
+        "min": -5,
+        "max": 15,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "D",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "RAIN1HR",
+      "units": "INCHES",
+      "relational": "GREATER THAN",
+      "thresh": 0.1,
+      "mapping": {
+        "min": 0,
+        "max": 3,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "E",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "PROBTHDR3HR",
+      "units": "PERCENT",
+      "relational": "LESS THAN",
+      "thresh": 25,
+      "mapping": {
+        "min": 15,
+        "max": 35,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "F",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "RH",
+      "units": "PERCENT",
+      "relational": "LESS THAN",
+      "thresh": 25,
+      "mapping": {
+        "min": 15,
+        "max": 35,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "G",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "VISIBILITY",
+      "units": "MILES",
+      "relational": "GREATER THAN",
+      "thresh": 10,
+      "mapping": {
+        "min": 5,
+        "max": 25,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "H",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "DEWPOINT",
+      "units": "DEG F",
+      "relational": "GREATER THAN",
+      "thresh": 30,
+      "mapping": {
+        "min": 15,
+        "max": 45,
+        "clip": "true"
+      }
+    }
+  ],
+  "tags": {
+    "values": [],
+    "keyValues": {
+      "name": "IDSSe E2E Test",
+      "nwsOffice": "GSL"
+    }
+  }
+}
