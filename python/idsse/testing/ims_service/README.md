@@ -1,10 +1,10 @@
-# IMS Dummy Service
+# NWS Connect Proxy Service
 
  ## Overview
--The `ims-service` is dummy IMS service (Impact-based decision support service Management System)
+-The `proxy-service` is dummy NWS Connect service that simulates storing a set of Support Profiles and serving them up in a simple REST interface.
 
 ## Configurations
-The ims service should be started as a standalone service and offers two end-points in support of the IMS gateway request/response services. Those services should be provided with the network address of this services endpoints via their command line arguments for testing purposes.
+The NWS Connect proxy service should be started as a standalone service and offers two end-points in support of the NWSConnect Gateway request/response services. Those services should be provided with the network address of this services endpoints via their command line arguments for testing purposes.
 
 
 ## Build, Release, and Run
@@ -20,11 +20,11 @@ The subsections below outline how to build the images within this project. All m
 ### IMS Service
 From the IDSS Engine project root directory `idss-engine/build/<env>/<arch>/`:
 
-`$ docker-compose build ims_service`
+`$ docker-compose build proxy_service`
 
-**Local Development Image Name** `idss.engine.service.ims.service:<tag>`
+**Local Development Image Name** `idss.engine.service.proxy.service:<tag>`
 
-**Packaged/Deployed Image Name** `idsse/service/ims/service:<tag>`
+**Packaged/Deployed Image Name** `idsse/service/proxy/service:<tag>`
 
 ---
 
@@ -37,7 +37,7 @@ See the [Build, Release, Run](https://github.com/NOAA-GSL/idss-engine/blob/main/
 To run this service can run in isolation, it does not requires a rabbitmq server
 
 ```
-docker run --rm --name ims-service idss.engine.service.ims.service:local
+docker run --rm --name proxy-service idss.engine.service.proxy.service:local
 ```
 
 Optional parameters include:
@@ -71,7 +71,7 @@ The most common way to get python dependencies installed is to use either [conda
         brew install peak/tap/s5cmd
         ```
 
-Lastly, `cd` to the `python/ims_service/src` directory, and start the relevant service. For example, for Request Service:
+Lastly, `cd` to the `./python` directory, and start the relevant service. For example, for Request Service:
 ```sh
-python3 ims_service.py
+python3 proxy_service.py
 ```
