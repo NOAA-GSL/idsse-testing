@@ -48,8 +48,7 @@ class ProfileStore:
 
         # ensure that base directory and all expected subdirectories exist
         for _dir in [self._base_dir, self._new_dir, self._existing_dir]:
-            if not os.path.exists(_dir):
-                os.mkdir(_dir)
+            os.makedirs(_dir, exist_ok=True)
 
         # load any NWS Connect response files dumped into the base_dir
         for response_filename in glob('*.json', root_dir=self._base_dir):
@@ -68,9 +67,13 @@ class ProfileStore:
                     with open(profile_filepath, 'w', encoding='utf-8') as outfile:
                         json.dump(profile, outfile)
 
-        # cache of JSON data of all Support Profiles, marked as new vs. existing Profiles
-        self.profile_cache = [CachedProfile(profile, is_new=False)
-                              for profile in self._load_existing_profiles()]
+        # populate cache of JSON data of all Support Profiles, marked as new vs. existing
+        existing_profiles = [CachedProfile(profile, is_new=False)
+                             for profile in self._load_profiles_from_filesystem(self._existing_dir)]
+        new_profiles = [CachedProfile(profile, is_new=True)
+                        for profile in self._load_profiles_from_filesystem(self._new_dir)]
+
+        self.profile_cache = existing_profiles + new_profiles
 
     def get_all(self, filter_new_profiles = False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
@@ -79,8 +82,8 @@ class ProfileStore:
 
         Args:
             filter_new_profiles (bool): if True, get only Support Profiles that have never been
-                returned to IDSS Engine on previous requests (never processed). Default is False
-                (return all existing profiles).
+                returned to IDSS Engine on previous requests (never processed). Default is False:
+                return all existing profiles.
         """
         return [cached_profile.data for cached_profile in self.profile_cache
                 if cached_profile.is_new == filter_new_profiles]
@@ -92,6 +95,14 @@ class ProfileStore:
             str | None: UUID of saved Support Profile on success, otherwise None
         """
         logger.debug('Now saving new profile: %s', profile)
+
+        # if profile ID is already in the cache, reject this save
+        existing_profile = next(((cached_obj for cached_obj in self.profile_cache
+                                if cached_obj.id == profile.get('id'))), None)
+        if existing_profile:
+            logger.warning('Cannot save profile; already exists %s', existing_profile.id)
+            return None
+
         cached_profile = CachedProfile(profile, is_new=True)
 
         # save Profile JSON to filesystem
@@ -162,18 +173,22 @@ class ProfileStore:
                               if cached_profile.id != profile_id]
         return True
 
-    def _load_existing_profiles(self) -> list[dict]:
-        """Read all JSON files from this ProfileStore's `existing` subdirectory"""
-        logger.info('Loading existing Support Profiles from path: %s', self._existing_dir)
+    def _load_profiles_from_filesystem(self, dir_: str) -> list[dict]:
+        """Read all JSON files from one of this ProfileStore's subdirectories, and return list of
+        the discovered files' json data.
+
+        Args:
+            dir_ (str): path to scan for Support Profile or NWS Connect API response JSON files
+        """
+        logger.info('Loading Support Profiles JSON files from path: %s', dir_)
 
         profile_list: list[dict] = []
-        for filename in glob('*.json', root_dir=self._existing_dir):
-            with open(os.path.join(self._existing_dir, filename), 'r', encoding='utf-8') as file:
+        for filename in glob('*.json', root_dir=dir_):
+            with open(os.path.join(dir_, filename), 'r', encoding='utf-8') as file:
                 json_data: dict = json.load(file)
-                # if this is a pure NWS Connect response, profile will be nested inside `profiles`
+                # if this is a pure NWS Connect response, profile data is nested inside `profiles`
                 if profiles := json_data.get('profiles', None) and isinstance(profiles, list):
-                    for profile in profiles:
-                        profile_list.append(profile)
+                    profile_list.extend(profiles)
                 else:
                     # this file is assumed to be just a Support Profile
                     profile_list.append(json_data)
