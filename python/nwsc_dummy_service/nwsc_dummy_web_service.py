@@ -67,7 +67,7 @@ class EventsRoute:
             return jsonify({'message': f'Profile {profile_id} deleted'}), 204
 
         # otherwise, must be 'GET' operation
-        data_source = request.args.get('dataSource', None, type='str')
+        data_source = request.args.get('dataSource', None, type=str)
         if data_source != 'NBM':
             return jsonify({'profiles': [], 'errors': [f'Invalid dataSource: {data_source}']}), 400
 
@@ -75,7 +75,7 @@ class EventsRoute:
         if profile_status == 'existing':
             profiles = self.profile_store.get_all()
 
-        if profile_status == 'new':
+        elif profile_status == 'new':
             profiles = self.profile_store.get_all(filter_new_profiles=True)
             # update ProfileStore to label all queried events as no longer "new";
             # they've now been returned to IDSS Engine clients at least once

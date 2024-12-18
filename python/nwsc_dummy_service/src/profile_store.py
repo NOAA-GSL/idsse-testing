@@ -11,8 +11,8 @@
 import os
 import json
 import logging
+from dataclasses import dataclass #, field
 from glob import glob
-from typing import NamedTuple
 
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = 'new'
@@ -21,8 +21,10 @@ EXISTING_SUBDIR = 'existing'
 logger = logging.getLogger(__name__)
 
 
-class CachedProfile(NamedTuple):
-    """Data class to hold Support Profile's data and metadata (status)
+
+@dataclass
+class CachedProfile:
+    """Data class to hold Support Profile's data and metadata ("new" vs "existing" status)
 
     Args:
         data (dict): full JSON data of this Support Profile
@@ -30,6 +32,11 @@ class CachedProfile(NamedTuple):
     """
     data: dict
     is_new: bool
+
+    @property
+    def id(self) -> str:
+        """The Support Profile UUID"""
+        return self.data.get('id')
 
 
 class ProfileStore:
@@ -44,9 +51,26 @@ class ProfileStore:
             if not os.path.exists(_dir):
                 os.mkdir(_dir)
 
+        # load any NWS Connect response files dumped into the base_dir
+        for response_filename in glob('*.json', root_dir=self._base_dir):
+            response_filepath = os.path.join(self._base_dir, response_filename)
+            logger.warning('Loading profiles from raw API response file: %s', response_filepath)
+
+            with open(response_filepath, 'r', encoding='utf-8') as infile:
+                data: dict = json.load(infile)
+
+                # loop through all profiles in this file,
+                # save them to "existing" directory as individual profiles
+                for profile in data.get('profiles', []):
+                    profile_filepath = os.path.join(self._existing_dir, f'{profile["id"]}.json')
+                    logger.info('Saving existing profile to file: %s', profile_filepath)
+
+                    with open(profile_filepath, 'w', encoding='utf-8') as outfile:
+                        json.dump(profile, outfile)
+
         # cache of JSON data of all Support Profiles, marked as new vs. existing Profiles
         self.profile_cache = [CachedProfile(profile, is_new=False)
-                              for profile in self._read_existing_profiles()]
+                              for profile in self._load_existing_profiles()]
 
     def get_all(self, filter_new_profiles = False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
@@ -71,7 +95,7 @@ class ProfileStore:
         profile_id = profile.get('id')
 
         # determine the right filepath where JSON data will be written
-        filepath = os.path.join(self._new_dir, profile_id + '.json')
+        filepath = os.path.join(self._new_dir, f'{profile_id}.json')
 
         logger.info('Now saving profile to path: %s', filepath)
         with open(filepath, 'w', encoding='utf-8') as file:
@@ -97,7 +121,7 @@ class ProfileStore:
                            profile_id)
             return False
 
-        new_filepath = os.path.join(self._new_dir, profile_id + '.json')
+        new_filepath = os.path.join(self._new_dir, f'{profile_id}.json')
         if not os.path.exists(new_filepath):
             # TODO: why is this thrown when requesting /profiles?status=new ?
             logger.warning('Attempt to mark as "existing" profile that is not found: %s',
@@ -105,12 +129,12 @@ class ProfileStore:
             return False
 
         # move the JSON file from the "new" to the "existing" directory and update cache
-        existing_filepath = os.path.join(self._existing_dir, profile_id + '.json')
+        existing_filepath = os.path.join(self._existing_dir, f'{profile_id}.json')
         os.rename(new_filepath, existing_filepath)
 
-        # find this profile in the cache and change is_new flag to false
-        cache_index = self.profile_cache.index(cached_profile)
-        self.profile_cache[cache_index].is_new = False
+        # update this profile's is_new flag in in-memory cache
+        profile_index = self.profile_cache.index(cached_profile)
+        self.profile_cache[profile_index].is_new = False
 
         return True
 
@@ -121,11 +145,11 @@ class ProfileStore:
             bool: True on success
         """
         logger.info('Deleting profile_id %s', profile_id)
-        filepath = os.path.join(self._existing_dir, profile_id + '.json')
 
+        filepath = os.path.join(self._existing_dir, f'{profile_id}.json')
         if not os.path.exists(filepath):
             # profile does not in exist in "existing" subdirectory, maybe its in "new"
-            filepath = os.path.join(self._existing_dir, profile_id + '.json')
+            filepath = os.path.join(self._new_dir, f'{profile_id}.json')
 
             if not os.path.exists(filepath):
                 logger.warning('Cannot delete profile %s; JSON file not found in %s or %s',
@@ -140,7 +164,7 @@ class ProfileStore:
                               if cached_profile.data['id'] != profile_id]
         return True
 
-    def _read_existing_profiles(self) -> list[dict]:
+    def _load_existing_profiles(self) -> list[dict]:
         """Read all JSON files from this ProfileStore's `existing` subdirectory"""
         logger.info('Loading existing Support Profiles from path: %s', self._existing_dir)
 
