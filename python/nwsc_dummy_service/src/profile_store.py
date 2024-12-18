@@ -12,12 +12,24 @@ import os
 import json
 import logging
 from glob import glob
+from typing import NamedTuple
 
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = 'new'
 EXISTING_SUBDIR = 'existing'
 
 logger = logging.getLogger(__name__)
+
+
+class CachedProfile(NamedTuple):
+    """Data class to hold Support Profile's data and metadata (status)
+
+    Args:
+        data (dict): full JSON data of this Support Profile
+        is_new (bool): track if Support Profile has ever been processed. Ought to start as True
+    """
+    data: dict
+    is_new: bool
 
 
 class ProfileStore:
@@ -32,9 +44,9 @@ class ProfileStore:
             if not os.path.exists(_dir):
                 os.mkdir(_dir)
 
-        # cache of JSON data of all Support Profiles, divided into new vs. existing Profiles
-        self.new_profiles: list[dict] = []
-        self.existing_profiles = self._read_existing_profiles()
+        # cache of JSON data of all Support Profiles, marked as new vs. existing Profiles
+        self.profile_cache = [CachedProfile(profile, is_new=False)
+                              for profile in self._read_existing_profiles()]
 
     def get_all(self, filter_new_profiles = False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
@@ -46,9 +58,8 @@ class ProfileStore:
                 returned to IDSS Engine on previous requests (never processed). Default is False
                 (return all existing profiles).
         """
-        if filter_new_profiles:
-            return self.new_profiles
-        return self.existing_profiles
+        return [cached_profile.data for cached_profile in self.profile_cache
+                if cached_profile.is_new == filter_new_profiles]
 
     def save(self, profile: dict) -> str | None:
         """Persist a new Support Profile Profile to this API
@@ -60,13 +71,14 @@ class ProfileStore:
         profile_id = profile.get('id')
 
         # determine the right filepath where JSON data will be written
-        filepath = os.path.join(self._new_dir , profile_id + '.json')
+        filepath = os.path.join(self._new_dir, profile_id + '.json')
 
         logger.info('Now saving profile to path: %s', filepath)
         with open(filepath, 'w', encoding='utf-8') as file:
             json.dump(profile, file)  # save JSON to filesystem
 
-        self.new_profiles.append(profile)  # add profile to in-memory cache
+        # add profile to in-memory cache
+        self.profile_cache.append(CachedProfile(profile, is_new=True))
         return profile_id
 
     def move_to_existing(self, profile_id: str) -> bool:
@@ -76,8 +88,16 @@ class ProfileStore:
         Returns:
             bool: True on success. False if JSON with this profile_id not found on filesystem
         """
-        new_filepath = os.path.join(self._new_dir, profile_id + '.json')
+        # find the profile data from the new_profiles cache and move it to existing_profiles
+        cached_profile = next((profile for profile in self.profile_cache
+                               if profile.data['id'] == profile_id), None)
+        if not cached_profile:
+            # profile is not in cache; it must not exist
+            logger.warning('Support Profile %s expected in profile_cache but not found',
+                           profile_id)
+            return False
 
+        new_filepath = os.path.join(self._new_dir, profile_id + '.json')
         if not os.path.exists(new_filepath):
             # TODO: why is this thrown when requesting /profiles?status=new ?
             logger.warning('Attempt to mark as "existing" profile that is not found: %s',
@@ -88,24 +108,9 @@ class ProfileStore:
         existing_filepath = os.path.join(self._existing_dir, profile_id + '.json')
         os.rename(new_filepath, existing_filepath)
 
-        # find the profile data from the new_profiles cache and move it to existing_profiles
-        profile_data = next((profile for profile in self.new_profiles
-                             if profile['id'] == profile_id), None)
-        if not profile_data:
-            logger.warning('Support Profile %s expected in new_profiles cache but not found',
-                           profile_id)
-
-            # unexpectedly, profile is not in new_profiles cache;
-            # recover from this by re-reading the JSON from file, because file must exist
-            filename = os.path.join(self._existing_dir, profile_id + '.json')
-            logger.debug('Attempting to read existing profile from path: %s', filename)
-            with open(filename, 'r', encoding='utf-8') as file:
-                profile_data = json.load(file)
-
-        # add Profile to existing_profiles cache, and scrub from new_profiles cache
-        self.existing_profiles.append(profile_data)
-        self.new_profiles = [profile for profile in self.existing_profiles
-                             if profile['id'] != profile_id]
+        # find this profile in the cache and change is_new flag to false
+        cache_index = self.profile_cache.index(cached_profile)
+        self.profile_cache[cache_index].is_new = False
 
         return True
 
@@ -117,12 +122,10 @@ class ProfileStore:
         """
         logger.info('Deleting profile_id %s', profile_id)
         filepath = os.path.join(self._existing_dir, profile_id + '.json')
-        profile_cache = self.existing_profiles  # assume profile is in "existing" cache
 
         if not os.path.exists(filepath):
             # profile does not in exist in "existing" subdirectory, maybe its in "new"
             filepath = os.path.join(self._existing_dir, profile_id + '.json')
-            profile_cache = self.new_profiles  # now assume profile is in "new" cache
 
             if not os.path.exists(filepath):
                 logger.warning('Cannot delete profile %s; JSON file not found in %s or %s',
@@ -132,9 +135,9 @@ class ProfileStore:
         logger.debug('Attempting to delete profile at path: %s', filepath)
         os.remove(filepath)
 
-        # drop profile from new/existing cache (whichever subdirectory it was found in)
-        profile_cache = [profile for profile in profile_cache if profile['id'] != profile_id]
-
+        # drop profile from cache
+        self.profile_cache = [cached_profile for cached_profile in self.profile_cache
+                              if cached_profile.data['id'] != profile_id]
         return True
 
     def _read_existing_profiles(self) -> list[dict]:

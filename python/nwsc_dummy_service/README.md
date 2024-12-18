@@ -73,5 +73,5 @@ The most common way to get python dependencies installed is to use either [conda
 
 Lastly, `cd` to the `./python` directory, and start the relevant service. For example, for Request Service:
 ```sh
-python3 proxy_service.py
+python3 nwsc_dummy_web_service.py
 ```

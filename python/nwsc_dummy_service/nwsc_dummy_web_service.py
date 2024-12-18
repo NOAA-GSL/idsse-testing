@@ -1,4 +1,4 @@
-"""Proxy web service simulating behaviors of NWS Connect core services"""
+"""Dummy web service simulating behaviors of NWS Connect core services"""
 # ----------------------------------------------------------------------------------
 # Created on Fri Apr 07 2023
 #
@@ -9,13 +9,13 @@
 #     Mackenzie Grimes (1)
 #
 # ----------------------------------------------------------------------------------
-# pylint: disable=too-few-public-methods
+import os
 from datetime import datetime, UTC
 from argparse import ArgumentParser, Namespace
 
 from flask import Flask, current_app, request, jsonify
 
-from src.event_store import EventStore
+from src.profile_store import ProfileStore
 
 # constants
 GSL_KEY = '8209c979-e3de-402e-a1f5-556d650ab889'
@@ -29,6 +29,7 @@ def to_iso(date_time: datetime) -> str:
             else date_time.strftime("%Z")[3:])
 
 
+# pylint: disable=too-few-public-methods
 class HealthRoute:
     """Handle requests to /health endpoint"""
     def __init__(self):
@@ -44,12 +45,12 @@ class HealthRoute:
 
 
 class EventsRoute:
-    """Handle requests to /events endpoint"""
+    """Handle requests to /all-events endpoint"""
     def __init__(self, base_dir: str):
-        self.event_store = EventStore(base_dir)
+        self.profile_store = ProfileStore(base_dir)
 
     def handler(self):
-        """Logic for requests to /events"""
+        """Logic for requests to /all-events"""
         # check that this request has proper key to get or add data
         if request.headers.get('X-Api-Key') != GSL_KEY:
             return jsonify({'message': 'ERROR: Unauthorized'}), 401
@@ -57,33 +58,37 @@ class EventsRoute:
         if request.method == 'POST':
             # request is saving new Support Profile event
             request_body: dict = request.json
-            event_id = self.event_store.save(request_body)  # TODO: handle failure?
-
-            return jsonify({'message': f'Event {event_id} saved'}), 201
+            profile_id = self.profile_store.save(request_body)  # TODO: handle failure?
+            return jsonify({'message': f'Profile {profile_id} saved'}), 201
 
         if request.method == 'DELETE':
-            event_id = request.args.get('uuid', default=None, type=str)
-            self.event_store.delete(event_id)  # TODO: handle failure?
-
-            return jsonify({'message': f'Event {event_id} deleted'}), 204
+            profile_id = request.args.get('uuid', default=None, type=str)
+            self.profile_store.delete(profile_id)  # TODO: handle failure?
+            return jsonify({'message': f'Profile {profile_id} deleted'}), 204
 
         # otherwise, must be 'GET' operation
-        event_status = request.args.get('status', default='existing', type=str)
-        if event_status == 'existing':
-            events = self.event_store.get_all()
-            return jsonify({'events': events}), 200
+        data_source = request.args.get('dataSource', None, type='str')
+        if data_source != 'NBM':
+            return jsonify({'profiles': [], 'errors': [f'Invalid dataSource: {data_source}']}), 400
 
-        if event_status == 'new':
-            new_events = self.event_store.get_all(filter_new_profiles=True)
-            # update EventStore to label all queried events as no longer "new";
+        profile_status = request.args.get('status', default='existing', type=str)
+        if profile_status == 'existing':
+            profiles = self.profile_store.get_all()
+
+        if profile_status == 'new':
+            profiles = self.profile_store.get_all(filter_new_profiles=True)
+            # update ProfileStore to label all queried events as no longer "new";
             # they've now been returned to IDSS Engine clients at least once
-            current_app.logger.info('Got all new events: %s', new_events)
-            for event in new_events:
-                self.event_store.move_to_existing(event['id'])
-            return jsonify({'events': new_events}), 200
+            current_app.logger.info('Got all new profiles: %s', profiles)
+            for profile in profiles:
+                self.profile_store.move_to_existing(profile['id'])
 
-        # status query param should have been 'existing' or 'new'
-        return jsonify({'message': f'Invalid event status: {event_status}'}), 400
+        else:
+            # status query param should have been 'existing' or 'new'
+            return jsonify({'message': f'Invalid profile status: {profile_status}'}), 400
+
+        return jsonify({'profiles': profiles, 'errors': []}), 200
+
 
 
 class AppWrapper:
@@ -97,7 +102,7 @@ class AppWrapper:
 
         self.app.add_url_rule('/health', 'health', view_func=health_route.handler,
                               methods=['GET'])
-        self.app.add_url_rule('/events', 'events',
+        self.app.add_url_rule('/all-events', 'events',
                               view_func=events_route.handler,
                               methods=['GET', 'POST', 'DELETE'])
 
@@ -109,8 +114,7 @@ class AppWrapper:
 def create_app(args: Namespace = None) -> Flask:
     """Create a Flask instance"""
     base_dir = args.base_dir
-    _wrapper = AppWrapper(base_dir)
-    return _wrapper.app
+    return AppWrapper(base_dir).app
 
 
 if __name__ == '__main__':
@@ -126,4 +130,7 @@ if __name__ == '__main__':
     # host=0.0.0.0 is required for flask to work properly in docker and k8s env
     app.run(host='0.0.0.0', port=_args.port)
 
-# TODO: gunicorn runtime
+elif 'gunicorn' in os.getenv('SERVER_SOFTWARE', default=''):  # pragma: no cover
+    # default to current directory
+    _base_dir = os.getenv('BASE_DIR', os.getcwd())
+    app = AppWrapper(_base_dir).app
