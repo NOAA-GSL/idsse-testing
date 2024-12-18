@@ -13,7 +13,7 @@
 from datetime import datetime, UTC
 from argparse import ArgumentParser, Namespace
 
-from flask import Flask, request, jsonify, current_app
+from flask import Flask, current_app, request, jsonify
 
 from src.event_store import EventStore
 
@@ -39,7 +39,7 @@ class HealthRoute:
         uptime = datetime.now(UTC) - self._app_start_time
         return jsonify({
             'startedAt': to_iso(self._app_start_time),
-            'uptime': uptime.total_seconds
+            'uptime': uptime.total_seconds()
         }), 200
 
 
@@ -77,10 +77,12 @@ class EventsRoute:
             new_events = self.event_store.get_all(filter_new_profiles=True)
             # update EventStore to label all queried events as no longer "new";
             # they've now been returned to IDSS Engine clients at least once
+            current_app.logger.info('Got all new events: %s', new_events)
             for event in new_events:
                 self.event_store.move_to_existing(event['id'])
-            return jsonify({'events': events}), 200
+            return jsonify({'events': new_events}), 200
 
+        # status query param should have been 'existing' or 'new'
         return jsonify({'message': f'Invalid event status: {event_status}'}), 400
 
 
@@ -105,16 +107,23 @@ class AppWrapper:
 
 
 def create_app(args: Namespace = None) -> Flask:
+    """Create a Flask instance"""
     base_dir = args.base_dir
     _wrapper = AppWrapper(base_dir)
     return _wrapper.app
 
 
 if __name__ == '__main__':
-    # TODO: command line args
+    parser = ArgumentParser()
+    parser.add_argument('--port', dest='port', default=5000, type=int,
+                        help='The port the web server will listen on.')
+    parser.add_argument('--base_dir', dest='base_dir', required=True, type=str,
+                        help='The base directory where Support Profile JSONs will be read/written')
 
+    _args = parser.parse_args()
+
+    app = create_app(_args)
     # host=0.0.0.0 is required for flask to work properly in docker and k8s env
-    app = create_app()
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=_args.port)
 
 # TODO: gunicorn runtime

@@ -70,19 +70,20 @@ class EventStore:
         Returns:
             bool: True on success. False if JSON with this event_id (UUID) not found on filesystem
         """
-        new_filepath = os.path.join(self._new_dir, event_id, '.json')
+        new_filepath = os.path.join(self._new_dir, event_id + '.json')
 
         if not os.path.exists(new_filepath):
+            # TODO: why is this thrown when requesting /events?status=new ?
             logger.warning('Attempt to mark as "existing" profile that is not found: %s',
                            new_filepath)
             return False
 
         # move the JSON file from the "new" to the "existing" directory and update cache
-        existing_filepath = os.path.join(self._existing_dir, event_id, '.json')
+        existing_filepath = os.path.join(self._existing_dir, event_id + '.json')
         os.rename(new_filepath, existing_filepath)
 
         # find the event data from the new_profiles cache and move it to the existing_profiles
-        event_data = next([profile for profile in self.new_profiles if profile['id'] == event_id],
+        event_data = next((profile for profile in self.new_profiles if profile['id'] == event_id),
                           None)
         if not event_data:
             logger.warning('Support Profile %s expected in new_profiles cache but not found',
@@ -133,14 +134,14 @@ class EventStore:
 
         # determine the right filepath where JSON data will be written
         dir_path = self._new_dir if is_new else self._existing_dir
-        filepath = os.path.join(dir_path, event_id, '.json')
+        filepath = os.path.join(dir_path, event_id + '.json')
 
         # will be saved to the appropriate in-memory list of profile data
         profile_cache = self.new_profiles if is_new else self.existing_profiles
 
         logger.info('Now saving event to path: %s', filepath)
         with open(filepath, 'w', encoding='utf-8') as file:
-            os.write(file, event)  # save JSON to filesystem
+            json.dump(event, file)  # save JSON to filesystem
 
         profile_cache.append(event)
         return event_id
@@ -159,7 +160,7 @@ class EventStore:
         """Get an existing event from disk based on the event ID.
         Reads from NEW subdirectory should almost never be necessary.
         """
-        filename = os.path.join(self._existing_dir, event_id, '.json')
+        filename = os.path.join(self._existing_dir, event_id + '.json')
         logger.debug('Attempting to read existing event from path: %s', filename)
         with open(filename, 'r', encoding='utf-8') as file:
             return json.load(file)
@@ -167,7 +168,7 @@ class EventStore:
     def _write_new_event(self, data: dict):
         """Write a new Support Profile Event to disk using `self._new_dir`"""
         event_id = data['id']
-        with open(os.path.join(self._new_dir, event_id, '.json'), 'w', encoding='utf-8') as file:
+        with open(os.path.join(self._new_dir, event_id + '.json'), 'w', encoding='utf-8') as file:
             os.write(file, data)
 
     def _delete_event(self, event_id: str) -> bool:
@@ -175,10 +176,10 @@ class EventStore:
         Returns:
             bool: True on success, False if JSON file not found
         """
-        filepath = os.path.join(self._existing_dir, event_id, '.json')
+        filepath = os.path.join(self._existing_dir, event_id + '.json')
         if not os.path.exists(filepath):
             # event does not in exist in existing subdirectory, maybe its in the new one
-            filepath = os.path.join(self._existing_dir, event_id, '.json')
+            filepath = os.path.join(self._existing_dir, event_id + '.json')
 
             if not os.path.exists(filepath):
                 logger.warning('Cannot delete event %s; JSON file not found in %s or %s',
