@@ -1,4 +1,4 @@
-# IMS Gateway Request Service using python commons base image
+# NWSC Dummy Service using python commons base image
 FROM ghcr.io/noaa-gsl/idss/commons/python/python-base:main
 
 ARG maintainer
