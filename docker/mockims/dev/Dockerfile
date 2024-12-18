@@ -21,4 +21,4 @@ COPY ./python/nwsc_dummy_service/src/profiles/*.json /python/profiles/
 # for now.
 #VOLUME /python/profiles
 
-ENTRYPOINT [ "python3", "/python/nwsc_dummy_service/nwsc_dummy_web_service.py", "--base_dir", "/python/profiles"]
+ENTRYPOINT [ "python3", "/python/nwsc_dummy_service/ncd_web_service.py", "--base_dir", "/python/profiles"]

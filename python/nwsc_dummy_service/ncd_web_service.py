@@ -1,4 +1,4 @@
-"""Dummy web service simulating behaviors of NWS Connect core services"""
+"""NWS Connect Dummy service simulating behaviors of NWS Connect core services"""
 # ----------------------------------------------------------------------------------
 # Created on Fri Apr 07 2023
 #
@@ -49,6 +49,7 @@ class EventsRoute:
     def __init__(self, base_dir: str):
         self.profile_store = ProfileStore(base_dir)
 
+    # pylint: disable=too-many-return-statements
     def handler(self):
         """Logic for requests to /all-events"""
         # check that this request has proper key to get or add data
@@ -58,12 +59,18 @@ class EventsRoute:
         if request.method == 'POST':
             # request is saving new Support Profile event
             request_body: dict = request.json
-            profile_id = self.profile_store.save(request_body)  # TODO: handle failure?
+            profile_id = self.profile_store.save(request_body)
+            if not profile_id:
+                return jsonify({'message': f'Profile {request_body.get("id")} already exists'}
+                               ), 400
+
             return jsonify({'message': f'Profile {profile_id} saved'}), 201
 
         if request.method == 'DELETE':
             profile_id = request.args.get('uuid', default=None, type=str)
-            self.profile_store.delete(profile_id)  # TODO: handle failure?
+            is_deleted = self.profile_store.delete(profile_id)
+            if not is_deleted:
+                return jsonify({'message': f'Profile {profile_id} not found'}), 404
             return jsonify({'message': f'Profile {profile_id} deleted'}), 204
 
         # otherwise, must be 'GET' operation
@@ -85,7 +92,9 @@ class EventsRoute:
 
         else:
             # status query param should have been 'existing' or 'new'
-            return jsonify({'message': f'Invalid profile status: {profile_status}'}), 400
+            return jsonify(
+                {'profiles': [], 'errors': [f'Invalid profile status: {profile_status}']}
+                ), 400
 
         return jsonify({'profiles': profiles, 'errors': []}), 200
 
