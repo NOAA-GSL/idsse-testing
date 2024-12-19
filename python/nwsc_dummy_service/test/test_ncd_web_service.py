@@ -8,6 +8,7 @@
 #     Mackenzie Grimes (1)
 #
 # ----------------------------------------------------------------------------------
+# pylint: disable=missing-function-docstring,redefined-outer-name,unused-argument
 import json
 from datetime import timedelta
 from unittest.mock import Mock
