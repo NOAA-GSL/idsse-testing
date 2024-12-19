@@ -104,7 +104,7 @@ class AppWrapper:
     """Web server class wrapping Flask operations"""
     def __init__(self, base_dir: str):
         """Build Flask app instance, mapping handler to each endpoint"""
-        self.app = Flask(__name__)
+        self.app = Flask(__name__, static_folder=None)  # no need for a static folder
 
         health_route = HealthRoute()
         events_route = EventsRoute(base_dir)
@@ -126,7 +126,7 @@ def create_app(args: Namespace = None) -> Flask:
     return AppWrapper(base_dir).app
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     parser = ArgumentParser()
     parser.add_argument('--port', dest='port', default=5000, type=int,
                         help='The port the web server will listen on.')
