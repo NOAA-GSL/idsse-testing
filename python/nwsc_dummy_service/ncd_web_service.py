@@ -75,7 +75,7 @@ class EventsRoute:
 
         # otherwise, must be 'GET' operation
         data_source = request.args.get('dataSource', None, type=str)
-        if data_source != 'NBM':
+        if data_source not in ['NBM', 'ANY']:
             return jsonify({'profiles': [], 'errors': [f'Invalid dataSource: {data_source}']}), 400
 
         profile_status = request.args.get('status', default='existing', type=str)
