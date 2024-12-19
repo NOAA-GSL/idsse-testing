@@ -37,10 +37,10 @@ jobs:
 
       - name: Set PYTHONPATH for pytest
         run: |
-          echo "PYTHONPATH=python/nwsc_dummy_service" >> $GITHUB_ENV
+          echo "PYTHONPATH=python/nwsc_proxy" >> $GITHUB_ENV
 
       - name: Test pytest
-        working-directory: python/nwsc_dummy_service/test
+        working-directory: python/nwsc_proxy/test
         run: |
           set -o pipefail;  # exit immediately if pytest fails (tee obfuscates the exit code)
           pytest --cov=.. --cov-report=term --junitxml=./pytest.xml | tee ./coverage.txt;
@@ -53,4 +53,4 @@ jobs:
           hide-comment: true
           badge-title: Coverage
           title: Report
-          pytest-coverage-path: python/nwsc_dummy_service/test/coverage.txt
+          pytest-coverage-path: python/nwsc_proxy/test/coverage.txt

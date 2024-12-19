@@ -17,7 +17,7 @@ from glob import glob
 
 from pytest import fixture
 
-from python.nwsc_dummy_service.src.profile_store import ProfileStore, NEW_SUBDIR, EXISTING_SUBDIR
+from python.nwsc_proxy.src.profile_store import ProfileStore, NEW_SUBDIR, EXISTING_SUBDIR
 
 # constants
 STORE_BASE_DIR = os.path.join(os.path.dirname(__file__), 'temp')

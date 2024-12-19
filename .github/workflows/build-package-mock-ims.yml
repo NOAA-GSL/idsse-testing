@@ -11,7 +11,7 @@ jobs:
       fail-fast: true
       matrix:
         app:
-          - dummyservice
+          - proxy
     steps:
 
     - name: Login to GitHub Container Registry
@@ -69,7 +69,7 @@ jobs:
           --build-arg COMMITBRANCH=${{env.BRANCH}} \
           --build-arg COMMITSHA=${{github.sha}} \
           -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}} \
-          -f ./docker/dummyservice/dev/Dockerfile .
+          -f ./docker/nwsc_proxy/dev/Dockerfile .
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master

@@ -1,4 +1,4 @@
-"""NWS Connect Dummy service simulating behaviors of NWS Connect core services"""
+"""NWS Connect Proxy service simulating behaviors of NWS Connect core services"""
 # ----------------------------------------------------------------------------------
 # Created on Fri Apr 07 2023
 #

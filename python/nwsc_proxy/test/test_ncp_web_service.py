@@ -1,4 +1,4 @@
-"""Unit tests for ncd_web_service.py"""
+"""Unit tests for ncp_web_service.py"""
 # ----------------------------------------------------------------------------------
 # Created on Wed Dec 18 2024
 #
@@ -17,8 +17,8 @@ from flask import Request, Response
 from pytest import fixture, MonkeyPatch
 from werkzeug.datastructures import MultiDict
 
-from python.nwsc_dummy_service.ncd_web_service import (AppWrapper, Flask, Namespace, ProfileStore,
-                                                       create_app, datetime, GSL_KEY)
+from python.nwsc_proxy.ncp_web_service import (AppWrapper, Flask, Namespace, ProfileStore,
+                                               create_app, datetime, GSL_KEY)
 
 # constants
 EXAMPLE_DATETIME = datetime(2024, 1, 1, 12, 34)
@@ -30,7 +30,7 @@ EXAMPLE_UUID = '9835b194-74de-4321-aa6b-d769972dc7cb'
 def mock_datetime(monkeypatch: MonkeyPatch) -> Mock:
     mock_obj = Mock(name='MockDatetime')
     mock_obj.now.return_value = EXAMPLE_DATETIME
-    monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.datetime', mock_obj)
+    monkeypatch.setattr('python.nwsc_proxy.ncp_web_service.datetime', mock_obj)
 
     return mock_obj
 
@@ -38,7 +38,7 @@ def mock_datetime(monkeypatch: MonkeyPatch) -> Mock:
 @fixture
 def mock_profile_store(monkeypatch: MonkeyPatch) -> Mock:
     mock_obj = Mock(name='MockProfileStore', spec=ProfileStore)
-    monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.ProfileStore', mock_obj)
+    monkeypatch.setattr('python.nwsc_proxy.ncp_web_service.ProfileStore', mock_obj)
     return mock_obj
 
 
@@ -49,7 +49,7 @@ def mock_jsonify(monkeypatch: MonkeyPatch) -> Mock:
 
     mock_obj = Mock(name='MockJsonify')
     mock_obj.side_effect = mock_func
-    monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.jsonify', mock_obj)
+    monkeypatch.setattr('python.nwsc_proxy.ncp_web_service.jsonify', mock_obj)
     return mock_obj
 
 
@@ -59,7 +59,7 @@ def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
     mock_obj.logger.info.return_value = None
     mock_obj.logger.error.return_value = None
     mock_obj.config = MultiDict({'GSL_KEY': GSL_KEY})
-    monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.current_app', mock_obj)
+    monkeypatch.setattr('python.nwsc_proxy.ncp_web_service.current_app', mock_obj)
     return mock_obj
 
 
@@ -69,7 +69,7 @@ def mock_request(monkeypatch: MonkeyPatch, mock_current_app, mock_jsonify) -> Mo
     mock_obj.origin = 'http://example.com:5000'
     mock_obj.method = 'GET'
     mock_obj.headers = MultiDict({'X-Api-Key': GSL_KEY})
-    monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.request', mock_obj)
+    monkeypatch.setattr('python.nwsc_proxy.ncp_web_service.request', mock_obj)
     return mock_obj
 
 

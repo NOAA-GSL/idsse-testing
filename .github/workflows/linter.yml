@@ -44,9 +44,9 @@ jobs:
       - name: Run code linter
         run: pylint ./python/idsse/testing --max-line-length=120 --recursive true
 
-      - name: Set PYTHONPATH for dummy service
+      - name: Set PYTHONPATH for proxy service
         run: |
-          echo "PYTHONPATH=python/nwsc_dummy_service" >> $GITHUB_ENV
+          echo "PYTHONPATH=python/nwsc_proxy" >> $GITHUB_ENV
 
-      - name: Run code linter for dummy service
-        run: pylint ./python/nwsc_dummy_service --max-line-length=120 --recursive true
+      - name: Run code linter for proxy service
+        run: pylint ./python/nwsc_proxy --max-line-length=120 --recursive true

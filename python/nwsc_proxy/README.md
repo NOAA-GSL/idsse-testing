@@ -1,10 +1,10 @@
 # NWS Connect Proxy Service
 
- ## Overview
--The `nwsc-dummy-service` is a web service that simulates storing a set of Support Profiles and serving them up in a simple REST interface.
+## Overview
+-The `nwsc-proxy` is a web service that simulates NWS Connect systems storing a set of Support Profiles and serving them up in a simple REST interface.
 
 ## Configurations
-The NWS Connect proxy service should be started as a standalone service and offers two end-points in support of the NWSConnect Gateway request/response services. Those services should be provided with the network address of this services endpoints via their command line arguments for testing purposes.
+The NWS Connect proxy service should be started as a standalone service and offers two end-points in support of the NWSConnect Gateway services. Those services should be provided with the network address of this services endpoints via their command line arguments for testing purposes.
 
 
 ## Build, Release, and Run
@@ -71,9 +71,9 @@ The most common way to get python dependencies installed is to use either [conda
         brew install peak/tap/s5cmd
         ```
 
-Lastly, `cd` to the `./python/nwsc_dummy_service` directory, and start the NWS Connect Dummy service:
+Lastly, `cd` to the `./python/nwsc_proxy` directory, and start the NWS Connect Proxy service:
 ```sh
-python3 ncd_web_service.py --base_dir /path/to/some/dir
+python3 ncp_web_service.py --base_dir /path/to/some/dir
 ```
 
 On startup, the service creates 'existing' and 'new' subdirectories at the path location given by `--base_dir` if needed, then reads into its in-memory cache any existing JSON files in the base directory or either subdirectory.
