@@ -53,7 +53,7 @@ class EventsRoute:
     def handler(self):
         """Logic for requests to /all-events"""
         # check that this request has proper key to get or add data
-        if request.headers.get('X-Api-Key') != GSL_KEY:
+        if request.headers.get('X-Api-Key') != current_app.config['GSL_KEY']:
             return jsonify({'message': 'ERROR: Unauthorized'}), 401
 
         if request.method == 'POST':
@@ -97,7 +97,6 @@ class EventsRoute:
                 ), 400
 
         return jsonify({'profiles': profiles, 'errors': []}), 200
-
 
 
 class AppWrapper:

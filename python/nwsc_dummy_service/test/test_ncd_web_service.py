@@ -58,6 +58,7 @@ def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
     mock_obj = Mock(name='MockCurrentApp', spec=Flask)
     mock_obj.logger.info.return_value = None
     mock_obj.logger.error.return_value = None
+    mock_obj.config = MultiDict({'GSL_KEY': GSL_KEY})
     monkeypatch.setattr('python.nwsc_dummy_service.ncd_web_service.current_app', mock_obj)
     return mock_obj
 
