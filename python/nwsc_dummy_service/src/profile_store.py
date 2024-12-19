@@ -21,7 +21,6 @@ EXISTING_SUBDIR = 'existing'
 logger = logging.getLogger(__name__)
 
 
-
 @dataclass
 class CachedProfile:
     """Data class to hold Support Profile's data and metadata ("new" vs "existing" status)
@@ -116,7 +115,7 @@ class ProfileStore:
         self.profile_cache.append(cached_profile)
         return cached_profile.id
 
-    def move_to_existing(self, profile_id: str) -> bool:
+    def mark_as_existing(self, profile_id: str) -> bool:
         """Mark a formerly "new" Support Profile as "existing", a.k.a. has been returned in
         API response at least once and should no longer be processed as "new"
 
@@ -141,10 +140,7 @@ class ProfileStore:
         # move the JSON file from the "new" to the "existing" directory and update cache
         existing_filepath = os.path.join(self._existing_dir, f'{profile_id}.json')
         os.rename(new_filepath, existing_filepath)
-
-        # update this profile's is_new flag in in-memory cache
-        profile_index = self.profile_cache.index(cached_profile)
-        self.profile_cache[profile_index].is_new = False
+        cached_profile.is_new = False
 
         return True
 

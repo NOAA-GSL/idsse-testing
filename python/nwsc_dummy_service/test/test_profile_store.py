@@ -150,7 +150,7 @@ def test_move_to_existing_success(store: ProfileStore):
     new_profiles = store.get_all(filter_new_profiles=True)
     assert [p['id'] for p in new_profiles] == [EXAMPLE_UUID]
 
-    store.move_to_existing(EXAMPLE_UUID)
+    store.mark_as_existing(EXAMPLE_UUID)
 
     new_profiles = store.get_all(filter_new_profiles=True)
     assert new_profiles == []  # Support Profile has vanished from list of new

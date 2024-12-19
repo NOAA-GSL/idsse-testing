@@ -88,7 +88,7 @@ class EventsRoute:
             # they've now been returned to IDSS Engine clients at least once
             current_app.logger.info('Got all new profiles: %s', profiles)
             for profile in profiles:
-                self.profile_store.move_to_existing(profile['id'])
+                self.profile_store.mark_as_existing(profile['id'])
 
         else:
             # status query param should have been 'existing' or 'new'
