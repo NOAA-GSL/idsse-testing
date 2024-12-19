@@ -104,6 +104,7 @@ class AppWrapper:
     def __init__(self, base_dir: str):
         """Build Flask app instance, mapping handler to each endpoint"""
         self.app = Flask(__name__, static_folder=None)  # no need for a static folder
+        self.app.config['GSL_KEY'] = GSL_KEY
 
         health_route = HealthRoute()
         events_route = EventsRoute(base_dir)
