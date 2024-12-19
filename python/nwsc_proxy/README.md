@@ -17,7 +17,7 @@ The subsections below outline how to build the images within this project. All m
 - targeted environment: `:aws`
 
 ---
-### IMS Service
+### NWSC Proxy Service
 From the IDSS Engine project root directory `idss-engine/build/<env>/<arch>/`:
 
 `$ docker-compose build proxy_service`

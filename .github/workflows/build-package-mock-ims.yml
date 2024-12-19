@@ -1,4 +1,4 @@
-name: Build and Package the Mock IMS Service to Dev Registry
+name: Build and Package the NWSC Proxy Service to Dev Registry
 on:
   push:
     branches: [ main ]
