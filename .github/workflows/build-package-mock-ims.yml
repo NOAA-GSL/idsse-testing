@@ -11,7 +11,7 @@ jobs:
       fail-fast: true
       matrix:
         app:
-          - mockims
+          - dummyservice
     steps:
 
     - name: Login to GitHub Container Registry
@@ -20,7 +20,7 @@ jobs:
         registry: ghcr.io
         username: ${{github.actor}}
         password: ${{secrets.GITHUB_TOKEN}}
-    
+
     - name: pull
       run: |
         docker pull ghcr.io/noaa-gsl/idss/commons/python/python-base:main
@@ -69,7 +69,7 @@ jobs:
           --build-arg COMMITBRANCH=${{env.BRANCH}} \
           --build-arg COMMITSHA=${{github.sha}} \
           -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}} \
-          -f ./docker/mockims/dev/Dockerfile .
+          -f ./docker/dummyservice/dev/Dockerfile .
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master

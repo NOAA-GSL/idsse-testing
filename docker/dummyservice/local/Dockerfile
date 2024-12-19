@@ -12,6 +12,7 @@ WORKDIR /python/nwsc_dummy_service
 
 # Copy source files
 COPY ./python/nwsc_dummy_service/*.py /python/nwsc_dummy_service/
+COPY ./python/nwsc_dummy_service/src/*.py /python/nwsc_dummy_service/src/
 
 # (TEMPORARY) Copy canned criteria files. To be removed when integration with NWS Connect API exists
 COPY ./python/nwsc_dummy_service/src/profiles/*.json /python/profiles/
