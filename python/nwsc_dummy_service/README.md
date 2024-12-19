@@ -40,9 +40,9 @@ To run this service can run in isolation, it does not requires a rabbitmq server
 docker run --rm --name proxy-service idss.engine.service.proxy.service:local
 ```
 
-Optional parameters include:
+Required parameters include:
 ```
-    None
+    --base_dir /path/to/file/dir  # file location where JSON files will be read and written
 ```
 #### Python (local)
 
@@ -75,3 +75,18 @@ Lastly, `cd` to the `./python/nwsc_dummy_service` directory, and start the NWS C
 ```sh
 python3 ncd_web_service.py --base_dir /path/to/some/dir
 ```
+
+On startup, the service creates 'existing' and 'new' subdirectories at the path location given by `--base_dir` if needed, then reads into its in-memory cache any existing JSON files in the base directory or either subdirectory.
+
+### Endpoints
+- GET `/health`
+- GET `/all-events?dataSource=ANY&status=existing`
+  - Get list of existing Support Profiles (not new). Will be formatted like `{ "profiles": [], "errors": []}`
+- GET `/all-events?dataSource=ANY&status=new`
+  - Get only new (never before processed) Support Profiles. After a profile is returned to any API request, it will disappear from the "new" list, only appearing in `status=existing` filter requests.
+- POST `/all-events`
+  - Create a new Support Profile to be stored by the API. The body of the request will be the JSON saved--the `id` field should be unique.
+- DELETE `/all-events?uuid=<some id>`
+  - Permanently remove an existing Support Profile from the API. `uuid` must match one of the saved Support Profile JSON's `id` attribute, otherwise it will return `404`.
+
+Note that all requests to the `/all-events` endpoint require an `X-Api-Key` header that must match the approved key, or the API will return `401`.
