@@ -160,14 +160,41 @@ def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_
     assert mark_existing_call_args[0][1][0] == example_profile['id']
 
 
-def test_create_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+def test_create_profile_new(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
     mock_request.method = 'POST'
-    mock_request.json = {'id': EXAMPLE_UUID, 'name': 'My Profile'}
+    example_profile = {'id': EXAMPLE_UUID, 'name': 'My Profile'}
+    mock_request.json = {'status': 'new', 'data': example_profile}
     mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
 
     result: tuple[Response, int] = wrapper.app.view_functions['events']()
 
     assert result[1] == 201
+    # should have saved profile with is_new: True
+    mock_profile_store.return_value.save.assert_called_once_with(example_profile, True)
+
+
+def test_create_profile_existing(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+    mock_request.method = 'POST'
+    example_profile = {'id': EXAMPLE_UUID, 'name': 'My Profile'}
+    mock_request.json = {'status': 'existing', 'data': example_profile}
+    mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
+
+    result: tuple[Response, int] = wrapper.app.view_functions['events']()
+
+    assert result[1] == 201
+    # should have saved profile with is_new: False
+    mock_profile_store.return_value.save.assert_called_once_with(example_profile, False)
+
+
+def test_create_profile_invalid(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+    mock_request.method = 'POST'
+    example_profile = {'id': EXAMPLE_UUID, 'name': 'My Profile'}
+    mock_request.json = {'status': 'foobar', 'data': example_profile}
+
+    result: tuple[Response, int] = wrapper.app.view_functions['events']()
+
+    assert result[1] == 400
+    mock_profile_store.return_value.save.assert_not_called()
 
 
 def test_create_previous_profile_failure(wrapper: AppWrapper,
