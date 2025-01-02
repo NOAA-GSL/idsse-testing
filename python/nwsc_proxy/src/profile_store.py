@@ -88,8 +88,14 @@ class ProfileStore:
         return [cached_profile.data for cached_profile in self.profile_cache
                 if cached_profile.is_new == filter_new_profiles]
 
-    def save(self, profile: dict) -> str | None:
+    def save(self, profile: dict, is_new = True) -> str | None:
         """Persist a new Support Profile Profile to this API
+
+        Args:
+            profile (dict): the JSON data of the Support Profile to store.
+            is_new (optional, bool): whether to store the Profile as "new" or "existing". This
+                will only control whether this SupportProfile will be returned to calls to the
+                `get_all()` method (if it is classified as new vs. existing). Defaults to True.
 
         Returns:
             str | None: UUID of saved Support Profile on success, otherwise None
@@ -103,10 +109,11 @@ class ProfileStore:
             logger.warning('Cannot save profile; already exists %s', existing_profile.id)
             return None
 
-        cached_profile = CachedProfile(profile, is_new=True)
+        cached_profile = CachedProfile(profile, is_new=is_new)
 
         # save Profile JSON to filesystem
-        filepath = os.path.join(self._new_dir, f'{cached_profile.id}.json')
+        file_dir = self._new_dir if is_new else self._existing_dir
+        filepath = os.path.join(file_dir, f'{cached_profile.id}.json')
         logger.info('Now saving profile to path: %s', filepath)
         with open(filepath, 'w', encoding='utf-8') as file:
             json.dump(profile, file)
