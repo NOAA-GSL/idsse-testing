@@ -1,0 +1,263 @@
+{
+  "corrId": {
+    "originator": "IDSSe",
+    "uuid": "22222222-beec-467b-a0e6-9d215b71f93c",
+    "issueDt": "2025-01-28T12:00:00.000Z"
+  },
+  "issueDt": "2025-01-28T12:00:00.000Z",
+  "location": {
+    "features": [
+      {
+        "type": "Feature",
+        "properties": { "name": "Location 1" },
+        "geometry": {
+          "coordinates": [
+            [-75.82261820803978, 42.100751285762954],
+            [-75.8383708354987, 42.10864014806441],
+            [-75.97392382434361, 42.120569061969576],
+            [-75.97856530045271, 42.12045478019678],
+            [-75.99682164316545, 42.11609384198053]
+          ],
+          "type": "LineString"
+        }
+      }
+    ]
+  },
+  "validDt": [
+    { "start": "2025-01-28T13:00:00.000Z", "end": "2025-01-28T15:00:00.000Z" }
+  ],
+  "conditions": [
+    {
+      "name": "Binghamton, Snow",
+      "severity": "MODERATE",
+      "combined": "A",
+      "partsUsed": ["A"]
+    }
+  ],
+  "parts": [
+    {
+      "name": "A",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": { "fcst": ["NBM"] },
+      "field": "SNOW:1HR",
+      "units": "INCHES",
+      "relational": "GREATER THAN OR EQUAL",
+      "thresh": 0.01,
+      "mapping": { "min": 0, "max": 3, "clip": "true" }
+    }
+  ],
+  "tags": {
+    "values": [],
+    "keyValues": { "name": "Binghamton, Snow", "nwsOffice": "BGM" }
+  },
+  "riskResults": [
+    {
+      "evaluatedAt": "2025-02-07T21:03:03.610Z",
+      "conditionKey": "Binghamton, Snow",
+      "productKey": "NBM CONUS",
+      "region": "CONUS",
+      "slice": "[1736:2136,760:1060]",
+      "locationKey": "Location 1",
+      "dataSummary": [
+        {
+          "validDt": [
+            "2025-01-28T13:00:00.000Z",
+            "2025-01-28T14:00:00.000Z",
+            "2025-01-28T15:00:00.000Z"
+          ],
+          "data": [
+            {
+              "name": "Binghamton, Snow",
+              "type": "condition",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [0.04, -1.0, -1.0],
+              "geoDist": [
+                { "-1.0": 4, "0.04": 3 },
+                { "-1.0": 7 },
+                { "-1.0": 7 }
+              ],
+              "dataType": "multi"
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [-1.0, -1.0, -1.0],
+              "geoDist": [{ "-1.0": 7 }, { "-1.0": 7 }, { "-1.0": 7 }],
+              "dataType": "dtrm"
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [0.04, -1.0, -1.0],
+              "geoDist": [
+                { "-1.0": 4, "0.04": 3 },
+                { "-1.0": 7 },
+                { "-1.0": 7 }
+              ],
+              "dataType": "prctl_p090"
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0],
+              "geoDist": [{ "0.0": 7 }, { "0.0": 7 }, { "0.0": 7 }],
+              "dataType": "dtrm"
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [0.12, 0.0, 0.0],
+              "geoDist": [{ "0.0": 4, "0.12": 3 }, { "0.0": 7 }, { "0.0": 7 }],
+              "dataType": "prctl_p090"
+            }
+          ]
+        }
+      ],
+      "dataDescript": [
+        {
+          "partName": "A",
+          "productName": "NBM CONUS",
+          "dataName": "Snowfall: 1HR accum (ASNOW)",
+          "dataLocation": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+          "issueDt": "2025-01-28T12:00:00.000Z"
+        }
+      ],
+      "metaData": [
+        {
+          "name": "Binghamton, Snow",
+          "type": "condition",
+          "dataType": "multi",
+          "proximalThresh": -0.5,
+          "states": [
+            {
+              "durationInMin": 2,
+              "min": 0.0,
+              "minAt": "2025-01-28T13:02:18.462Z",
+              "max": 0.04,
+              "startDt": "2025-01-28T13:00:00.000Z",
+              "endDt": "2025-01-28T13:02:18.462Z",
+              "maxAt": "2025-01-28T13:00:00.000Z",
+              "empirical": "HIT",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            },
+            {
+              "durationInMin": 29,
+              "min": -0.5,
+              "minAt": "2025-01-28T13:31:09.231Z",
+              "max": 0.0,
+              "startDt": "2025-01-28T13:02:18.462Z",
+              "endDt": "2025-01-28T13:31:09.231Z",
+              "maxAt": "2025-01-28T13:02:18.462Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            },
+            {
+              "durationInMin": 89,
+              "min": -1.0,
+              "minAt": "2025-01-28T14:00:00.000Z",
+              "max": -0.5,
+              "startDt": "2025-01-28T13:31:09.231Z",
+              "endDt": "2025-01-28T15:00:00.000Z",
+              "maxAt": "2025-01-28T13:31:09.231Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "dtrm",
+          "proximalThresh": -0.5,
+          "states": [
+            {
+              "durationInMin": 120,
+              "min": -1.0,
+              "minAt": "2025-01-28T13:00:00.000Z",
+              "max": -1.0,
+              "startDt": "2025-01-28T13:00:00.000Z",
+              "endDt": "2025-01-28T15:00:00.000Z",
+              "maxAt": "2025-01-28T13:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p090",
+          "proximalThresh": -0.5,
+          "states": [
+            {
+              "durationInMin": 2,
+              "min": 0.0,
+              "minAt": "2025-01-28T13:02:18.462Z",
+              "max": 0.04,
+              "startDt": "2025-01-28T13:00:00.000Z",
+              "endDt": "2025-01-28T13:02:18.462Z",
+              "maxAt": "2025-01-28T13:00:00.000Z",
+              "empirical": "HIT",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            },
+            {
+              "durationInMin": 29,
+              "min": -0.5,
+              "minAt": "2025-01-28T13:31:09.231Z",
+              "max": 0.0,
+              "startDt": "2025-01-28T13:02:18.462Z",
+              "endDt": "2025-01-28T13:31:09.231Z",
+              "maxAt": "2025-01-28T13:02:18.462Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            },
+            {
+              "durationInMin": 89,
+              "min": -1.0,
+              "minAt": "2025-01-28T14:00:00.000Z",
+              "max": -0.5,
+              "startDt": "2025-01-28T13:31:09.231Z",
+              "endDt": "2025-01-28T15:00:00.000Z",
+              "maxAt": "2025-01-28T13:31:09.231Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

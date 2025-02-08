@@ -1,0 +1,99 @@
+{
+  "A:Raw": {
+    "filenames": {
+      "dtrm": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore-1703650835.nc",
+      "prctl_p090": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p090/Inches/gridstore-1767335105.nc",
+      "Deterministic": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore-1703650835.nc"
+    },
+    "issue_dt": "2025-01-28T12:00:00.000Z",
+    "valid_dt": "2025-01-28T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "product": "NBM.AWS.GRIB",
+    "data_name": "Snowfall: 1HR accum (ASNOW)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "Inches",
+    "region": "CONUS",
+    "slice": "[1736:2136,760:1060]"
+  },
+  "A:ThreatLevel": {
+    "filenames": {
+      "dtrm": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc",
+      "prctl_p090": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.nc",
+      "Deterministic": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc"
+    },
+    "issue_dt": "2025-01-28T12:00:00.000Z",
+    "valid_dt": "2025-01-28T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "product": "NBM.AWS.GRIB",
+    "data_name": "Snowfall: 1HR accum (ASNOW)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[1736:2136,760:1060]"
+  },
+  "Binghamton, Snow": {
+    "filenames": {
+      "multi": "/share/2025/01/28/NBM.AWS.GRIB/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-1728425781.nc"
+    },
+    "issue_dt": "2025-01-28T12:00:00.000Z",
+    "valid_dt": "2025-01-28T13:00:00.000Z",
+    "proj_name": "NBM CONUS",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "product": "NBM.AWS.GRIB",
+    "data_name": "OR(Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW))",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[1736:2136,760:1060]"
+  },
+  "request": {
+    "corrId": {
+      "originator": "IDSSe",
+      "uuid": "22222222-beec-467b-a0e6-9d215b71f93c",
+      "issueDt": "2025-01-28T12:00:00.000Z"
+    },
+    "label": "Binghamton, Snow",
+    "sourceType": "join",
+    "sourceObj": {
+      "join": "OR",
+      "sources": [
+        {
+          "sourceType": "condition",
+          "label": "A:ThreatLevel",
+          "sourceObj": {
+            "relational": "GREATER THAN OR EQUAL",
+            "thresh": 0.01,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 0, 3, "Infinity"]
+            },
+            "source": {
+              "label": "A:Raw",
+              "sourceType": "data",
+              "sourceObj": {
+                "product": "NBM",
+                "field": "SNOW:1HR.[DTRM,p090]",
+                "region": "CONUS",
+                "units": "INCHES",
+                "sliceCoords": [
+                  [-75.99682164316545, 42.100751285762954],
+                  [-75.82261820803978, 42.120569061969576]
+                ],
+                "minSize": [400, 300],
+                "minBuff": 50,
+                "validDt": "2025-01-28T13:00:00.000Z",
+                "issueDt": "2025-01-28T12:00:00.000Z"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
