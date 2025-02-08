@@ -1,6 +1,7 @@
 {
   "A:Raw": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR/Inches/gridstore-907024368.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR/Inches/gridstore-907024368.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -16,6 +17,7 @@
   },
   "A:ThreatLevel": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR.Criteria/ThreatLevel/gridstore-401831466.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR.Criteria/ThreatLevel/gridstore-401831466.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -31,6 +33,7 @@
   },
   "Binghamton, Snow": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore2098351630.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore2098351630.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",

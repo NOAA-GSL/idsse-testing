@@ -1,0 +1,66 @@
+{
+  "corrId": {
+    "originator": "IDSSe",
+    "uuid": "22222222-beec-467b-a0e6-9d215b71f93c",
+    "issueDt": "2025-01-28T12:00:00.000Z"
+  },
+  "issueDt": "2025-01-28T12:00:00.000Z",
+  "location": {
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Location 1"
+        },
+        "geometry": {
+          "coordinates": [
+            [-75.82261820803978, 42.100751285762954],
+            [-75.8383708354987, 42.10864014806441],
+            [-75.97392382434361, 42.120569061969576],
+            [-75.97856530045271, 42.12045478019678],
+            [-75.99682164316545, 42.11609384198053]
+          ],
+          "type": "LineString"
+        }
+      }
+    ]
+  },
+  "validDt": [
+    { "start": "2025-01-28T13:00:00.000Z", "end": "2025-01-28T15:00:00.000Z" }
+  ],
+  "conditions": [
+    {
+      "name": "Binghamton, Snow",
+      "severity": "MODERATE",
+      "combined": "A",
+      "partsUsed": ["A"]
+    }
+  ],
+  "parts": [
+    {
+      "name": "A",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "SNOW:1HR",
+      "units": "INCHES",
+      "relational": "GREATER THAN OR EQUAL",
+      "thresh": 0.01,
+      "mapping": {
+        "min": 0,
+        "max": 3,
+        "clip": "true"
+      }
+    }
+  ],
+  "tags": {
+    "values": [],
+    "keyValues": {
+      "name": "Binghamton, Snow",
+      "nwsOffice": "BGM"
+    }
+  }
+}
