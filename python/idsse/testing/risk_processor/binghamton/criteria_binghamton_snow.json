@@ -111,7 +111,7 @@
       "product": {
         "fcst": ["NBM"]
       },
-      "field": "1 HR SNOWFALL",
+      "field": "SNOW:1HR",
       "units": "INCHES",
       "relational": "GREATER THAN OR EQUAL",
       "thresh": 0.01,

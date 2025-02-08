@@ -1,6 +1,7 @@
 {
   "A:Raw": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore2064195902.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore2064195902.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -16,6 +17,7 @@
   },
   "A:ThreatLevel": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-811715560.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-811715560.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -31,6 +33,7 @@
   },
   "B:Raw": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST/MilesPerHour/gridstore696460526.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST/MilesPerHour/gridstore696460526.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -46,6 +49,7 @@
   },
   "B:ThreatLevel": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST.Criteria/ThreatLevel/gridstore43167307.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST.Criteria/ThreatLevel/gridstore43167307.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",
@@ -61,6 +65,7 @@
   },
   "Syracuse, Cold and Windy": {
     "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore1303753817.nc",
       "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore1303753817.nc"
     },
     "issue_dt": "2022-12-23T12:00:00.000Z",

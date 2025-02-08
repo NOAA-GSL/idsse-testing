@@ -29,7 +29,6 @@ class CachedProfile:
         data (dict): full JSON data of this Support Profile
         is_new (bool): track if Support Profile has ever been processed. Ought to start as True
     """
-    # pylint: disable=invalid-name
     data: dict
     is_new: bool
 
