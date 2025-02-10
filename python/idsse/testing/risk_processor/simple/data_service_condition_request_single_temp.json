@@ -21,19 +21,24 @@
                         "controlPoints": ["-Infinity", 0.0, 75.0, "Infinity"]
                     },
                     "source": {
-                        "label": "A:Raw",
-                        "sourceType": "data",
-                        "sourceObj": {
+                      "sourceType": "slice",
+                      "sourceObj": {
+                        "sliceCoords": [[-106.6083, 35.0389]],
+                        "minSize": [400, 300],
+                        "minBuff": 50,
+                        "source": {
+                          "label": "A:Raw",
+                          "sourceType": "data",
+                          "sourceObj": {
                             "product": "NBM",
                             "field": "TEMPERATURE",
                             "region": "CONUS",
                             "units": "DEG F",
-                            "sliceCoords": [[-106.6083, 35.0389]], 
-                            "minSize": [400, 300],
-                            "minBuff": 50,
                             "validDt": "2022-11-12T00:00:00.000Z",
                             "issueDt": "2022-11-11T13:00:00.000Z"
+                          }
                         }
+                      }
                     }
                 }
             }

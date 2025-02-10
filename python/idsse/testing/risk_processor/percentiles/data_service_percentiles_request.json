@@ -1,7 +1,7 @@
 {
   "corrId": {
     "originator": "IDSSe",
-    "uuid": "22222222-beec-467b-a0e6-9d215b71f93c",
+    "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
     "issueDt": "2025-01-28T12:00:00.000Z"
   },
   "label": "Binghamton, Snow",
@@ -21,21 +21,26 @@
             "controlPoints": ["-Infinity", 0, 3, "Infinity"]
           },
           "source": {
-            "label": "A:Raw",
-            "sourceType": "data",
+            "sourceType": "slice",
             "sourceObj": {
-              "product": "NBM",
-              "field": "SNOW:1HR.[DTRM,p090]",
-              "region": "CONUS",
-              "units": "INCHES",
               "sliceCoords": [
                 [-75.99682164316545, 42.100751285762954],
                 [-75.82261820803978, 42.120569061969576]
               ],
               "minSize": [400, 300],
               "minBuff": 50,
-              "validDt": "2025-01-28T13:00:00.000Z",
-              "issueDt": "2025-01-28T12:00:00.000Z"
+              "source": {
+                "label": "A:Raw",
+                "sourceType": "data",
+                "sourceObj": {
+                  "product": "NBM",
+                  "field": "SNOW:1HR.[DTRM,p010,p090]",
+                  "region": "CONUS",
+                  "units": "INCHES",
+                  "validDt": "2025-01-28T13:00:00.000Z",
+                  "issueDt": "2025-01-28T12:00:00.000Z"
+                }
+              }
             }
           }
         }
