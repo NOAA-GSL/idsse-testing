@@ -54,7 +54,7 @@
   },
   "riskResults": [
     {
-      "evaluatedAt": "2025-02-07T21:03:03.610Z",
+      "evaluatedAt": "2025-02-10T23:09:57.599Z",
       "conditionKey": "Binghamton, Snow",
       "productKey": "NBM CONUS",
       "region": "CONUS",
@@ -104,6 +104,18 @@
                 "2025-01-28T14:00:00.000Z",
                 "2025-01-28T15:00:00.000Z"
               ],
+              "singleValue": [-1.0, -1.0, -1.0],
+              "geoDist": [{ "-1.0": 7 }, { "-1.0": 7 }, { "-1.0": 7 }],
+              "dataType": "prctl_p010"
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
               "singleValue": [0.04, -1.0, -1.0],
               "geoDist": [
                 { "-1.0": 4, "0.04": 3 },
@@ -123,6 +135,18 @@
               "singleValue": [0.0, 0.0, 0.0],
               "geoDist": [{ "0.0": 7 }, { "0.0": 7 }, { "0.0": 7 }],
               "dataType": "dtrm"
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2025-01-28T13:00:00.000Z",
+                "2025-01-28T14:00:00.000Z",
+                "2025-01-28T15:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0],
+              "geoDist": [{ "0.0": 7 }, { "0.0": 7 }, { "0.0": 7 }],
+              "dataType": "prctl_p010"
             },
             {
               "name": "A",
@@ -197,6 +221,26 @@
           "name": "A",
           "type": "criteria",
           "dataType": "dtrm",
+          "proximalThresh": -0.5,
+          "states": [
+            {
+              "durationInMin": 120,
+              "min": -1.0,
+              "minAt": "2025-01-28T13:00:00.000Z",
+              "max": -1.0,
+              "startDt": "2025-01-28T13:00:00.000Z",
+              "endDt": "2025-01-28T15:00:00.000Z",
+              "maxAt": "2025-01-28T13:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT"
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p010",
           "proximalThresh": -0.5,
           "states": [
             {
