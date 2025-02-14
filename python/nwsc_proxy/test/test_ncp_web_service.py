@@ -111,11 +111,12 @@ def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
 
 
 def test_get_bad_data_source(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.args = MultiDict({'dataSource': 'A BAD DATA SOURCE'})
+    mock_request.args = MultiDict({'dataSource': 'MYSTERY DATA SOURCE'})
 
     result: tuple[Response, int] = wrapper.app.view_functions['events']()
 
-    assert result[1] == 400
+    assert result[0].json['profiles'] == []
+    assert result[1] == 200
 
 
 def test_get_bad_status(wrapper: AppWrapper, mock_request: Mock):
