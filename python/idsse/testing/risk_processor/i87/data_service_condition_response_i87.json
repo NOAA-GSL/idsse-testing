@@ -1,8 +1,7 @@
 {
     "A:Raw": {
         "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore-1492124782.nc",
-          "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore-1492124782.nc"
+          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore-1492124782.nc"
         },
         "issue_dt": "2022-12-23T12:00:00.000Z",
         "valid_dt": "2022-12-23T13:00:00.000Z",
@@ -17,8 +16,7 @@
     },
     "A:ThreatLevel": {
         "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore1698359448.nc",
-          "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore1698359448.nc"
+          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore1698359448.nc"
         },
         "issue_dt": "2022-12-23T12:00:00.000Z",
         "valid_dt": "2022-12-23T13:00:00.000Z",
@@ -33,8 +31,7 @@
     },
     "B:Raw": {
         "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR/Inches/gridstore1563243851.nc",
-          "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR/Inches/gridstore1563243851.nc"
+          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR/Inches/gridstore1563243851.nc"
         },
         "issue_dt": "2022-12-23T12:00:00.000Z",
         "valid_dt": "2022-12-23T13:00:00.000Z",
@@ -49,8 +46,7 @@
     },
     "B:ThreatLevel": {
         "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR.Criteria/ThreatLevel/gridstore-85065583.nc",
-          "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR.Criteria/ThreatLevel/gridstore-85065583.nc"
+          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR.Criteria/ThreatLevel/gridstore-85065583.nc"
         },
         "issue_dt": "2022-12-23T12:00:00.000Z",
         "valid_dt": "2022-12-23T13:00:00.000Z",
@@ -65,8 +61,7 @@
     },
     "I-87, Albany-Nyack, Icy Roads": {
       "filenames": {
-        "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore-2042697837.nc",
-        "Deterministic": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore-2042697837.nc"
+        "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore-2042697837.nc"
       },
       "issue_dt": "2022-12-23T12:00:00.000Z",
       "valid_dt": "2022-12-23T13:00:00.000Z",
