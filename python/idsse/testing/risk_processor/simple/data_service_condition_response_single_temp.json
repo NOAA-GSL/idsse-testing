@@ -1,8 +1,7 @@
 {
   "Abq TEMP": {
     "filenames": {
-      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc",
-      "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc"
+      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc"
     },
     "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
     "issue_dt": "2022-11-11T13:00:00.000Z",
@@ -17,8 +16,7 @@
   },
   "A:ThreatLevel": {
     "filenames": {
-      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc",
-      "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-278843281.nc"
+      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc"
     },
     "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
     "issue_dt": "2022-11-11T13:00:00.000Z",
@@ -33,8 +31,7 @@
   },
   "A:Raw": {
     "filenames": {
-      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc",
-      "Deterministic": "/share/2022/11/11/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore765661987.nc"
+      "dtrm": "/share/2022/11/11/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-1825711489.nc"
     },
     "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=31.177375065798472 +lon_ll=-111.5741153608759",
     "issue_dt": "2022-11-11T13:00:00.000Z",

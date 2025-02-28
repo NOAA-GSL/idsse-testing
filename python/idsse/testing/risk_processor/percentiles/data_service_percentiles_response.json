@@ -3,8 +3,7 @@
     "filenames": {
       "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore1685131974.nc",
       "prctl_p010": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p010/Inches/gridstore-168975316.nc",
-      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p090/Inches/gridstore-1838561740.nc",
-      "Deterministic": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore1685131974.nc"
+      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p090/Inches/gridstore-1838561740.nc"
     },
     "issue_dt": "2025-01-28T12:00:00.000Z",
     "valid_dt": "2025-01-28T13:00:00.000Z",
@@ -22,8 +21,7 @@
     "filenames": {
       "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc",
       "prctl_p010": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore-497177812.nc",
-      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.nc",
-      "Deterministic": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc"
+      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.nc"
     },
     "issue_dt": "2025-01-28T12:00:00.000Z",
     "valid_dt": "2025-01-28T13:00:00.000Z",
@@ -89,7 +87,7 @@
                   "sourceType": "data",
                   "sourceObj": {
                     "product": "NBM",
-                    "field": "SNOW:1HR.[DTRM,p010,p090]",
+                    "field": "SNOW:1HR:[DTRM,p010,p090]",
                     "region": "CONUS",
                     "units": "INCHES",
                     "validDt": "2025-01-28T13:00:00.000Z",

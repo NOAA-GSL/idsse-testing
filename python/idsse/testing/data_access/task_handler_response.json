@@ -6,7 +6,7 @@
     },
     "data_requested": {
         "filenames": {
-            "Deterministic": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
+          "dtrm": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
         },
         "grid_spec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=41.05894633497196 +lon_ll=-106.02046021316575",
         "issue_dt": "2023-01-10T08:00:00Z",
