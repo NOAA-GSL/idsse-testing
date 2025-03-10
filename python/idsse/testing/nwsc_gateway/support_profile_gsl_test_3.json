@@ -1,0 +1,138 @@
+{
+  "profiles": [
+    {
+      "id": "e1033860-f198-4c6a-a91b-beaec905132f",
+      "name": "GSL Test 3",
+      "associatedOfficeId": "GSL",
+      "profileType": "LIMITED_EPISODIC",
+      "lifecycleStatus": "UNDEF",
+      "submissionStatus": "APPROVED",
+      "setting": {
+        "id": "989d35f8-3991-4438-adb0-c24d8bf1f449",
+        "name": "I-80 WY",
+        "driverType": "EVENT",
+        "locations": [
+          {
+            "createdAt": "2024-01-26T20:33:08.274198Z",
+            "creationMethod": "DRAWLINE",
+            "editable": true,
+            "original": null,
+            "address": null,
+            "geometryType": "POLYLINE",
+            "minElevation": 5393,
+            "maxElevation": 7759,
+            "lastModified": "2024-01-26T20:33:08.274202Z",
+            "name": "I-80 WY",
+            "notes": "",
+            "userData": null,
+            "validTime": null,
+            "geoShapeCreationMethod": "DRAWLINE",
+            "geomAsString": "LINESTRING (-111.0202 41.1361, -109.7672 41.557, -108.0818 41.662, -106.8992 41.7286, -105.2465 41.1077, -104.0862 41.1633)"
+          }
+        ],
+        "timing": {
+          "start": null,
+          "duration": 0,
+          "rrule": ""
+        },
+        "nationalSecurity": false,
+        "website": "",
+        "numberOfPeople": 3
+      },
+      "impacts": [],
+      "nonImpactThresholds": {
+        "phrasesForAllSeverities": {
+          "MINOR": {
+            "severity": "MINOR",
+            "encodedRepresentation": "A",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "WINDGST",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "10",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "",
+                "dataParameter": ""
+              }
+            }
+          },
+          "SEVERE": {
+            "severity": "SEVERE",
+            "encodedRepresentation": "A",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "WINDGST",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "50",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "",
+                "dataParameter": ""
+              }
+            }
+          },
+          "EXTREME": {
+            "severity": "EXTREME",
+            "encodedRepresentation": "A",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "WINDGST",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "70",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "",
+                "dataParameter": ""
+              }
+            }
+          },
+          "MODERATE": {
+            "severity": "MODERATE",
+            "encodedRepresentation": "A",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "WINDGST",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "30",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "",
+                "dataParameter": ""
+              }
+            }
+          }
+        },
+        "allTypesAsStrings": ["WINDGST"]
+      },
+      "maxLeadTime": 168,
+      "isLive": true,
+      "requestedServices": ["AUTO_COMPREHENSIVE_SPECIFIC"],
+      "timeBuffer": 0,
+      "geoBuffer": 3.0,
+      "profileLevelActionPlans": [],
+      "maxLeadTimeAsString": "7 d"
+    }
+  ],
+  "errors": []
+}
