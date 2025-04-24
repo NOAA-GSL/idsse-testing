@@ -97,7 +97,7 @@ def test_store_loads_jsons_from_new(store: ProfileStore):
     _new_store = ProfileStore(STORE_BASE_DIR)
 
     # newly creatd ProfileStore should have correctly loaded and labeled "new" Profile
-    new_profile_list = _new_store.get_all(filter_new_profiles=True)
+    new_profile_list = _new_store.get_all(is_new=True)
     assert len(new_profile_list) == 1
     assert len(_new_store.profile_cache) == 4  # 3 existing, 1 new
 
@@ -106,7 +106,7 @@ def test_get_all_profiles(store: ProfileStore):
     result = store.get_all()
     assert len(result) == 3
 
-    result = store.get_all(filter_new_profiles=True)
+    result = store.get_all(is_new=True)
     assert len(result) == 0
 
 
@@ -118,7 +118,7 @@ def test_save_adds_to_new_profiles(store: ProfileStore):
 
     assert new_profile_id == EXAMPLE_UUID
     # profile should now be returned by get() request for new profiles
-    new_profile_list = store.get_all(filter_new_profiles=True)
+    new_profile_list = store.get_all(is_new=True)
     assert [p.get('id') for p in new_profile_list] == [EXAMPLE_UUID]
 
     # profile should not be returned by get() request for existing profiles
@@ -136,7 +136,7 @@ def test_save_rejects_existing_profile(store: ProfileStore):
 
     assert not new_profile_id
     # no new profile should have been added
-    new_profile_list = store.get_all(filter_new_profiles=True)
+    new_profile_list = store.get_all(is_new=True)
     assert new_profile_list == []
     # file should not exist in the "new" subdirectory
     assert not os.path.exists(os.path.join(STORE_BASE_DIR, NEW_SUBDIR, f'{new_profile["id"]}.json'))
@@ -147,12 +147,12 @@ def test_move_to_existing_success(store: ProfileStore):
     new_profile['id'] = EXAMPLE_UUID
     store.save(new_profile)
 
-    new_profiles = store.get_all(filter_new_profiles=True)
+    new_profiles = store.get_all(is_new=True)
     assert [p['id'] for p in new_profiles] == [EXAMPLE_UUID]
 
     store.mark_as_existing(EXAMPLE_UUID)
 
-    new_profiles = store.get_all(filter_new_profiles=True)
+    new_profiles = store.get_all(is_new=True)
     assert new_profiles == []  # Support Profile has vanished from list of new
     existing_profiles = store.get_all()
     assert EXAMPLE_UUID in [p['id'] for p in existing_profiles]  # now Profile is in existing list

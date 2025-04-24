@@ -17,6 +17,7 @@ from glob import glob
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = 'new'
 EXISTING_SUBDIR = 'existing'
+DEFAULT_DATA_SOURCE = 'NBM'
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,19 @@ class CachedProfile:
     def id(self) -> str:
         """The Support Profile UUID"""
         return self.data.get('id')
+
+    @property
+    def data_sources(self) -> list[str]:
+        """The weather products used by any parts of this Support Profile (e.g. NBM, HRRR, MRMS)"""
+        try:
+            return [
+                # treat any profiles with empty string dataSource as default 'NBM'
+                _map['dataSource'] if _map['dataSource'] != '' else DEFAULT_DATA_SOURCE
+                for phrase in self.data['nonImpactThresholds']['phrasesForAllSeverities'].values()
+                for _map in phrase['map'].values()
+            ]
+        except KeyError:
+            return [DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources, so just default to NBM
 
 
 class ProfileStore:
@@ -75,18 +89,23 @@ class ProfileStore:
 
         self.profile_cache = existing_profiles + new_profiles
 
-    def get_all(self, filter_new_profiles = False) -> list[dict]:
+    def get_all(self, data_source: str, is_new = False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
         (if Support Profile has never been returned in an API request before) or status='existing'
         otherwise.
 
         Args:
-            filter_new_profiles (bool): if True, get only Support Profiles that have never been
+            is_new (bool): if True, get only Support Profiles that have never been
                 returned to IDSS Engine on previous requests (never processed). Default is False:
                 return all existing profiles.
         """
-        return [cached_profile.data for cached_profile in self.profile_cache
-                if cached_profile.is_new == filter_new_profiles]
+        profiles_by_status = [cached_profile for cached_profile in self.profile_cache
+                             if cached_profile.is_new == is_new]
+        if data_source == 'ANY':
+            # all data sources requested, so do not filter by products used
+            return [profile.data for profile in profiles_by_status]
+        return [profile.data for profile in profiles_by_status
+                if data_source in profile.data_sources]
 
     def save(self, profile: dict, is_new = True) -> str | None:
         """Persist a new Support Profile Profile to this API
