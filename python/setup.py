@@ -1,11 +1,11 @@
 """Setup to support installation as Python library"""
-import glob
 import os
 from setuptools import setup
 
 
 def package_files(directory):
-    paths = []
+    """Discover all files in a given package directory"""
+    paths: list[str] = []
     for (path, directories, filenames) in os.walk(directory):
         for filename in filenames:
             paths.append(os.path.join(path, filename))
@@ -27,8 +27,6 @@ setup(name='idsse-testing',
                 'idsse.testing.data_access.validation',
                 'idsse.testing.event_portfolios',
                 'idsse.testing.idsse_common',
-                'idsse.testing.ims_request',
-                'idsse.testing.ims_response',
                 'idsse.testing.nwsc_gateway',
                 'idsse.testing.risk_processor',
                 'idsse.testing.risk_processor.binghamton',
