@@ -42,11 +42,17 @@ jobs:
           echo "PYTHONPATH=python/idsse/testing/" >> $GITHUB_ENV
 
       - name: Run code linter
-        run: pylint ./python/idsse/testing --max-line-length=120 --recursive true
+        run: pylint ./python/idsse/testing --max-line-length=100 --recursive true
 
       - name: Set PYTHONPATH for proxy service
         run: |
           echo "PYTHONPATH=python/nwsc_proxy" >> $GITHUB_ENV
 
       - name: Run code linter for proxy service
-        run: pylint ./python/nwsc_proxy --max-line-length=120 --recursive true
+        run: pylint ./python/nwsc_proxy --max-line-length=100 --recursive true
+
+      - name: Run black formatter
+        uses: psf/black@stable
+        with:
+          options: "--check --line-length 99"  # 100-1 due to black formatter bug
+          src: "./python"
