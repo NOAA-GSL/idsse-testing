@@ -153,7 +153,9 @@ class ProfileStore:
         )
         if not cached_profile:
             # profile is not in cache; it must not exist
-            logger.warning("Support Profile %s expected in profile_cache but not found", profile_id)
+            logger.warning(
+                "Support Profile %s expected in profile_cache but not found", profile_id
+            )
             return False
 
         new_filepath = os.path.join(self._new_dir, f"{profile_id}.json")

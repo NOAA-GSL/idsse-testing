@@ -140,7 +140,9 @@ def test_save_rejects_existing_profile(store: ProfileStore):
     new_profile_list = store.get_all(filter_new_profiles=True)
     assert new_profile_list == []
     # file should not exist in the "new" subdirectory
-    assert not os.path.exists(os.path.join(STORE_BASE_DIR, NEW_SUBDIR, f'{new_profile["id"]}.json'))
+    assert not os.path.exists(
+        os.path.join(STORE_BASE_DIR, NEW_SUBDIR, f'{new_profile["id"]}.json')
+    )
 
 
 def test_move_to_existing_success(store: ProfileStore):

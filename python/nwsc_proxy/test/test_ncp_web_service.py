@@ -180,7 +180,9 @@ def test_create_profile_new(wrapper: AppWrapper, mock_request: Mock, mock_profil
     mock_profile_store.return_value.save.assert_called_once_with(example_profile, True)
 
 
-def test_create_profile_existing(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+def test_create_profile_existing(
+    wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock
+):
     mock_request.method = "POST"
     example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
     mock_request.json = {"status": "existing", "data": example_profile}
