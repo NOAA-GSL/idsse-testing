@@ -54,5 +54,5 @@ jobs:
       - name: Run black formatter
         uses: psf/black@stable
         with:
-          options: "--check --line-length 100"
+          options: "--check --line-length 99"  # 100-1 due to black formatter bug
           src: "./python"
