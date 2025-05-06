@@ -95,12 +95,12 @@ def test_store_loads_jsons_from_new(store: ProfileStore):
     store.save(profile)
 
     # simulate starting ProfileStore process fresh, with existing JSONs on filesystem
-    _new_store = ProfileStore(STORE_BASE_DIR)
+    new_store = ProfileStore(STORE_BASE_DIR)
 
-    # newly creatd ProfileStore should have correctly loaded and labeled "new" Profile
-    new_profile_list = _new_store.get_all(is_new=True)
+    # newly created ProfileStore should have correctly loaded and labeled "new" Profile
+    new_profile_list = new_store.get_all(is_new=True)
     assert len(new_profile_list) == 1
-    assert len(_new_store.profile_cache) == 4  # 3 existing, 1 new
+    assert len(new_store.profile_cache) == 4  # 3 existing, 1 new
 
 
 def test_get_all_profiles(store: ProfileStore):

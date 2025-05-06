@@ -13,7 +13,11 @@ import os
 import json
 import logging
 from dataclasses import dataclass
+from datetime import datetime, UTC
 from glob import glob
+from math import inf
+
+from dateutil.parser import parse as dt_parse
 
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
@@ -42,6 +46,29 @@ class CachedProfile:
         return self.data.get("id")
 
     @property
+    def is_active(self) -> bool:
+        """The Support Profile's active state (can be marked as inactive to halt processing)"""
+        return self.data.get("isLive")
+
+    @property
+    def start_timestamp(self) -> float:
+        """The Support Profile event's start in Unix time (milliseconds since the epoch).
+        -1 if Support Profile is never-ending
+        """
+        profile_start = self.data["setting"]["timing"].get("start")
+        return dt_parse(profile_start).timestamp() if profile_start else -1
+
+    @property
+    def end_timestamp(self) -> float:
+        """The Support Profile event's end in Unix time (milliseconds since the epoch).
+        math.inf if Support Profile is never-ending
+        """
+        if self.start_timestamp < 0:
+            return inf  # infinite start time, so infinite end time as well
+        profile_duration = self.data["setting"]["timing"].get("duration", 0)
+        return self.start_timestamp + profile_duration * 60 * 1000  # convert min to ms
+
+    @property
     def data_sources(self) -> list[str]:
         """The weather products used by any parts of this Support Profile (e.g. NBM, HRRR, MRMS)"""
         try:
@@ -59,17 +86,16 @@ class ProfileStore:
     """Data storage using JSON files on filesystem that simulates CRUD operations"""
 
     def __init__(self, base_dir: str):
-        self._base_dir = base_dir
-        self._new_dir = os.path.join(self._base_dir, NEW_SUBDIR)
-        self._existing_dir = os.path.join(self._base_dir, EXISTING_SUBDIR)
+        self._new_dir = os.path.join(base_dir, NEW_SUBDIR)
+        self._existing_dir = os.path.join(base_dir, EXISTING_SUBDIR)
 
         # ensure that base directory and all expected subdirectories exist
-        for _dir in [self._base_dir, self._new_dir, self._existing_dir]:
+        for _dir in [self._new_dir, self._existing_dir]:
             os.makedirs(_dir, exist_ok=True)
 
         # load any NWS Connect response files dumped into the base_dir
-        for response_filename in glob("*.json", root_dir=self._base_dir):
-            response_filepath = os.path.join(self._base_dir, response_filename)
+        for response_filename in glob("*.json", root_dir=base_dir):
+            response_filepath = os.path.join(base_dir, response_filename)
             logger.warning("Loading profiles from raw API response file: %s", response_filepath)
 
             with open(response_filepath, "r", encoding="utf-8") as infile:
@@ -96,7 +122,7 @@ class ProfileStore:
 
         self.profile_cache = existing_profiles + new_profiles
 
-    def get_all(self, data_source: str, is_new=False) -> list[dict]:
+    def get_all(self, data_source="ANY", is_new=False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
         (if Support Profile has never been returned in an API request before) or status='existing'
         otherwise.
@@ -109,7 +135,14 @@ class ProfileStore:
         profiles_by_status = [
             cached_profile
             for cached_profile in self.profile_cache
-            if cached_profile.is_new == is_new
+            if (
+                # is new, if client requested new profiles, or is existing
+                cached_profile.is_new == is_new
+                # is "active", meaning no one has intentional disabled/deactivated it
+                and cached_profile.is_active
+                # the end_dt has not yet passed (or profile is never-ending)
+                and datetime.now(UTC).timestamp() <= cached_profile.end_timestamp
+            )
         ]
         if data_source == "ANY":
             # all data sources requested, so do not filter by products used

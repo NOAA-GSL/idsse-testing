@@ -157,7 +157,6 @@ if __name__ == "__main__":  # pragma: no cover
         "--base_dir",
         dest="base_dir",
         required=True,
-        type=str,
         help="The base directory where Support Profile JSONs will be read/written",
     )
 
