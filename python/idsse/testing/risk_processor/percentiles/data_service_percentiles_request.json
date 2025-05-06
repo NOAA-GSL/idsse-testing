@@ -21,6 +21,7 @@
             "controlPoints": ["-Infinity", 0, 3, "Infinity"]
           },
           "source": {
+            "label": "A:Raw",
             "sourceType": "slice",
             "sourceObj": {
               "sliceCoords": [
@@ -30,7 +31,6 @@
               "minSize": [400, 300],
               "minBuff": 50,
               "source": {
-                "label": "A:Raw",
                 "sourceType": "data",
                 "sourceObj": {
                   "product": "NBM",

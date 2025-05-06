@@ -1,4 +1,5 @@
 """Utilities for using test resources from named packages in unit tests"""
+
 # --------------------------------------------------------------------------------
 # Created on Wed Jul 19 2023
 #
@@ -24,32 +25,35 @@ from idsse.common.sci.netcdf_io import read_netcdf
 
 import numpy as np
 
+
 # pylint: disable=protected-access
 def get_package_path(package: str) -> str:
     """Get file path from package/filename
 
-     Args:
-         package (str): name of test package
+    Args:
+        package (str): name of test package
 
-     Returns:
-         str: The package path from the installed package
+    Returns:
+        str: The package path from the installed package
     """
     package_path = resources.files(package)
     if isinstance(package_path, pathlib.PosixPath):
         return str(package_path)
     return str(package_path._paths[0])
 
+
 def get_filepath(package: str, filename: str) -> str:
     """Get file path from package/filename
 
-     Args:
-         package (str): name of test package containing the file
-         filename (str): name of test resource to load from the package directory
+    Args:
+        package (str): name of test package containing the file
+        filename (str): name of test resource to load from the package directory
 
-     Returns:
-         str: The filepath from the installed package
+    Returns:
+        str: The filepath from the installed package
     """
     return str(resources.files(package).joinpath(filename))
+
 
 def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Sequence[any]]:
     """Load test resource/data from file into python object
@@ -66,16 +70,16 @@ def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Seque
         For example, .json returns a dict, .csv returns a list of lists
     """
     _, file_extension = path.splitext(filename)
-    if file_extension == '.nc':
+    if file_extension == ".nc":
         return _load_netcdf_resource(resources.files(package).joinpath(filename))
-    file_stream = resources.files(package).joinpath(filename).open('r')
-    if file_extension == '.json':
+    file_stream = resources.files(package).joinpath(filename).open("r")
+    if file_extension == ".json":
         return _load_json_resource(file_stream)
-    if file_extension == '.csv':
+    if file_extension == ".csv":
         return _load_csv_resource(file_stream)
-    if file_extension == '.html':
+    if file_extension == ".html":
         return _load_html_resource(file_stream)
-    raise ValueError(f'Unable to load test data from unsupported extension {file_extension}')
+    raise ValueError(f"Unable to load test data from unsupported extension {file_extension}")
 
 
 def _load_json_resource(stream: TextIO) -> dict:
