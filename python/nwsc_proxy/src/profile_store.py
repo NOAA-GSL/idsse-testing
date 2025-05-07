@@ -29,7 +29,10 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CachedProfile:
-    """Data class to hold Support Profile's data and metadata ("new" vs "existing" status)
+    """Data class to hold Support Profile's data and metadata ("new" vs "existing" status),
+    as well as some derived properties extracted from the `data` JSON (e.g.
+    `CachedProfile.is_active` or `CachedProfile.start_timestamp`) that make it easier to query
+    and filter the Profiles.
 
     Args:
         data (dict): full JSON data of this Support Profile
@@ -44,6 +47,11 @@ class CachedProfile:
     def id(self) -> str:
         """The Support Profile UUID"""
         return self.data.get("id")
+
+    @property
+    def name(self) -> str:
+        """The Support Profile name"""
+        return self.data.get("name")
 
     @property
     def is_active(self) -> bool:
@@ -80,6 +88,13 @@ class CachedProfile:
             ]
         except KeyError:
             return [DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources, so just default to NBM
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}(id='{self.id}', name='{self.name}', is_new={self.is_new}, "
+            f"is_active={self.is_active}, start_timestamp={self.start_timestamp}, "
+            f"end_timestamp={self.end_timestamp}, data_sources={self.data_sources})"
+        )
 
 
 class ProfileStore:
@@ -185,12 +200,13 @@ class ProfileStore:
         # save Profile JSON to filesystem
         file_dir = self._new_dir if is_new else self._existing_dir
         filepath = os.path.join(file_dir, f"{cached_profile.id}.json")
-        logger.info("Now saving profile to path: %s", filepath)
+        logger.warning("Now saving profile to path: %s", filepath)
         with open(filepath, "w", encoding="utf-8") as file:
             json.dump(profile, file)
 
         # add profile to in-memory cache
         self.profile_cache.append(cached_profile)
+        logger.warning("Saved profile to cache, file locationh: %s", filepath)
         return cached_profile.id
 
     def mark_as_existing(self, profile_id: str) -> bool:
