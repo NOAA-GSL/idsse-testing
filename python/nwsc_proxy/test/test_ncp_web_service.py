@@ -153,7 +153,7 @@ def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_
 
     get_call_args = mock_profile_store.return_value.get_all.mock_calls
     # called with is_new set to True
-    assert get_call_args[0][1:] == (("NBM",), ({"is_new": True},))
+    assert get_call_args[0][1:] == (("NBM",), {"is_new": True})
 
     # expect that we told ProfileStore to label this profile as not new
     mark_existing_call_args = mock_profile_store.return_value.mark_as_existing.mock_calls
