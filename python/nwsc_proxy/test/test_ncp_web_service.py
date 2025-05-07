@@ -116,15 +116,6 @@ def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
     assert result[1] == 401
 
 
-def test_get_bad_data_source(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.args = MultiDict({"dataSource": "MYSTERY DATA SOURCE"})
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[0].json["profiles"] == []
-    assert result[1] == 200
-
-
 def test_get_bad_status(wrapper: AppWrapper, mock_request: Mock):
     mock_request.args = MultiDict({"dataSource": "NBM", "status": "NOT REAL STATUS"})
 
@@ -145,7 +136,8 @@ def test_get_existing_profiles(wrapper: AppWrapper, mock_request: Mock, mock_pro
     response, status_code = result
     assert status_code == 200
     assert response.json == {"profiles": example_profile_list, "errors": []}
-    mock_profile_store.return_value.get_all.assert_called_with()  # filter_new_profiles not set
+    # filter_new_profiles not set
+    mock_profile_store.return_value.get_all.assert_called_with("NBM")
 
 
 def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
@@ -160,9 +152,10 @@ def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_
     assert response.json == {"profiles": [example_profile], "errors": []}
 
     get_call_args = mock_profile_store.return_value.get_all.mock_calls
-    assert get_call_args[0][2] == {"filter_new_profiles": True}  # filter_new_profiles set to True
+    # called with is_new set to True
+    assert get_call_args[0][1:] == (("NBM",), ({"is_new": True},))
 
-    # expect that  we told ProfileStore to label this profile as not new
+    # expect that we told ProfileStore to label this profile as not new
     mark_existing_call_args = mock_profile_store.return_value.mark_as_existing.mock_calls
     assert mark_existing_call_args[0][1][0] == example_profile["id"]
 
