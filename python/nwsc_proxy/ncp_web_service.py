@@ -60,15 +60,12 @@ class EventsRoute:
 
         # otherwise, must be 'GET' operation
         data_source = request.args.get("dataSource", None, type=str)
-        if data_source not in ["NBM", "ANY"]:
-            return jsonify({"profiles": [], "errors": []}), 200
-
         profile_status = request.args.get("status", default="existing", type=str)
         if profile_status == "existing":
-            profiles = self.profile_store.get_all()
+            profiles = self.profile_store.get_all(data_source)
 
         elif profile_status == "new":
-            profiles = self.profile_store.get_all(filter_new_profiles=True)
+            profiles = self.profile_store.get_all(data_source, is_new=True)
             # update ProfileStore to label all queried events as no longer "new";
             # they've now been returned to IDSS Engine clients at least once
             current_app.logger.info("Got all new profiles: %s", profiles)
@@ -160,7 +157,6 @@ if __name__ == "__main__":  # pragma: no cover
         "--base_dir",
         dest="base_dir",
         required=True,
-        type=str,
         help="The base directory where Support Profile JSONs will be read/written",
     )
 
