@@ -32,7 +32,7 @@
         ],
         "timing": {
           "start": null,
-          "duration": 0,
+          "durationInMinutes": 0,
           "rrule": ""
         },
         "nationalSecurity": false,

@@ -61,20 +61,22 @@ class CachedProfile:
     @property
     def start_timestamp(self) -> float:
         """The Support Profile event's start in Unix time (milliseconds since the epoch).
-        -1 if Support Profile is never-ending
+        math.inf if Support Profile is never-ending
         """
-        profile_start = self.data["setting"]["timing"].get("start")
-        return dt_parse(profile_start).timestamp() if profile_start else -1
+        profile_start: str | None = self.data["setting"]["timing"].get("start")
+        return dt_parse(profile_start).timestamp() if profile_start else inf
 
     @property
     def end_timestamp(self) -> float:
         """The Support Profile event's end in Unix time (milliseconds since the epoch).
         math.inf if Support Profile is never-ending
         """
-        if self.start_timestamp < 0:
+        if self.start_timestamp == inf:
             return inf  # infinite start time, so infinite end time as well
-        profile_duration = self.data["setting"]["timing"].get("duration", 0)
-        return self.start_timestamp + profile_duration * 60 * 1000  # convert min to ms
+        timing: dict[str, int] = self.data["setting"]["timing"]
+        # look up durationInMinutes, or deprecated duration, or None
+        profile_duration = timing.get("durationInMinutes", timing.get("duration", inf))
+        return self.start_timestamp + profile_duration * 60 * 1000  # convert mins to ms
 
     @property
     def data_sources(self) -> list[str]:
@@ -200,13 +202,13 @@ class ProfileStore:
         # save Profile JSON to filesystem
         file_dir = self._new_dir if is_new else self._existing_dir
         filepath = os.path.join(file_dir, f"{cached_profile.id}.json")
-        logger.warning("Now saving profile to path: %s", filepath)
+        logger.debug("Now saving profile to path: %s", filepath)
         with open(filepath, "w", encoding="utf-8") as file:
             json.dump(profile, file)
 
         # add profile to in-memory cache
         self.profile_cache.append(cached_profile)
-        logger.warning("Saved profile to cache, file locationh: %s", filepath)
+        logger.info("Saved profile to cache, file location: %s", filepath)
         return cached_profile.id
 
     def mark_as_existing(self, profile_id: str) -> bool:
