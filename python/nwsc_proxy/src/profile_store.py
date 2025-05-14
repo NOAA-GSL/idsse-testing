@@ -19,8 +19,6 @@ from math import inf
 
 from dateutil.parser import parse as dt_parse
 
-datetime.max
-
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
 EXISTING_SUBDIR = "existing"
