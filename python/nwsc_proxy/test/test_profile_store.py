@@ -14,11 +14,12 @@ import json
 import os
 import shutil
 from copy import deepcopy
+from datetime import datetime, UTC
 from glob import glob
 
-from pytest import fixture
+from pytest import fixture, raises
 
-from python.nwsc_proxy.src.profile_store import ProfileStore, NEW_SUBDIR, EXISTING_SUBDIR
+from python.nwsc_proxy.src.profile_store import ProfileStore, NEW_SUBDIR, EXISTING_SUBDIR, dt_parse
 
 # constants
 STORE_BASE_DIR = os.path.join(os.path.dirname(__file__), "temp")
@@ -179,3 +180,30 @@ def test_delete_profile_failure(store: ProfileStore):
 
     success = store.delete(profile_id)
     assert not success
+
+
+def test_update_profile_success(store: ProfileStore):
+    profile_id = EXAMPLE_SUPPORT_PROFILE["id"]
+    new_start_dt = "2026-01-01T12:00:00Z"
+    new_name = "A different name"
+    new_profile_data = {"name": new_name, "setting": {"timing": {"start": new_start_dt}}}
+
+    updated_profile = store.update(profile_id, new_profile_data)
+
+    # confirm that data returns has updated attributes
+    assert updated_profile["name"] == new_name
+    assert updated_profile["setting"]["timing"]["start"] == new_start_dt
+    # confirm that profile in cache has indeed been changed
+    refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
+    assert refetched_profile.name == new_name
+    assert datetime.fromtimestamp(refetched_profile.start_timestamp, UTC) == dt_parse(new_start_dt)
+
+
+def test_update_profile_not_found(store: ProfileStore):
+    profile_id = "11111111-2222-3333-444444444444"  # fake ID does not exist in ProfileStore
+    new_profile_data = {"name": "A different name"}
+
+    with raises(FileNotFoundError) as exc:
+        _ = store.update(profile_id, new_profile_data)
+
+    assert exc is not None
