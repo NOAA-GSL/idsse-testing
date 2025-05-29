@@ -58,7 +58,7 @@ class EventsRoute:
         if request.method == "DELETE":
             return self._handle_delete()
 
-        if request.method == "PUT":
+        if request.method == "PATCH":
             return self._handle_update()
 
         # otherwise, must be 'GET' operation
@@ -150,7 +150,7 @@ class AppWrapper:
             "/all-events",
             "events",
             view_func=events_route.handler,
-            methods=["GET", "POST", "PUT", "DELETE"],
+            methods=["GET", "POST", "PATCH", "DELETE"],
         )
 
     def run(self, **kwargs):

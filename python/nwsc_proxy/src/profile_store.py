@@ -265,6 +265,8 @@ class ProfileStore:
         if not cached_profile:
             raise FileNotFoundError  # Profile with this ID does not exist in cache
 
+        # Bug: does not preserve nested attributes, e.g. condition thresholds, of dicts. Therefore
+        # can't truly do a partially update (e.g. just 1 part of combined threshold)
         new_profile_data = {**cached_profile.data, **data}
         is_new_profile = cached_profile.is_new
 
