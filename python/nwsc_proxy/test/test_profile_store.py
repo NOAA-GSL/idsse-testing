@@ -190,10 +190,16 @@ def test_update_profile_success(store: ProfileStore):
 
     updated_profile = store.update(profile_id, new_profile_data)
 
-    # confirm that data returns has updated attributes
+    # data returned should have updated attributes
     assert updated_profile["name"] == new_name
     assert updated_profile["setting"]["timing"]["start"] == new_start_dt
-    # confirm that profile in cache has indeed been changed
+    # attributes at same level as any nested updated ones should not have changed
+    # TODO: failure here
+    assert (
+        updated_profile["setting"]["timing"].get("durationInMinutes")
+        == EXAMPLE_SUPPORT_PROFILE["setting"]["timing"]["durationInMinutes"]
+    )
+    # profile in cache should have indeed been changed
     refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
     assert refetched_profile.name == new_name
     assert datetime.fromtimestamp(refetched_profile.start_timestamp, UTC) == dt_parse(new_start_dt)
