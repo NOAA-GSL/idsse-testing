@@ -58,6 +58,9 @@ class EventsRoute:
         if request.method == "DELETE":
             return self._handle_delete()
 
+        if request.method == "PUT":
+            return self._handle_update()
+
         # otherwise, must be 'GET' operation
         data_source = request.args.get("dataSource", None, type=str)
         profile_status = request.args.get("status", default="existing", type=str)
@@ -84,7 +87,7 @@ class EventsRoute:
     def _handle_delete(self) -> Response:
         """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
         success, 404 otherwise."""
-        profile_id = request.args.get("uuid", default=None, type=str)
+        profile_id = request.args.get("uuid")
         is_deleted = self.profile_store.delete(profile_id)
         if not is_deleted:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
@@ -113,6 +116,23 @@ class EventsRoute:
 
         return jsonify({"message": f"Profile {profile_id} saved"}), 201
 
+    def _handle_update(self) -> Response:
+        request_body: dict = request.json
+        profile_id = request.args.get("uuid")
+
+        if not profile_id:
+            return jsonify({"message": "Missing required query parameter: uuid"}), 400
+
+        try:
+            updated_profile = self.profile_store.update(profile_id, request_body)
+        except FileNotFoundError:
+            return jsonify({"message": f"Profile {profile_id} not found"}), 404
+
+        return (
+            jsonify({"message": f"Profile {profile_id} updated", "profile": updated_profile}),
+            200,
+        )
+
 
 class AppWrapper:
     """Web server class wrapping Flask operations"""
@@ -130,7 +150,7 @@ class AppWrapper:
             "/all-events",
             "events",
             view_func=events_route.handler,
-            methods=["GET", "POST", "DELETE"],
+            methods=["GET", "POST", "PUT", "DELETE"],
         )
 
     def run(self, **kwargs):

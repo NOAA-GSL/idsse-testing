@@ -224,9 +224,33 @@ def test_delete_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_pr
 def test_delete_profile_failure(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
     mock_request.method = "DELETE"
     mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
-    mock_profile_store.return_value.delete.return_value = (
-        False  # delete() rejected, profile must exist
-    )
+    # delete() was rejected, profile must exist
+    mock_profile_store.return_value.delete.return_value = False
+
+    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+
+    assert result[1] == 404
+
+
+def test_update_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+    mock_request.method = "PUT"
+    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_request.json = {"name": "Some new name"}
+    updated_profile = {"id": EXAMPLE_UUID, "name": "Some new name"}
+
+    mock_profile_store.return_value.update.return_value = updated_profile
+    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+
+    assert result[1] == 200
+    assert result[0].json["profile"] == updated_profile
+
+
+def test_update_profile_not_found(
+    wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock
+):
+    mock_request.method = "PUT"
+    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_profile_store.return_value.update.side_effect = FileNotFoundError
 
     result: tuple[Response, int] = wrapper.app.view_functions["events"]()
 

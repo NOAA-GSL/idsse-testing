@@ -86,6 +86,8 @@ On startup, the service creates 'existing' and 'new' subdirectories at the path 
   - Get only new (never before processed) Support Profiles. After a profile is returned to any API request, it will disappear from the "new" list, only appearing in `status=existing` filter requests.
 - POST `/all-events`
   - Create a new Support Profile to be stored by the API. The body of the request will be the JSON saved--the `id` field should be unique.
+- PUT `/all-events?uuid=<some id>`
+  - Update (complete JSON, or partial) an existing Support Profile from the API. `uuid` must match one of the saved Support Profile JSON's `id` attribute, otherwise it will return `404`.
 - DELETE `/all-events?uuid=<some id>`
   - Permanently remove an existing Support Profile from the API. `uuid` must match one of the saved Support Profile JSON's `id` attribute, otherwise it will return `404`.
 
