@@ -194,7 +194,6 @@ def test_update_profile_success(store: ProfileStore):
     assert updated_profile["name"] == new_name
     assert updated_profile["setting"]["timing"]["start"] == new_start_dt
     # attributes at same level as any nested updated ones should not have changed
-    # TODO: failure here
     assert (
         updated_profile["setting"]["timing"].get("durationInMinutes")
         == EXAMPLE_SUPPORT_PROFILE["setting"]["timing"]["durationInMinutes"]

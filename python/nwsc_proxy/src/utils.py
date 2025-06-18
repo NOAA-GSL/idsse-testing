@@ -13,10 +13,10 @@
 from copy import deepcopy
 
 
-def deep_update(a: dict, b: dict) -> dict:
-    """Recursively combine two dictionaries such that dictionary `b`'s attributes only
-    overwrite dictionary a's values at the deepest (leaf node) level. Returns the combined
-    dictionary (dictionaries not changed in place).
+def deep_update(original: dict, updates: dict) -> dict:
+    """Recursively combine two dictionaries such that attributes in `changes` only
+    overwrite the original dict's values at the deepest level (a.k.a. leaf node). Returns
+    the original dictionary with changes updated (dictionaries not changed in place).
 
     E.g.
     ```
@@ -27,10 +27,10 @@ def deep_update(a: dict, b: dict) -> dict:
     {'foo': {'bar': 'y', 'baz': 'x'}}
     ```
     """
-    combined_dict = deepcopy(a)
-    for k, v in b.items():
-        if isinstance(a.get(k), dict) and isinstance(v, dict):
-            combined_dict[k] = deep_update(a.get(k), v)  # recurse down one level
+    updated_dict = deepcopy(original)
+    for key, value in updates.items():
+        if isinstance(original.get(key), dict) and isinstance(value, dict):
+            updated_dict[key] = deep_update(original.get(key), value)  # recurse down one level
         else:
-            combined_dict[k] = v
-    return combined_dict
+            updated_dict[key] = value
+    return updated_dict
