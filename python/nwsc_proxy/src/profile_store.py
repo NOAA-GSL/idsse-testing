@@ -19,6 +19,8 @@ from math import inf
 
 from dateutil.parser import parse as dt_parse
 
+from src.utils import deep_update
+
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
 EXISTING_SUBDIR = "existing"
@@ -265,9 +267,8 @@ class ProfileStore:
         if not cached_profile:
             raise FileNotFoundError  # Profile with this ID does not exist in cache
 
-        # Bug: does not preserve nested attributes, e.g. condition thresholds, of dicts. Therefore
-        # can't truly do a partially update (e.g. just 1 part of combined threshold)
-        new_profile_data = {**cached_profile.data, **data}
+        # Apply dict of edits on top of existing cached profile (combining any nested attributes)
+        new_profile_data = deep_update(cached_profile.data, data)
         is_new_profile = cached_profile.is_new
 
         # a bit hacky, but the fastest and least duplicative way to update a Profile
