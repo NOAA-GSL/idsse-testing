@@ -19,6 +19,8 @@ from math import inf
 
 from dateutil.parser import parse as dt_parse
 
+from src.utils import deep_update
+
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
 EXISTING_SUBDIR = "existing"
@@ -242,6 +244,43 @@ class ProfileStore:
         cached_profile.is_new = False
 
         return True
+
+    def update(self, profile_id: str, data: dict) -> dict:
+        """Update a Support Profile in storage based on its UUID.
+
+        Args:
+            profile_id (str): The UUID of the Support Profile to update
+            data (dict): The JSON attributes to apply. Can be partial Support Profile
+
+        Returns:
+            dict: the latest version of the Profile, with all attribute changes applied
+
+        Raises:
+            FileNotFoundError: if no Support Profile exists with the provided uuid
+        """
+        logger.info("Updating profile_id %s with new attributes: %s", profile_id, data)
+
+        # find the profile data from the new_profiles cache, then apply updates and save over it
+        cached_profile = next(
+            (profile for profile in self.profile_cache if profile.id == profile_id), None
+        )
+        if not cached_profile:
+            raise FileNotFoundError  # Profile with this ID does not exist in cache
+
+        # Apply dict of edits on top of existing cached profile (combining any nested attributes)
+        new_profile_data = deep_update(cached_profile.data, data)
+        is_new_profile = cached_profile.is_new
+
+        # a bit hacky, but the fastest and least duplicative way to update a Profile
+        # in cache + disk is to delete the existing profile and re-save with modified JSON data
+        self.delete(profile_id)
+        update_success = self.save(new_profile_data, is_new_profile)
+
+        if not update_success:
+            logger.warning("Unable to update Profile ID %s for some reason", profile_id)
+            return None
+
+        return new_profile_data
 
     def delete(self, profile_id: str) -> bool:
         """Delete a Support Profile profile from storage, based on its UUID.
