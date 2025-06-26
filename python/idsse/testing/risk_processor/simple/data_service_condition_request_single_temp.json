@@ -31,7 +31,7 @@
                         "sourceType": "data",
                         "sourceObj": {
                           "product": "NBM",
-                          "field": "TEMPERATURE",
+                          "field": "Temp",
                           "region": "CONUS",
                           "units": "DEG F",
                           "validDt": "2022-11-12T00:00:00.000Z",

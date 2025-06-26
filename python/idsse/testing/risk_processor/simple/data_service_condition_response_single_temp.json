@@ -79,7 +79,7 @@
                       "sourceType": "data",
                       "sourceObj": {
                         "product": "NBM",
-                        "field": "TEMPERATURE",
+                        "field": "Temp",
                         "region": "CONUS",
                         "validDt": "2022-11-12T00:00:00.000Z",
                         "issueDt": "2022-11-11T13:00:00.000Z"
