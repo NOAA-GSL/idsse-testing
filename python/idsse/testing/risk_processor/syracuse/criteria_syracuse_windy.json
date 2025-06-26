@@ -438,8 +438,8 @@
       "product": {
         "fcst": ["NBM"]
       },
-      "field": "TEMP",
-      "units": "Fahrenheit",
+      "field": "Temp",
+      "units": "DEG F",
       "relational": "LESS THAN",
       "thresh": 30,
       "mapping": {

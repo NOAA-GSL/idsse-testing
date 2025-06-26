@@ -71,7 +71,7 @@
               "sourceType": "data",
               "sourceObj": {
                 "product": "NBM",
-                "field": "1 HR SNOWFALL",
+                "field": "Snow:1HR",
                 "region": "CONUS",
                 "units": "INCHES",
                 "sliceCoords": [

@@ -100,7 +100,7 @@
               "sourceType": "units",
               "label": "A:Raw",
               "sourceObj": {
-                "units": "Fahrenheit",
+                "units": "DEG F",
                 "source": {
                   "sourceType": "slice",
                   "sourceObj": {
@@ -114,7 +114,7 @@
                       "sourceType": "data",
                       "sourceObj": {
                         "product": "NBM",
-                        "field": "TEMP",
+                        "field": "Temp",
                         "region": "CONUS",
                         "validDt": "2022-12-23T13:00:00.000Z",
                         "issueDt": "2022-12-23T12:00:00.000Z"
@@ -141,7 +141,7 @@
               "sourceType": "units",
               "label": "B:Raw",
               "sourceObj": {
-                "units": "MPH",
+                "units": "MilesPerHour",
                 "source": {
                   "sourceType": "slice",
                   "sourceObj": {
@@ -155,7 +155,7 @@
                       "sourceType": "data",
                       "sourceObj": {
                         "product": "NBM",
-                        "field": "WIND GUST",
+                        "field": "WindGust",
                         "region": "CONUS",
                         "validDt": "2022-12-23T13:00:00.000Z",
                         "issueDt": "2022-12-23T12:00:00.000Z"

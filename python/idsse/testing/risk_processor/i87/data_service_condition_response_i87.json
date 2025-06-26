@@ -1,189 +1,163 @@
 {
-    "A:Raw": {
-        "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore-1492124782.nc"
-        },
-        "issue_dt": "2022-12-23T12:00:00.000Z",
-        "valid_dt": "2022-12-23T13:00:00.000Z",
-        "proj_name": "NBM",
-        "region": "CONUS",
-        "slice": "[1801:2201,746:1046]",
-        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
-        "units": "Fahrenheit",
-        "data_name": "Temperature: 2m (Ensemble mean)",
-        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  "A:Raw": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore-1492124782.nc"
     },
-    "A:ThreatLevel": {
-        "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore1698359448.nc"
-        },
-        "issue_dt": "2022-12-23T12:00:00.000Z",
-        "valid_dt": "2022-12-23T13:00:00.000Z",
-        "proj_name": "NBM",
-        "region": "CONUS",
-        "slice": "[1801:2201,746:1046]",
-        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
-        "units": "ThreatLevel",
-        "data_name": "Temperature: 2m (Ensemble mean)",
-        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "Fahrenheit",
+    "data_name": "Temperature: 2m (Ensemble mean)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  },
+  "A:ThreatLevel": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore1698359448.nc"
     },
-    "B:Raw": {
-        "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR/Inches/gridstore1563243851.nc"
-        },
-        "issue_dt": "2022-12-23T12:00:00.000Z",
-        "valid_dt": "2022-12-23T13:00:00.000Z",
-        "proj_name": "NBM",
-        "region": "CONUS",
-        "slice": "[1801:2201,746:1046]",
-        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
-        "units": "Inches",
-        "data_name": "Rainfall: 1hr accum (APCP)",
-        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "ThreatLevel",
+    "data_name": "Temperature: 2m (Ensemble mean)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  },
+  "B:Raw": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR/Inches/gridstore1563243851.nc"
     },
-    "B:ThreatLevel": {
-        "filenames": {
-          "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR.Criteria/ThreatLevel/gridstore-85065583.nc"
-        },
-        "issue_dt": "2022-12-23T12:00:00.000Z",
-        "valid_dt": "2022-12-23T13:00:00.000Z",
-        "proj_name": "NBM",
-        "region": "CONUS",
-        "slice": "[1801:2201,746:1046]",
-        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
-        "units": "ThreatLevel",
-        "data_name": "Rainfall: 1hr accum (APCP)",
-        "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "Inches",
+    "data_name": "Rainfall: 1hr accum (APCP)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  },
+  "B:ThreatLevel": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN1HR.Criteria/ThreatLevel/gridstore-85065583.nc"
     },
-    "I-87, Albany-Nyack, Icy Roads": {
-      "filenames": {
-        "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore-2042697837.nc"
-      },
-      "issue_dt": "2022-12-23T12:00:00.000Z",
-      "valid_dt": "2022-12-23T13:00:00.000Z",
-      "proj_name": "NBM",
-      "region": "CONUS",
-      "slice": "[1801:2201,746:1046]",
-      "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-      "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
-      "units": "ThreatLevel",
-      "data_name": "AND(Temperature: 2m (Ensemble mean), Rainfall: 1hr accum (APCP))",
-      "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "ThreatLevel",
+    "data_name": "Rainfall: 1hr accum (APCP)",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  },
+  "I-87, Albany-Nyack, Icy Roads": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore-2042697837.nc"
     },
-    "request": {
-        "corrId": {
-            "originator": "IDSSe",
-            "uuid": "11111111-beec-467b-a0e6-9d215b715b97",
-            "issueDt": "2022-12-23T12:00:00.000Z"
-        },
-        "label": "I-87, Albany-Nyack, Icy Roads",
-        "sourceType": "join",
-        "sourceObj": {
-            "join": "AND",
-            "sources": [
-                {
-                    "sourceType": "condition",
-                    "label": "A:ThreatLevel",
-                    "sourceObj": {
-                        "relational": "LESS THAN OR EQUAL",
-                        "thresh": 35,
-                        "mapping": {
-                            "startWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "endWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "controlPoints": [
-                                "-Infinity",
-                                20.0,
-                                50.0,
-                                "Infinity"
-                            ]
-                        },
-                        "source": {
-                            "sourceType": "units",
-                            "label": "A:Raw",
-                            "sourceObj": {
-                                "units": "Fahrenheit",
-                                "source": {
-                                    "sourceType": "slice",
-                                    "sourceObj": {
-                                        "slice": "[1801:2201,746:1046]",
-                                        "source": {
-                                            "sourceType": "data",
-                                            "sourceObj": {
-                                                "product": "NBM",
-                                                "field": "TEMP",
-                                                "region": "CONUS",
-                                                "validDt": "2022-12-23T13:00:00.000Z",
-                                                "issueDt": "2022-12-23T12:00:00.000Z"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+    "issue_dt": "2022-12-23T12:00:00.000Z",
+    "valid_dt": "2022-12-23T13:00:00.000Z",
+    "proj_name": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
+    "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "grid_spec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "ThreatLevel",
+    "data_name": "AND(Temperature: 2m (Ensemble mean), Rainfall: 1hr accum (APCP))",
+    "data_loc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
+  },
+  "request": {
+    "corrId": {
+      "originator": "IDSSe",
+      "uuid": "11111111-beec-467b-a0e6-9d215b715b97",
+      "issueDt": "2022-12-23T12:00:00.000Z"
+    },
+    "label": "I-87, Albany-Nyack, Icy Roads",
+    "sourceType": "join",
+    "sourceObj": {
+      "join": "AND",
+      "sources": [
+        {
+          "sourceType": "condition",
+          "label": "A:ThreatLevel",
+          "sourceObj": {
+            "relational": "LESS THAN OR EQUAL",
+            "thresh": 35,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 20.0, 50.0, "Infinity"]
+            },
+            "source": {
+              "sourceType": "units",
+              "label": "A:Raw",
+              "sourceObj": {
+                "units": "DEG F",
+                "source": {
+                  "sourceType": "slice",
+                  "sourceObj": {
+                    "slice": "[1801:2201,746:1046]",
+                    "source": {
+                      "sourceType": "data",
+                      "sourceObj": {
+                        "product": "NBM",
+                        "field": "Temp",
+                        "region": "CONUS",
+                        "validDt": "2022-12-23T13:00:00.000Z",
+                        "issueDt": "2022-12-23T12:00:00.000Z"
+                      }
                     }
-                },
-                {
-                    "sourceType": "condition",
-                    "label": "B:ThreatLevel",
-                    "sourceObj": {
-                        "relational": "GREATER THAN OR EQUAL",
-                        "thresh": 0.01,
-                        "mapping": {
-                            "startWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "endWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "controlPoints": [
-                                "-Infinity",
-                                0,
-                                3,
-                                "Infinity"
-                            ]
-                        },
-                        "source": {
-                            "sourceType": "units",
-                            "label": "B:Raw",
-                            "sourceObj": {
-                                "units": "INCHES",
-                                "source": {
-                                    "sourceType": "slice",
-                                    "sourceObj": {
-                                        "slice": "[1801:2201,746:1046]",
-                                        "source": {
-                                            "sourceType": "data",
-                                            "sourceObj": {
-                                                "product": "NBM",
-                                                "field": "1 HR RAINFALL",
-                                                "region": "CONUS",
-                                                "validDt": "2022-12-23T13:00:00.000Z",
-                                                "issueDt": "2022-12-23T12:00:00.000Z"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                  }
                 }
-            ]
+              }
+            }
+          }
+        },
+        {
+          "sourceType": "condition",
+          "label": "B:ThreatLevel",
+          "sourceObj": {
+            "relational": "GREATER THAN OR EQUAL",
+            "thresh": 0.01,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 0, 3, "Infinity"]
+            },
+            "source": {
+              "sourceType": "units",
+              "label": "B:Raw",
+              "sourceObj": {
+                "units": "INCHES",
+                "source": {
+                  "sourceType": "slice",
+                  "sourceObj": {
+                    "slice": "[1801:2201,746:1046]",
+                    "source": {
+                      "sourceType": "data",
+                      "sourceObj": {
+                        "product": "NBM",
+                        "field": "Precip:1HR",
+                        "region": "CONUS",
+                        "validDt": "2022-12-23T13:00:00.000Z",
+                        "issueDt": "2022-12-23T12:00:00.000Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+      ]
     }
+  }
 }

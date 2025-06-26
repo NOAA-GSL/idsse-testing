@@ -1,99 +1,90 @@
 {
-    "corrId": {
-        "originator": "IDSSe",
-        "uuid": "11111111-beec-467b-a0e6-9d215b715b97",
-        "issueDt": "2022-12-23T12:00:00.000Z"
-    },
-    "issueDt": "2022-12-23T12:00:00.000Z",
-    "location": {
-        "features": [
-            {
-                "type": "Feature",
-                "properties": {
-                    "name": "Location 1"
-                },
-                "geometry": {
-                    "coordinates": [
-                        [-73.7590024537097, 42.65591696534881],
-                        [-73.90942792831065, 42.23822787157235],
-                        [-74.06762300901649, 41.87759195324239],
-                        [-74.06833074286453, 41.47501813192122],
-                        [-74.19523410397834, 41.22676406380836],
-                        [-74.16592315820024, 41.132081305023206],
-                        [-74.19779358251459, 41.03313792372083],
-                        [-74.31356413534577, 41.03313792372083],
-                        [-74.34463257389241, 40.89758661905506],
-                        [-74.2799359199833, 40.79969530956663],
-                        [-74.02190712335938, 40.706913872561074]
-                    ],
-                    "type": "LineString"
-                }
-            }
-        ]
-    },
-    "validDt": [
-        {"start": "2022-12-23T12:00:00.000Z", "end": "2022-12-24T00:00:00.000Z"}
-    ],
-    "conditions": [
-        {
-            "name": "I-87, Albany-Nyack, Icy Roads",
-            "severity": "MODERATE",
-            "combined": "A AND B",
-            "partsUsed": [
-                "A",
-                "B"
-            ]
-        }
-    ],
-    "parts": [
-        {
-            "name": "A",
-            "duration": 0,
-            "arealPercentage": 0,
-            "region": "CONUS",
-            "product": {
-                "fcst": [
-                    "NBM"
-                ]
-            },
-            "field": "TEMP",
-            "units": "Fahrenheit",
-            "relational": "LESS THAN OR EQUAL",
-            "thresh": 35,
-            "mapping": {
-                "min": 20.0,
-                "max": 50.0,
-                "clip": "true"
-            }
+  "corrId": {
+    "originator": "IDSSe",
+    "uuid": "11111111-beec-467b-a0e6-9d215b715b97",
+    "issueDt": "2022-12-23T12:00:00.000Z"
+  },
+  "issueDt": "2022-12-23T12:00:00.000Z",
+  "location": {
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Location 1"
         },
-        {
-            "name": "B",
-            "duration": 0,
-            "arealPercentage": 0,
-            "region": "CONUS",
-            "product": {
-                "fcst": [
-                    "NBM"
-                ]
-            },
-            "field": "1 HR RAINFALL",
-            "units": "INCHES",
-            "relational": "GREATER THAN OR EQUAL",
-            "thresh": 0.01,
-            "mapping": {
-                "min": 0,
-                "max": 3,
-                "clip": "true"
-            }
+        "geometry": {
+          "coordinates": [
+            [-73.7590024537097, 42.65591696534881],
+            [-73.90942792831065, 42.23822787157235],
+            [-74.06762300901649, 41.87759195324239],
+            [-74.06833074286453, 41.47501813192122],
+            [-74.19523410397834, 41.22676406380836],
+            [-74.16592315820024, 41.132081305023206],
+            [-74.19779358251459, 41.03313792372083],
+            [-74.31356413534577, 41.03313792372083],
+            [-74.34463257389241, 40.89758661905506],
+            [-74.2799359199833, 40.79969530956663],
+            [-74.02190712335938, 40.706913872561074]
+          ],
+          "type": "LineString"
         }
-    ],
-    "tags": {
-        "values": [
-            "I-87, Albany-Nyack, Icy Roads"
-        ],
-        "keyValues": {
-            "name": "I-87, Albany-Nyack, Icy Roads",
-            "nwsOffice": "ALY"
-        }
+      }
+    ]
+  },
+  "validDt": [
+    { "start": "2022-12-23T12:00:00.000Z", "end": "2022-12-24T00:00:00.000Z" }
+  ],
+  "conditions": [
+    {
+      "name": "I-87, Albany-Nyack, Icy Roads",
+      "severity": "MODERATE",
+      "combined": "A AND B",
+      "partsUsed": ["A", "B"]
     }
+  ],
+  "parts": [
+    {
+      "name": "A",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "Temp",
+      "units": "DEG F",
+      "relational": "LESS THAN OR EQUAL",
+      "thresh": 35,
+      "mapping": {
+        "min": 20.0,
+        "max": 50.0,
+        "clip": "true"
+      }
+    },
+    {
+      "name": "B",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": {
+        "fcst": ["NBM"]
+      },
+      "field": "Precip:1HR",
+      "units": "INCHES",
+      "relational": "GREATER THAN OR EQUAL",
+      "thresh": 0.01,
+      "mapping": {
+        "min": 0,
+        "max": 3,
+        "clip": "true"
+      }
+    }
+  ],
+  "tags": {
+    "values": ["I-87, Albany-Nyack, Icy Roads"],
+    "keyValues": {
+      "name": "I-87, Albany-Nyack, Icy Roads",
+      "nwsOffice": "ALY"
+    }
+  }
 }

@@ -37,24 +37,22 @@
     ],
     "parts": [
         {
-            "name": "A",
-            "duration": 0,
-            "arealPercentage": 0,
-            "product": {
-                "fcst": [
-                    "NBM"
-                ]
-            },
-            "field": "TEMPERATURE",
-            "units": "DEG F",
-            "region": "CONUS",
-            "relational": "GREATER THAN",
-            "thresh": 30,
-            "mapping": {
-                "min": 0.0,
-                "max": 75.0,
-                "clip": "true"
-            }
+          "name": "A",
+          "duration": 0,
+          "arealPercentage": 0,
+          "product": {
+            "fcst": ["NBM"]
+          },
+          "field": "Temp",
+          "units": "DEG F",
+          "region": "CONUS",
+          "relational": "GREATER THAN",
+          "thresh": 30,
+          "mapping": {
+            "min": 0.0,
+            "max": 75.0,
+            "clip": "true"
+          }
         }
     ],
     "tags": {

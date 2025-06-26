@@ -4,7 +4,7 @@
     "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
     "issueDt": "2025-01-28T12:00:00.000Z"
   },
-  "label": "Binghamton, Snow",
+  "label": "Binghamton, Snow (probabilistic)",
   "sourceType": "join",
   "sourceObj": {
     "join": "OR",
@@ -34,7 +34,7 @@
                 "sourceType": "data",
                 "sourceObj": {
                   "product": "NBM",
-                  "field": "SNOW:1HR:[DTRM,p010,p090]",
+                  "field": "Snow:1HR:[DTRM,p010,p090]",
                   "region": "CONUS",
                   "units": "INCHES",
                   "validDt": "2025-01-28T13:00:00.000Z",
