@@ -1,0 +1,1 @@
+Note: all the .nc files in this directory are empty. Only use this directory of test files for functions that check if a filepath exists--not ones that actually try to read NetCDF data.
