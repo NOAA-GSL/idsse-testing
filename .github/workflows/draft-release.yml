@@ -1,0 +1,15 @@
+name: Draft Release on Tag Push
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Matches semantic version tags
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true # Automatically generate release notes based on PRs between versions

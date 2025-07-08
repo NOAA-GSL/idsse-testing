@@ -30,7 +30,7 @@
   ],
   "conditions": [
     {
-      "name": "Binghamton, Snow",
+      "name": "Binghamton, Snow (probabilistic)",
       "severity": "MODERATE",
       "combined": "A",
       "partsUsed": ["A"]
@@ -45,7 +45,7 @@
       "product": {
         "fcst": ["NBM"]
       },
-      "field": "SNOW:1HR",
+      "field": "Snow:1HR",
       "units": "INCHES",
       "relational": "GREATER THAN OR EQUAL",
       "thresh": 0.01,
