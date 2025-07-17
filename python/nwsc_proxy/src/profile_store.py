@@ -246,7 +246,7 @@ class ProfileStore:
         return True
 
     def update(self, profile_id: str, data: dict) -> dict:
-        """Update a Support Profile in storage based on its UUID.
+        """Update a Support Profile in storage based on its id.
 
         Args:
             profile_id (str): The UUID of the Support Profile to update
@@ -256,7 +256,7 @@ class ProfileStore:
             dict: the latest version of the Profile, with all attribute changes applied
 
         Raises:
-            FileNotFoundError: if no Support Profile exists with the provided uuid
+            FileNotFoundError: if no Support Profile exists with the provided id
         """
         logger.info("Updating profile_id %s with new attributes: %s", profile_id, data)
 
