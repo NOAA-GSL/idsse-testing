@@ -245,6 +245,16 @@ def test_update_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_pr
     assert result[0].json["profile"] == updated_profile
 
 
+def test_update_no_body(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+    mock_request.method = "PATCH"
+    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_request.data = None
+
+    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+
+    assert result[1] == 400
+
+
 def test_update_profile_missing(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
     mock_request.method = "PATCH"
     mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})

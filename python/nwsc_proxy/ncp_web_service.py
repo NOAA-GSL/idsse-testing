@@ -117,6 +117,9 @@ class EventsRoute:
         return jsonify({"message": f"Profile {profile_id} saved"}), 201
 
     def _handle_update(self) -> Response:
+        if not request.data:
+            return jsonify({"message": "PATCH requires request body"}), 400
+
         request_body: dict = request.json
         profile_id = request.args.get("id", request.args.get("uuid"))
 
