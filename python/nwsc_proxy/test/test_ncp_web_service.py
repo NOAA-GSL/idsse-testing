@@ -213,7 +213,7 @@ def test_create_previous_profile_failure(
 
 def test_delete_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
     mock_request.method = "DELETE"
-    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_request.args = MultiDict({"id": EXAMPLE_UUID})
     mock_profile_store.return_value.delete.return_value = True  # delete worked
 
     result: tuple[Response, int] = wrapper.app.view_functions["events"]()
@@ -234,7 +234,7 @@ def test_delete_profile_failure(wrapper: AppWrapper, mock_request: Mock, mock_pr
 
 def test_update_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
     mock_request.method = "PATCH"
-    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_request.args = MultiDict({"id": EXAMPLE_UUID})
     mock_request.json = {"name": "Some new name"}
     updated_profile = {"id": EXAMPLE_UUID, "name": "Some new name"}
 
@@ -243,6 +243,16 @@ def test_update_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_pr
 
     assert result[1] == 200
     assert result[0].json["profile"] == updated_profile
+
+
+def test_update_no_body(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
+    mock_request.method = "PATCH"
+    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
+    mock_request.data = None
+
+    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+
+    assert result[1] == 400
 
 
 def test_update_profile_missing(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
