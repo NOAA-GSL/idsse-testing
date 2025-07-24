@@ -87,7 +87,7 @@ class EventsRoute:
     def _handle_delete(self) -> Response:
         """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
         success, 404 otherwise."""
-        profile_id = request.args.get("uuid")
+        profile_id = request.args.get("id", request.args.get("uuid"))
         is_deleted = self.profile_store.delete(profile_id)
         if not is_deleted:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
@@ -117,11 +117,14 @@ class EventsRoute:
         return jsonify({"message": f"Profile {profile_id} saved"}), 201
 
     def _handle_update(self) -> Response:
+        if not request.data:
+            return jsonify({"message": "PATCH requires request body"}), 400
+
         request_body: dict = request.json
-        profile_id = request.args.get("uuid")
+        profile_id = request.args.get("id", request.args.get("uuid"))
 
         if not profile_id:
-            return jsonify({"message": "Missing required query parameter: uuid"}), 400
+            return jsonify({"message": "Missing required query parameter: id"}), 400
 
         try:
             updated_profile = self.profile_store.update(profile_id, request_body)
