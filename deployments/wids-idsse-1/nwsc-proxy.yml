@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nwsc-proxy-deployment
+  namespace: idsse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nwsc-proxy
+  template:
+    metadata:
+      labels:
+        app: nwsc-proxy
+    spec:
+      containers:
+      - name: nwsc-proxy
+        image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:main
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 50m
+          limits:
+            memory: 256Mi
+            cpu: 250m
+        ports:
+          - containerPort: 5000
+            name: service
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: ghcr-io-dockerconfig
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nwscproxy
+  namespace: idsse
+spec:
+  # ClusterIP is internal to k8s only
+  type: ClusterIP
+  selector:
+    app: nwsc-proxy
+  ports:
+    - name: service
+      port: 5000
+      targetPort: 5000

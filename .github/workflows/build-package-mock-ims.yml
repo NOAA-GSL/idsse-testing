@@ -61,6 +61,31 @@ jobs:
           APP: '${{matrix.app}}'
         run: |
           echo "APP_LOWERCASE=${APP,,}" >> $GITHUB_ENV
+      
+      - name: Generate Date-Time Tag
+        id: tag
+        run: |
+          # Get the current date-time in YYYYMMDDHHMMSS format
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          echo "Generated tag: $TIMESTAMP"
+          # Store it as an output to use in later steps
+          echo "GIT_TAG=$TIMESTAMP" >> $GITHUB_ENV
+
+      - name: Update k8s wids-idsse-1 deployments with git tag
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          sed -i "s/proxy:[^ ]\+/proxy:${GIT_TAG}/g" ./deployments/wids-idsse-1/nwsc-proxy.yml
+
+      - name: Pull before Push
+        run: |
+          git pull origin main
+
+      - name: Commit & push changes to k8s dev deployment yaml files
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions-js/push@master
+        with:
+          message: Update k8s dev deployment yamls with git tag
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Image
         run: |
@@ -69,13 +94,13 @@ jobs:
             --build-arg BUILDVER="${{env.VERSION}}" \
             --build-arg COMMITBRANCH=${{env.BRANCH}} \
             --build-arg COMMITSHA=${{github.sha}} \
-            -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}} \
+            -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.GIT_TAG}} \
             -f ./docker/nwsc_proxy/dev/Dockerfile .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}}'
+          image-ref: '${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.GIT_TAG}}'
           format: 'table'
           #exit-code: '1'
           ignore-unfixed: true
@@ -101,7 +126,7 @@ jobs:
 
       - name: Push Image to Dev Registry
         run: |
-          docker push ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}}
+          docker push ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.GIT_TAG}}
   job2:
       name: NWSC Proxy Service - UAT
       needs: job1
