@@ -5,15 +5,15 @@
         "uuid": "53430eaa-1db4-4095-bf13-a26e45223d9a"
     },
     "data_requested": {
-        "filenames": {
-          "dtrm": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
-        },
-        "grid_spec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=41.05894633497196 +lon_ll=-106.02046021316575",
-        "issue_dt": "2023-01-10T08:00:00Z",
-        "proj_name": "NBM",
-        "proj_spec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-        "units": "Criteria",
-        "valid_dt": "2023-01-11T06:00:00Z"
+      "filenames": {
+        "dtrm": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
+      },
+      "gridSpec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=41.05894633497196 +lon_ll=-106.02046021316575",
+      "issueDt": "2023-01-10T08:00:00Z",
+      "projName": "NBM",
+      "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+      "units": "Criteria",
+      "vaildDt": "2023-01-11T06:00:00Z"
     },
     "request": {
         "label": "data_requested",
