@@ -1,10 +1,11 @@
 {
   "A:Raw": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore2064195902.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/TEMP/Fahrenheit/gridstore2064195902.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
+    "validDtStart": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
@@ -16,10 +17,11 @@
   },
   "A:ThreatLevel": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-811715560.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/TEMP.Criteria/ThreatLevel/gridstore-811715560.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
+    "validDtStart": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
@@ -31,10 +33,11 @@
   },
   "B:Raw": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST/MilesPerHour/gridstore696460526.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/WINDGUST/MilesPerHour/gridstore696460526.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
+    "validDtStart": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
@@ -46,10 +49,11 @@
   },
   "B:ThreatLevel": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST.Criteria/ThreatLevel/gridstore43167307.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/WINDGUST.Criteria/ThreatLevel/gridstore43167307.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
+    "validDtStart": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
@@ -61,10 +65,11 @@
   },
   "Syracuse, Cold and Windy": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore1303753817.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore1303753817.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
+    "validDtStart": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",

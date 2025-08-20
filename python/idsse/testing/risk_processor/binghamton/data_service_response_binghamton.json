@@ -1,10 +1,10 @@
 {
   "A:Raw": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR/Inches/gridstore-907024368.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/SNOW1HR/Inches/gridstore-907024368.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
@@ -16,10 +16,10 @@
   },
   "A:ThreatLevel": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/SNOW1HR.Criteria/ThreatLevel/gridstore-401831466.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/SNOW1HR.Criteria/ThreatLevel/gridstore-401831466.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
@@ -31,10 +31,10 @@
   },
   "Binghamton, Snow": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore2098351630.nc"
+      "dtrm": "/local_data/2022/12/23/NBM.AWS.GRIB/Criteria/ThreatLevel/gridstore2098351630.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
-    "vaildDt": "2022-12-23T13:00:00.000Z",
+    "validDt": "2022-12-23T13:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",

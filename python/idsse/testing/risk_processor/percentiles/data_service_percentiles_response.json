@@ -1,12 +1,13 @@
 {
   "A:Raw": {
     "filenames": {
-      "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore1685131974.nc",
-      "prctl_p010": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p010/Inches/gridstore-168975316.nc",
-      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p090/Inches/gridstore-1838561740.nc"
+      "dtrm": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.DTRM/Inches/gridstore1685131974.nc",
+      "prctl_p010": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p010/Inches/gridstore-168975316.nc",
+      "prctl_p090": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR.PRCTL_p090/Inches/gridstore-1838561740.nc"
     },
     "issueDt": "2025-01-28T12:00:00.000Z",
-    "vaildDt": "2025-01-28T13:00:00.000Z",
+    "validDt": "2025-01-28T13:00:00.000Z",
+    "validDtStart": "2025-01-28T12:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
@@ -19,12 +20,13 @@
   },
   "A:ThreatLevel": {
     "filenames": {
-      "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc",
-      "prctl_p010": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore-497177812.nc",
-      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.nc"
+      "dtrm": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.nc",
+      "prctl_p010": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore-497177812.nc",
+      "prctl_p090": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.nc"
     },
     "issueDt": "2025-01-28T12:00:00.000Z",
-    "vaildDt": "2025-01-28T13:00:00.000Z",
+    "validDt": "2025-01-28T13:00:00.000Z",
+    "validDtStart": "2025-01-28T12:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
@@ -37,10 +39,11 @@
   },
   "Binghamton, Snow": {
     "filenames": {
-      "multi": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-1728425781.nc"
+      "multi": "/local_data/2025/01/28/NBM.AWS.GRIB/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-1728425781.nc"
     },
     "issueDt": "2025-01-28T12:00:00.000Z",
-    "vaildDt": "2025-01-28T13:00:00.000Z",
+    "validDt": "2025-01-28T13:00:00.000Z",
+    "validDtStart": "2025-01-28T12:00:00.000Z",
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
     "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
