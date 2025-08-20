@@ -1,0 +1,167 @@
+{
+  "A:Raw": {
+    "filenames": {
+      "dtrm": "/local_data/2025/08/18/NBM.AWS.GRIB/CONUS/TEMP.DTRM/Fahrenheit/gridstore-589809087.nc"
+    },
+    "issueDt": "2025-08-18T20:00:00.000Z",
+    "validDt": "2025-08-22T06:00:00.000Z",
+    "validDtStart": "2025-08-22T06:00:00.000Z",
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=43.00838965835521 +lon_ll=-119.20780097309057",
+    "product": "NBM.AWS.GRIB",
+    "dataName": "Temperature: 2m (Ensemble mean)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "Fahrenheit",
+    "region": "CONUS",
+    "slice": "[475:875,979:1279]"
+  },
+  "A:ThreatLevel": {
+    "filenames": {
+      "dtrm": "/local_data/2025/08/18/NBM.AWS.GRIB/CONUS/TEMP.DTRM/ThreatLevel/gridstore-648044071.nc"
+    },
+    "issueDt": "2025-08-18T20:00:00.000Z",
+    "validDt": "2025-08-22T06:00:00.000Z",
+    "validDtStart": "2025-08-22T06:00:00.000Z",
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=43.00838965835521 +lon_ll=-119.20780097309057",
+    "product": "NBM.AWS.GRIB",
+    "dataName": "Temperature: 2m (Ensemble mean)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[475:875,979:1279]"
+  },
+  "B:Raw": {
+    "filenames": {
+      "dtrm": "/local_data/2025/08/18/NBM.AWS.GRIB/CONUS/PROBTHDR.3HR.DTRM/Percent/gridstore-31774729.nc"
+    },
+    "issueDt": "2025-08-18T20:00:00.000Z",
+    "validDt": "2025-08-22T06:00:00.000Z",
+    "validDtStart": "2025-08-22T03:00:00.000Z",
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=43.00838965835521 +lon_ll=-119.20780097309057",
+    "product": "NBM.AWS.GRIB",
+    "dataName": "Thunderstorm Probability: 3HR accum (TSTM)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "Percent",
+    "region": "CONUS",
+    "slice": "[475:875,979:1279]"
+  },
+  "B:ThreatLevel": {
+    "filenames": {
+      "dtrm": "/local_data/2025/08/18/NBM.AWS.GRIB/CONUS/PROBTHDR.3HR.DTRM/ThreatLevel/gridstore-127538435.nc"
+    },
+    "issueDt": "2025-08-18T20:00:00.000Z",
+    "validDt": "2025-08-22T06:00:00.000Z",
+    "validDtStart": "2025-08-22T03:00:00.000Z",
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=43.00838965835521 +lon_ll=-119.20780097309057",
+    "product": "NBM.AWS.GRIB",
+    "dataName": "Thunderstorm Probability: 3HR accum (TSTM)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[475:875,979:1279]"
+  },
+  "Minor": {
+    "filenames": {
+      "dtrm": "/local_data/2025/08/18/NBM.AWS.GRIB/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-2128403906.nc"
+    },
+    "issueDt": "2025-08-18T20:00:00.000Z",
+    "validDt": "2025-08-22T06:00:00.000Z",
+    "validDtStart": "2025-08-22T03:00:00.000Z",
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=43.00838965835521 +lon_ll=-119.20780097309057",
+    "product": "NBM.AWS.GRIB",
+    "dataName": "OR(Temperature: 2m (Ensemble mean), Thunderstorm Probability: 3HR accum (TSTM))",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[475:875,979:1279]"
+  },
+  "request": {
+    "corrId": {
+      "originator": "IMS",
+      "uuid": "fd35adec-d2a0-49a9-a320-df20a7b6d681",
+      "issueDt": "2025-08-18T20:00:00.000Z"
+    },
+    "label": "Minor",
+    "sourceType": "join",
+    "sourceObj": {
+      "join": "OR",
+      "sources": [
+        {
+          "sourceType": "condition",
+          "label": "A:ThreatLevel",
+          "sourceObj": {
+            "relational": "LESS THAN",
+            "thresh": 32,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 17, 47, "Infinity"]
+            },
+            "source": {
+              "label": "A:Raw",
+              "sourceType": "slice",
+              "sourceObj": {
+                "sliceCoords": [[-113.9595, 46.8571]],
+                "minSize": [400, 300],
+                "minBuff": 50,
+                "source": {
+                  "sourceType": "data",
+                  "sourceObj": {
+                    "product": "NBM",
+                    "field": "Temp",
+                    "region": "CONUS",
+                    "units": "Fahrenheit",
+                    "validDt": "2025-08-22T06:00:00.000Z",
+                    "issueDt": "2025-08-18T20:00:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "sourceType": "condition",
+          "label": "B:ThreatLevel",
+          "sourceObj": {
+            "relational": "GREATER THAN",
+            "thresh": 10,
+            "mapping": {
+              "startWeight": [0, 1, 0],
+              "endWeight": [0, 1, 0],
+              "controlPoints": ["-Infinity", 0, 20, "Infinity"]
+            },
+            "source": {
+              "label": "B:Raw",
+              "sourceType": "slice",
+              "sourceObj": {
+                "sliceCoords": [[-113.9595, 46.8571]],
+                "minSize": [400, 300],
+                "minBuff": 50,
+                "source": {
+                  "sourceType": "data",
+                  "sourceObj": {
+                    "product": "NBM",
+                    "field": "ProbThdr:3HR",
+                    "region": "CONUS",
+                    "units": "Percent",
+                    "validDt": "2025-08-22T06:00:00.000Z",
+                    "issueDt": "2025-08-18T20:00:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
