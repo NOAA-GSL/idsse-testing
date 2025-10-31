@@ -24,16 +24,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install pytest pytest-cov pylint==2.17.5 python-dateutil==2.8.2 flask==2.3.2
 
-      - name: Checkout idss-engine-commons
-        uses: actions/checkout@v2
-        with:
-          repository: NOAA-GSL/idss-engine-commons
-          ref: main
-          path: commons/
+      # - name: Checkout idss-engine-commons
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: NOAA-GSL/idss-engine-commons
+      #     ref: main
+      #     path: commons/
 
-      - name: Install IDSSE python commons
-        working-directory: commons/python/idsse_common
-        run: pip install .
+      # - name: Install IDSSE python commons
+      #   working-directory: commons/python/idsse_common
+      #   run: pip install .
 
       - name: Set PYTHONPATH for pytest
         run: |
