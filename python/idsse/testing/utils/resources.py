@@ -19,11 +19,7 @@ import pathlib
 from collections.abc import Sequence
 from importlib import resources
 from os import path
-from typing import TextIO
-
-from idsse.common.sci.netcdf_io import read_netcdf
-
-import numpy as np
+from typing import Any, TextIO, Callable
 
 
 # pylint: disable=protected-access
@@ -55,24 +51,31 @@ def get_filepath(package: str, filename: str) -> str:
     return str(resources.files(package).joinpath(filename))
 
 
-def get_resource_from_file(package: str, filename: str) -> dict | Sequence[Sequence[any]]:
+def get_resource_from_file(
+    package: str, filename: str, load_func: Callable[[str], Any] | None = None
+) -> dict | Sequence[Sequence[Any]]:
     """Load test resource/data from file into python object
 
     Args:
         package (str): name of test package containing the file
         filename (str): name of test resource to load from the package directory
+        load_func (optional, Callable | None): custom function to read content from the provided
+            filename and package. Required if file extension is not one of: `[.json, .csv. .html]`.
+            Defaults to None (use built-in file readers).
 
     Raises:
         ValueError: if file extension is not supported
 
     Returns:
-        dict | Sequence[Sequence[any]]: Appropriate data type based on resource file type.
+        dict | Sequence[Sequence[Any]]: Appropriate data type based on resource file type.
         For example, .json returns a dict, .csv returns a list of lists
     """
+    traversable = resources.files(package).joinpath(filename)
+    if load_func:
+        return load_func(traversable)
+
     _, file_extension = path.splitext(filename)
-    if file_extension == ".nc":
-        return _load_netcdf_resource(resources.files(package).joinpath(filename))
-    file_stream = resources.files(package).joinpath(filename).open("r")
+    file_stream = traversable.open("r")
     if file_extension == ".json":
         return _load_json_resource(file_stream)
     if file_extension == ".csv":
@@ -87,15 +90,10 @@ def _load_json_resource(stream: TextIO) -> dict:
     return json.load(stream)
 
 
-def _load_csv_resource(stream: TextIO) -> Sequence[Sequence[any]]:
+def _load_csv_resource(stream: TextIO) -> Sequence[Sequence[Any]]:
     """utility to load CSV file from package into 2D array of floats"""
     file_reader = csv.reader(stream)
     return [list(map(float, row)) for row in file_reader]
-
-
-def _load_netcdf_resource(filename: str) -> tuple[dict, np.ndarray]:
-    """utility to load NetCDF file from package"""
-    return read_netcdf(filename)
 
 
 def _load_html_resource(filestream: TextIO) -> str:

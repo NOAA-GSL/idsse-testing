@@ -16,12 +16,20 @@ from argparse import ArgumentParser, Namespace
 
 from flask import Flask, Response, current_app, request, jsonify
 
-from idsse.common.utils import to_iso
-
 from src.profile_store import ProfileStore
 
 # constants
 GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+
+
+def to_iso(dt: datetime) -> str:
+    """Format a datetime instance to an ISO string. Copied from `idss-engine-commons` for now"""
+    # pylint: disable=invalid-name
+    return (
+        f'{dt.strftime("%Y-%m-%dT%H:%M")}:' f"{(dt.second + dt.microsecond / 1e6):06.3f}" "Z"
+        if dt.tzname() in [None, str(UTC)]
+        else dt.strftime("%Z")[3:]
+    )
 
 
 # pylint: disable=too-few-public-methods
