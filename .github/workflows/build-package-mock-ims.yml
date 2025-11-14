@@ -22,10 +22,6 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: pull
-        run: |
-          docker pull ghcr.io/noaa-gsl/idss/commons/python/python-base:main
-
       - name: Checkout Code
         uses: actions/checkout@v2
 
@@ -144,10 +140,6 @@ jobs:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
-
-      - name: pull
-        run: |
-          docker pull ghcr.io/noaa-gsl/idss/commons/python/python-base:main
 
       - name: Checkout Code
         uses: actions/checkout@v2
