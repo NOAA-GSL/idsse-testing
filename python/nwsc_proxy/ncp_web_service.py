@@ -72,11 +72,18 @@ class EventsRoute:
         # otherwise, must be 'GET' operation
         data_source = request.args.get("dataSource", None, type=str)
         profile_status = request.args.get("status", default="existing", type=str)
+
+        # let request control if `isLive: false` profiles are included in response.
+        # Default to False if param not present (only return profiles where isLive: true)
+        include_inactive = request.args.get("includeInactive", default=False, type=bool)
+
         if profile_status == "existing":
-            profiles = self.profile_store.get_all(data_source)
+            profiles = self.profile_store.get_all(data_source, include_inactive=include_inactive)
 
         elif profile_status == "new":
-            profiles = self.profile_store.get_all(data_source, is_new=True)
+            profiles = self.profile_store.get_all(
+                data_source, is_new=True, include_inactive=include_inactive
+            )
             # update ProfileStore to label all queried events as no longer "new";
             # they've now been returned to IDSS Engine clients at least once
             current_app.logger.info("Got all new profiles: %s", profiles)
