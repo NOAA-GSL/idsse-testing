@@ -19,7 +19,7 @@ spec:
       - name: nwsc-proxy
         image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:uat # idsse-testing repo
         imagePullPolicy: Always
-        args: [--base_dir, /local_data/profiles]
+        args: ["--base_dir=/local_data/profiles"]
         env:
         - name: BASE_DIR
           value: "/local_data/profiles"

@@ -17,9 +17,7 @@ COPY ./python/nwsc_proxy/src/*.py /python/nwsc_proxy/src/
 # Don't copy canned profiles for UAT, use criteria builder to generate needed profiles
 #COPY ./python/nwsc_proxy/src/profiles/*.json /python/profiles/
 
-# The volume mapping here is kind of strange for k8s deployment, because if we map an empty volume to /criteria
-# then the temp copy of json above will get blown away by the volume mapping...just omit it for k8s deployment
-# for now.
-#VOLUME /python/profiles
+# Setup the data volumes
+VOLUME /local_data
 
-ENTRYPOINT [ "python3", "/python/nwsc_proxy/ncp_web_service.py", "--base_dir", "/python/profiles"]
+ENTRYPOINT [ "python3", "/python/nwsc_proxy/ncp_web_service.py"]
