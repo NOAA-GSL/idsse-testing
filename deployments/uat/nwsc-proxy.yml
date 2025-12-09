@@ -13,27 +13,38 @@ spec:
       labels:
         app: nwsc-proxy
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-137-75-224-190.us-east-2.compute.internal
       containers:
       - name: nwsc-proxy
-        image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:20251114161628
+        image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:uat # idsse-testing repo
         imagePullPolicy: Always
         env:
         - name: BASE_DIR
-          value: "/python/profiles"
+          value: "/local_data/profiles"
         resources:
           requests:
-            memory: 64Mi
-            cpu: 10m
-          limits:
             memory: 128Mi
-            cpu: 100m
+            cpu: 50m
+          limits:
+            memory: 256Mi
+            cpu: 250m
         ports:
           - containerPort: 5000
             name: service
+        volumeMounts:
+          - mountPath: /local_data
+            name: local-data-storage
       restartPolicy: Always
       imagePullSecrets:
         - name: ghcr-io-dockerconfig
+      volumes:
+      - name: local-data-storage
+        persistentVolumeClaim:
+          claimName: local-data-pvc
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:

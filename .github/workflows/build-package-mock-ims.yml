@@ -185,7 +185,7 @@ jobs:
             --build-arg COMMITBRANCH=${{env.BRANCH}} \
             --build-arg COMMITSHA=${{github.sha}} \
             -t ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:uat \
-            -f ./docker/nwsc_proxy/uat/Dockerfile .
+            -f ./docker/nwsc_proxy/release/Dockerfile .
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
