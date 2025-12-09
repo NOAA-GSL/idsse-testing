@@ -113,6 +113,7 @@ class ProfileStore:
             os.makedirs(_dir, exist_ok=True)
 
         # load any NWS Connect response files dumped into the base_dir
+        logger.info("Scanning base directory for raw NWS Connect API response files: %s", base_dir)
         for response_filename in glob("*.json", root_dir=base_dir):
             response_filepath = os.path.join(base_dir, response_filename)
             logger.warning("Loading profiles from raw API response file: %s", response_filepath)
