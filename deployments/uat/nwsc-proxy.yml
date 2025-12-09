@@ -35,14 +35,14 @@ spec:
             name: service
         volumeMounts:
           - mountPath: /local_data
-            name: local-data-storage
+            name: efs-data-storage
       restartPolicy: Always
       imagePullSecrets:
         - name: ghcr-io-dockerconfig
       volumes:
-      - name: local-data-storage
+      - name: efs-data-storage
         persistentVolumeClaim:
-          claimName: local-data-pvc
+          claimName: efs-data-pvc
 
 ---
 
