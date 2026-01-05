@@ -14,7 +14,7 @@ spec:
         app: nwsc-proxy
     spec:
       nodeSelector:
-        kubernetes.io/hostname: ip-137-75-224-190.us-east-2.compute.internal
+        kubernetes.io/hostname: ip-137-75-224-172.us-east-2.compute.internal
       containers:
       - name: nwsc-proxy
         image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:uat # idsse-testing repo
