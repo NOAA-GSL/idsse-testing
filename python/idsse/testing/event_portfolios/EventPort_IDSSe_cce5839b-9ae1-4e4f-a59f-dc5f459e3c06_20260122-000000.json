@@ -1,0 +1,922 @@
+{
+  "corrId": {
+    "originator": "CriteriaBuilder",
+    "uuid": "cce5839b-9ae1-4e4f-a59f-dc5f459e3c06",
+    "issueDt": "2026-01-22T00:00:00.000Z"
+  },
+  "issueDt": "2026-01-22T00:00:00.000Z",
+  "location": {
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-97.411502, 35.726093],
+              [-97.410129, 35.612233],
+              [-97.140968, 35.65467],
+              [-97.140968, 35.612233],
+              [-97.274175, 35.582067],
+              [-97.22611, 35.513871],
+              [-97.316746, 35.510516],
+              [-97.334599, 35.554125],
+              [-97.445834, 35.474716],
+              [-97.360691, 35.446737],
+              [-97.151954, 35.44114],
+              [-97.15134, 35.365242],
+              [-97.149966, 35.304712],
+              [-97.230989, 35.306394],
+              [-97.228929, 35.346192],
+              [-97.250215, 35.347312],
+              [-97.250215, 35.317046],
+              [-97.307206, 35.319849],
+              [-97.307892, 35.304152],
+              [-97.336731, 35.30247],
+              [-97.334671, 35.28733],
+              [-97.415694, 35.292377],
+              [-97.417754, 35.339467],
+              [-97.4411, 35.336104],
+              [-97.44522, 35.357398],
+              [-97.461699, 35.356278],
+              [-97.461699, 35.370845],
+              [-97.51251, 35.369164],
+              [-97.511823, 35.296863],
+              [-97.65739, 35.291255],
+              [-97.656703, 35.332741],
+              [-97.931358, 35.354037],
+              [-97.934706, 35.502648],
+              [-97.774033, 35.501529],
+              [-97.763047, 35.455653],
+              [-97.675158, 35.457891],
+              [-97.672411, 35.544025],
+              [-97.789139, 35.549615],
+              [-97.783646, 35.636767],
+              [-97.583149, 35.630066],
+              [-97.585895, 35.683656],
+              [-97.528218, 35.690352],
+              [-97.526845, 35.728286],
+              [-97.411502, 35.726093]
+            ]
+          ]
+        },
+        "properties": { "name": "Oklahoma City" }
+      }
+    ]
+  },
+  "validDt": [
+    { "start": "2026-01-23T07:00:00.000Z", "end": "2026-01-23T12:00:00.000Z" }
+  ],
+  "conditions": [
+    {
+      "name": "Severe",
+      "severity": "SEVERE",
+      "combined": "A OR B",
+      "partsUsed": ["A", "B"]
+    }
+  ],
+  "parts": [
+    {
+      "name": "A",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": { "fcst": ["NBM"] },
+      "field": "Temp",
+      "units": "Fahrenheit",
+      "relational": "LESS THAN OR EQUAL",
+      "thresh": 25,
+      "mapping": { "min": 10, "max": 40, "clip": "true" }
+    },
+    {
+      "name": "B",
+      "duration": 0,
+      "arealPercentage": 0,
+      "region": "CONUS",
+      "product": { "fcst": ["NBM"] },
+      "field": "Temp",
+      "units": "Fahrenheit",
+      "relational": "LESS THAN OR EQUAL",
+      "thresh": 0,
+      "mapping": { "min": -15, "max": 15, "clip": "true" }
+    }
+  ],
+  "tags": {
+    "values": ["created at 2026-01-23T22:22:06.335Z"],
+    "keyValues": {
+      "name": "OKC Extreme Cold",
+      "nwsOffice": "OUN",
+      "status": "COMPLETE"
+    }
+  },
+  "riskResults": [
+    {
+      "evaluatedAt": "2026-01-23T22:24:09.216Z",
+      "conditionKey": "Severe",
+      "productKey": "NBM.AWS.GRIB",
+      "region": "CONUS",
+      "slice": "[996:1396,417:717]",
+      "locationKey": "Oklahoma City",
+      "dataSummary": [
+        {
+          "validDt": [
+            "2026-01-23T07:00:00.000Z",
+            "2026-01-23T08:00:00.000Z",
+            "2026-01-23T09:00:00.000Z",
+            "2026-01-23T10:00:00.000Z",
+            "2026-01-23T11:00:00.000Z",
+            "2026-01-23T12:00:00.000Z"
+          ],
+          "data": [
+            {
+              "name": "Severe",
+              "type": "condition",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [15.53, 20.33, 27.53, 35.93, 45.53, 57.53],
+              "dataType": "dtrm",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "Severe",
+              "type": "condition",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.93, 7.48, 13.24, 20.93],
+              "dataType": "prctl_p010",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "Severe",
+              "type": "condition",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [2.34, 6.82, 13.53, 20.96, 28.54, 38.27],
+              "dataType": "prctl_p025",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "Severe",
+              "type": "condition",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [29.71, 35.15, 42.44, 51.57, 63.03, 77.54],
+              "dataType": "prctl_p075",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "Severe",
+              "type": "condition",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [43.55, 48.97, 56.94, 66.72, 79.86, 96.63],
+              "dataType": "prctl_p090",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [15.53, 20.33, 27.53, 35.93, 45.53, 57.53],
+              "dataType": "dtrm",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [43.55, 48.97, 56.94, 66.72, 79.86, 96.63],
+              "dataType": "prctl_p090",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [29.71, 35.15, 42.44, 51.57, 63.03, 77.54],
+              "dataType": "prctl_p075",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [2.34, 6.82, 13.53, 20.96, 28.54, 38.27],
+              "dataType": "prctl_p025",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.93, 7.48, 13.24, 20.93],
+              "dataType": "prctl_p010",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [37.67, 36.95, 35.87, 34.61, 33.17, 31.37],
+              "dataType": "dtrm",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [33.47, 32.65, 31.46, 29.99, 28.02, 25.51],
+              "dataType": "prctl_p010",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [35.54, 34.73, 33.63, 32.26, 30.55, 28.37],
+              "dataType": "prctl_p025",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [39.65, 38.98, 37.97, 36.86, 35.72, 34.26],
+              "dataType": "prctl_p075",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "A",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [41.43, 40.8, 39.86, 38.88, 38.01, 36.86],
+              "dataType": "prctl_p090",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              "dataType": "dtrm",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              "dataType": "prctl_p090",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              "dataType": "prctl_p075",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              "dataType": "prctl_p025",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "criteria",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              "dataType": "prctl_p010",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [37.67, 36.95, 35.87, 34.61, 33.17, 31.37],
+              "dataType": "dtrm",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [33.47, 32.65, 31.46, 29.99, 28.02, 25.51],
+              "dataType": "prctl_p010",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [35.54, 34.73, 33.63, 32.26, 30.55, 28.37],
+              "dataType": "prctl_p025",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [39.65, 38.98, 37.97, 36.86, 35.72, 34.26],
+              "dataType": "prctl_p075",
+              "geoDist": [{ "0": 425 }]
+            },
+            {
+              "name": "B",
+              "type": "raw",
+              "validDt": [
+                "2026-01-23T07:00:00.000Z",
+                "2026-01-23T08:00:00.000Z",
+                "2026-01-23T09:00:00.000Z",
+                "2026-01-23T10:00:00.000Z",
+                "2026-01-23T11:00:00.000Z",
+                "2026-01-23T12:00:00.000Z"
+              ],
+              "singleValue": [41.43, 40.8, 39.86, 38.88, 38.01, 36.86],
+              "dataType": "prctl_p090",
+              "geoDist": [{ "0": 425 }]
+            }
+          ]
+        }
+      ],
+      "dataDescript": [
+        {
+          "partName": "A",
+          "productName": "NBM.AWS.GRIB",
+          "dataName": "Temperature: 2m (Ensemble mean)",
+          "dataLocation": "arn:aws:s3:::noaa-nbm-para-pds:",
+          "issueDt": "2026-01-22T00:00:00.000Z"
+        },
+        {
+          "partName": "B",
+          "productName": "NBM.AWS.GRIB",
+          "dataName": "Temperature: 2m (Ensemble mean)",
+          "dataLocation": "arn:aws:s3:::noaa-nbm-para-pds:",
+          "issueDt": "2026-01-22T00:00:00.000Z"
+        }
+      ],
+      "metaData": [
+        {
+          "name": "Severe",
+          "type": "condition",
+          "dataType": "dtrm",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 682,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T11:22:21.000Z",
+              "maxAt": "2026-01-23T11:22:21.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 262
+            },
+            {
+              "durationInMin": 346,
+              "min": 50.0,
+              "minAt": "2026-01-23T11:22:21.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T11:22:21.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 38
+            }
+          ]
+        },
+        {
+          "name": "Severe",
+          "type": "condition",
+          "dataType": "prctl_p010",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 1043,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "Severe",
+          "type": "condition",
+          "dataType": "prctl_p025",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 770,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "Severe",
+          "type": "condition",
+          "dataType": "prctl_p075",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 590,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T09:49:40.000Z",
+              "maxAt": "2026-01-23T09:49:40.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 170
+            },
+            {
+              "durationInMin": 201,
+              "min": 50.0,
+              "minAt": "2026-01-23T09:49:40.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T09:49:40.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 130
+            }
+          ]
+        },
+        {
+          "name": "Severe",
+          "type": "condition",
+          "dataType": "prctl_p090",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 488,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T08:07:45.000Z",
+              "maxAt": "2026-01-23T08:07:45.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 68
+            },
+            {
+              "durationInMin": 242,
+              "min": 50.0,
+              "minAt": "2026-01-23T08:07:45.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T08:07:45.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 232
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "dtrm",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 682,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T11:22:21.000Z",
+              "maxAt": "2026-01-23T11:22:21.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 262
+            },
+            {
+              "durationInMin": 346,
+              "min": 50.0,
+              "minAt": "2026-01-23T11:22:21.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T11:22:21.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 38
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p090",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 488,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T08:07:45.000Z",
+              "maxAt": "2026-01-23T08:07:45.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 68
+            },
+            {
+              "durationInMin": 242,
+              "min": 50.0,
+              "minAt": "2026-01-23T08:07:45.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T08:07:45.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 232
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p075",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 590,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T09:49:40.000Z",
+              "maxAt": "2026-01-23T09:49:40.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 170
+            },
+            {
+              "durationInMin": 201,
+              "min": 50.0,
+              "minAt": "2026-01-23T09:49:40.000Z",
+              "max": 100.0,
+              "startDt": "2026-01-23T09:49:40.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "PROXIMAL",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 130
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p025",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 770,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "A",
+          "type": "criteria",
+          "dataType": "prctl_p010",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 1043,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "B",
+          "type": "criteria",
+          "dataType": "dtrm",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 2399,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "B",
+          "type": "criteria",
+          "dataType": "prctl_p090",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 1473,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "B",
+          "type": "criteria",
+          "dataType": "prctl_p075",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 1744,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "B",
+          "type": "criteria",
+          "dataType": "prctl_p025",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 2694,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 50.0,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        },
+        {
+          "name": "B",
+          "type": "criteria",
+          "dataType": "prctl_p010",
+          "proximalThresh": 50,
+          "states": [
+            {
+              "durationInMin": 5760,
+              "min": 0.0,
+              "minAt": "2026-01-23T07:00:00.000Z",
+              "max": 38.18,
+              "startDt": "2026-01-23T07:00:00.000Z",
+              "endDt": "2026-01-23T12:00:00.000Z",
+              "maxAt": "2026-01-23T12:00:00.000Z",
+              "empirical": "MISS",
+              "geographical": "HIT",
+              "temporal": "HIT",
+              "durationInMinutes": 300
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
