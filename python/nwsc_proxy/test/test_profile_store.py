@@ -16,6 +16,7 @@ import shutil
 from copy import deepcopy
 from datetime import datetime, UTC
 from glob import glob
+from unittest.mock import Mock
 
 from pytest import fixture, raises
 
@@ -186,22 +187,36 @@ def test_update_profile_success(store: ProfileStore):
     profile_id = EXAMPLE_SUPPORT_PROFILE["id"]
     new_start_dt = "2026-01-01T12:00:00Z"
     new_name = "A different name"
-    new_profile_data = {"name": new_name, "setting": {"timing": {"start": new_start_dt}}}
+    new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
+    new_profile["name"] = new_name
+    new_profile["setting"] = {"timing": {"start": new_start_dt}}
 
-    updated_profile = store.update(profile_id, new_profile_data)
+    updated_profile = store.update(profile_id, new_profile)
 
     # data returned should have updated attributes
     assert updated_profile["name"] == new_name
     assert updated_profile["setting"]["timing"]["start"] == new_start_dt
-    # attributes at same level as any nested updated ones should not have changed
-    assert (
-        updated_profile["setting"]["timing"].get("durationInMinutes")
-        == EXAMPLE_SUPPORT_PROFILE["setting"]["timing"]["durationInMinutes"]
-    )
     # profile in cache should have indeed been changed
     refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
     assert refetched_profile.name == new_name
     assert datetime.fromtimestamp(refetched_profile.start_timestamp, UTC) == dt_parse(new_start_dt)
+
+
+def test_update_profile_error_rollback(store: ProfileStore):
+    profile_id = EXAMPLE_SUPPORT_PROFILE["id"]
+    new_name = "A different name"
+    new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
+    new_profile["name"] = new_name
+    # HACK: mocks out the class under test (BAD)
+    store.delete = Mock(name="mock_delete")  # test fails if we really delete existing Profile
+    store.save = Mock(name="mock_save", side_effect=[None, profile_id])  # fails first save
+
+    updated_profile = store.update(profile_id, new_profile)
+
+    assert updated_profile is None
+    # profile in cache is still there, no changes were made to data
+    refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
+    assert refetched_profile.name == EXAMPLE_SUPPORT_PROFILE["name"]
 
 
 def test_update_profile_not_found(store: ProfileStore):

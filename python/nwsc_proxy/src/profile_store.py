@@ -12,14 +12,15 @@
 import os
 import json
 import logging
-from dataclasses import dataclass
+
+# from dataclasses import dataclass
 from datetime import datetime, UTC
 from glob import glob
 from math import inf
 
 from dateutil.parser import parse as dt_parse
 
-from src.utils import deep_update
+# from src.utils import deep_update
 
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
@@ -29,7 +30,6 @@ DEFAULT_DATA_SOURCE = "NBM"
 logger = logging.getLogger(__name__)
 
 
-@dataclass
 class CachedProfile:
     """Data class to hold Support Profile's data and metadata ("new" vs "existing" status),
     as well as some derived properties extracted from the `data` JSON (e.g.
@@ -41,31 +41,31 @@ class CachedProfile:
         is_new (bool): track if Support Profile has ever been processed. Ought to start as True
     """
 
-    # pylint: disable=invalid-name
-    data: dict
-    is_new: bool
+    def __init__(self, data: dict, is_new: bool):
+        self.is_new = is_new
+        self._data = data
 
     @property
     def id(self) -> str:
         """The Support Profile UUID"""
-        return self.data.get("id")
+        return self._data.get("id")
 
     @property
     def name(self) -> str:
         """The Support Profile name"""
-        return self.data.get("name")
+        return self._data.get("name")
 
     @property
     def is_active(self) -> bool:
         """The Support Profile's active state (can be marked as inactive to halt processing)"""
-        return self.data.get("isLive")
+        return self._data.get("isLive")
 
     @property
     def start_timestamp(self) -> float:
         """The Support Profile event's start in Unix time (milliseconds since the epoch).
         math.inf if Support Profile is never-ending
         """
-        profile_start: str | None = self.data["setting"]["timing"].get("start")
+        profile_start: str | None = self._data["setting"]["timing"].get("start")
         return dt_parse(profile_start).timestamp() if profile_start else inf
 
     @property
@@ -75,7 +75,7 @@ class CachedProfile:
         """
         if self.start_timestamp == inf:
             return inf  # infinite start time, so infinite end time as well
-        timing: dict[str, int] = self.data["setting"]["timing"]
+        timing: dict[str, int] = self._data["setting"]["timing"]
         # look up durationInMinutes, or deprecated duration, or None
         profile_duration = timing.get("durationInMinutes", timing.get("duration", inf))
         return self.start_timestamp + profile_duration * 60 * 1000  # convert mins to ms
@@ -87,11 +87,19 @@ class CachedProfile:
             return [
                 # treat any profiles with empty string dataSource as default 'NBM'
                 _map["dataSource"] if _map["dataSource"] != "" else DEFAULT_DATA_SOURCE
-                for phrase in self.data["nonImpactThresholds"]["phrasesForAllSeverities"].values()
+                for phrase in self._data["nonImpactThresholds"]["phrasesForAllSeverities"].values()
                 for _map in phrase["map"].values()
             ]
         except KeyError:
             return [DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources, so just default to NBM
+
+    def save_to_file(self, parent_dir: str) -> str | None:
+        """Commit the CachedProfile object to a local file in the given parent directory.
+
+        Returns:
+            (str | None): written filepath, if successful, or None on error
+        """
+        raise NotImplementedError
 
     def __str__(self):
         return (
@@ -166,9 +174,9 @@ class ProfileStore:
         ]
         if data_source == "ANY":
             # all data sources requested, so do not filter by products used
-            return [profile.data for profile in profiles_by_status]
+            return [profile._data for profile in profiles_by_status]
         return [
-            profile.data for profile in profiles_by_status if data_source in profile.data_sources
+            profile._data for profile in profiles_by_status if data_source in profile.data_sources
         ]
 
     def save(self, profile: dict, is_new=True) -> str | None:
@@ -251,37 +259,35 @@ class ProfileStore:
 
         Args:
             profile_id (str): The UUID of the Support Profile to update
-            data (dict): The JSON attributes to apply. Can be partial Support Profile
+            data (dict): The JSON attributes to apply. Must be complete Support Profile
 
         Returns:
-            dict: the latest version of the Profile, with all attribute changes applied
+            dict: the latest version of the Profile, with the profile overwritten by `data`, or
+                `None` on error (existing profile will be unchanged)
 
         Raises:
             FileNotFoundError: if no Support Profile exists with the provided id
         """
-        logger.info("Updating profile_id %s with new attributes: %s", profile_id, data)
+        logger.info("Updating profile_id %s with new data: %s", profile_id, data)
 
-        # find the profile data from the new_profiles cache, then apply updates and save over it
+        # find the profile data from the new_profiles cache, then save over it
         cached_profile = next(
             (profile for profile in self.profile_cache if profile.id == profile_id), None
         )
         if not cached_profile:
             raise FileNotFoundError  # Profile with this ID does not exist in cache
 
-        # Apply dict of edits on top of existing cached profile (combining any nested attributes)
-        new_profile_data = deep_update(cached_profile.data, data)
-        is_new_profile = cached_profile.is_new
-
         # a bit hacky, but the fastest and least duplicative way to update a Profile
-        # in cache + disk is to delete the existing profile and re-save with modified JSON data
+        # in cache + disk is to delete the existing profile and re-save with new JSON data
         self.delete(profile_id)
-        update_success = self.save(new_profile_data, is_new_profile)
-
-        if not update_success:
+        saved_id = self.save(data, cached_profile.is_new)
+        if not saved_id:
             logger.warning("Unable to update Profile ID %s for some reason", profile_id)
+            # attempt to rollback, recovering the previously deleted profile
+            self.save(cached_profile._data, cached_profile.is_new)
             return None
 
-        return new_profile_data
+        return data
 
     def delete(self, profile_id: str) -> bool:
         """Delete a Support Profile profile from storage, based on its UUID.
