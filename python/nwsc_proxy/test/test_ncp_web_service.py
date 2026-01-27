@@ -137,7 +137,7 @@ def test_get_existing_profiles(wrapper: AppWrapper, mock_request: Mock, mock_pro
     assert status_code == 200
     assert response.json == {"profiles": example_profile_list, "errors": []}
     # filter_new_profiles not set
-    mock_profile_store.return_value.get_all.assert_called_with("NBM")
+    mock_profile_store.return_value.get_all.assert_called_with("NBM", include_inactive=False)
 
 
 def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
@@ -153,7 +153,7 @@ def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_
 
     get_call_args = mock_profile_store.return_value.get_all.mock_calls
     # called with is_new set to True
-    assert get_call_args[0][1:] == (("NBM",), {"is_new": True})
+    assert get_call_args[0][1:] == (("NBM",), {"is_new": True, "include_inactive": False})
 
     # expect that we told ProfileStore to label this profile as not new
     mark_existing_call_args = mock_profile_store.return_value.mark_as_existing.mock_calls
