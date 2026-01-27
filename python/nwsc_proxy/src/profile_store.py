@@ -137,7 +137,6 @@ class ProfileStore:
             for profile in self._load_profiles_from_filesystem(self._new_dir)
         }
 
-        # TODO: might have broken this
         self.profile_cache: dict[str, CachedProfile] = {**existing_profiles, **new_profiles}
 
     def get_all(self, data_source="ANY", is_new=False) -> list[dict]:
