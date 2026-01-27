@@ -13,8 +13,6 @@ spec:
       labels:
         app: nwsc-proxy
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: ip-137-75-224-40.us-east-2.compute.internal
       containers:
       - name: nwsc-proxy
         image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:uat # idsse-testing repo
@@ -25,11 +23,11 @@ spec:
           value: "/local_data/profiles"
         resources:
           requests:
-            memory: 128Mi
-            cpu: 50m
+            memory: 64Mi
+            cpu: 10m
           limits:
             memory: 256Mi
-            cpu: 250m
+            cpu: 125m
         ports:
           - containerPort: 5000
             name: service
