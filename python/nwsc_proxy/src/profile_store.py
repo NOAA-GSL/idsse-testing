@@ -45,6 +45,7 @@ class CachedProfile:
     @property
     def id(self) -> str:
         """The Support Profile UUID"""
+        # pylint: disable=invalid-name
         return self.data.get("id")
 
     @property
@@ -250,7 +251,10 @@ class ProfileStore:
 
         if profile_id != data.get("id"):
             raise ValueError(
-                f"Refusing to overwrite existing profile ID {profile_id} with mismatched data including id {data.get('id')}"
+                (
+                    f"Refusing to overwrite existing profile ID {profile_id} with mismatched data "
+                    f"including id {data.get('id')}"
+                )
             )
 
         updated_profile = CachedProfile(data, cached_profile.is_new)
