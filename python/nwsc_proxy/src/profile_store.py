@@ -139,7 +139,7 @@ class ProfileStore:
 
         self.profile_cache: dict[str, CachedProfile] = {**existing_profiles, **new_profiles}
 
-    def get_all(self, data_source="ANY", is_new=False) -> list[dict]:
+    def get_all(self, data_source="ANY", is_new=False, include_inactive=False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
         (if Support Profile has never been returned in an API request before) or status='existing'
         otherwise.
@@ -156,7 +156,7 @@ class ProfileStore:
                 # is new, if client requested new profiles, or is existing
                 cached_profile.is_new == is_new
                 # is "active", meaning no one has intentional disabled/deactivated it
-                and cached_profile.is_active
+                and (include_inactive or cached_profile.is_active)
                 # the end_dt has not yet passed (or profile is never-ending)
                 and datetime.now(UTC).timestamp() <= cached_profile.end_timestamp
             )
