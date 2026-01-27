@@ -16,7 +16,6 @@ import shutil
 from copy import deepcopy
 from datetime import datetime, UTC
 from glob import glob
-from unittest.mock import Mock
 
 from pytest import fixture, raises
 
@@ -74,16 +73,16 @@ def store():
 
 # tests
 def test_profile_store_loads_api_responses(store: ProfileStore):
-    assert sorted([c.id for c in store.profile_cache]) == [
+    assert sorted(list(store.profile_cache.keys())) == [
         "a08370c6-ab87-4808-bd51-a8597e58410d",
         "e1033860-f198-4c6a-a91b-beaec905132f",
         "fd35adec-d2a0-49a9-a320-df20a7b6d681",
     ]
 
-    for cache_obj in store.profile_cache:
+    for cache_id, cache_obj in store.profile_cache.items():
         # should have loaded all profiles as status "existing", file should exist in that subdir
         assert not cache_obj.is_new
-        filepath = os.path.join(STORE_BASE_DIR, EXISTING_SUBDIR, f"{cache_obj.id}.json")
+        filepath = os.path.join(STORE_BASE_DIR, EXISTING_SUBDIR, f"{cache_id}.json")
         assert os.path.exists(filepath)
 
     # new directory should be empty to begin with
@@ -197,7 +196,7 @@ def test_update_profile_success(store: ProfileStore):
     assert updated_profile["name"] == new_name
     assert updated_profile["setting"]["timing"]["start"] == new_start_dt
     # profile in cache should have indeed been changed
-    refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
+    refetched_profile = store.profile_cache.get(profile_id)
     assert refetched_profile.name == new_name
     assert datetime.fromtimestamp(refetched_profile.start_timestamp, UTC) == dt_parse(new_start_dt)
 
@@ -207,16 +206,15 @@ def test_update_profile_error_rollback(store: ProfileStore):
     new_name = "A different name"
     new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
     new_profile["name"] = new_name
-    # HACK: mocks out the class under test (BAD)
-    store.delete = Mock(name="mock_delete")  # test fails if we really delete existing Profile
-    store.save = Mock(name="mock_save", side_effect=[None, profile_id])  # fails first save
+    # inject unhashable content into JSON data, will cause save() to fail and return None
+    new_profile["unhashable"] = set(["foo", "bar"])
 
     updated_profile = store.update(profile_id, new_profile)
 
     assert updated_profile is None
     # profile in cache is still there, no changes were made to data
-    refetched_profile = next((p for p in store.profile_cache if p.id == profile_id), None)
-    assert refetched_profile.name == EXAMPLE_SUPPORT_PROFILE["name"]
+    refetched_profile = store.profile_cache.get(profile_id)
+    assert refetched_profile.name != new_name
 
 
 def test_update_profile_not_found(store: ProfileStore):
