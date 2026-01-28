@@ -66,7 +66,7 @@ class EventsRoute:
         if request.method == "DELETE":
             return self._handle_delete()
 
-        if request.method == "PATCH":
+        if request.method == "PUT":
             return self._handle_update()
 
         # otherwise, must be 'GET' operation
@@ -133,7 +133,7 @@ class EventsRoute:
 
     def _handle_update(self) -> Response:
         if not request.data:
-            return jsonify({"message": "PATCH requires request body"}), 400
+            return jsonify({"message": "PUT requires request body"}), 400
 
         request_body: dict = request.json
         profile_id = request.args.get("id", request.args.get("uuid"))
@@ -168,7 +168,7 @@ class AppWrapper:
             "/all-events",
             "events",
             view_func=events_route.handler,
-            methods=["GET", "POST", "PATCH", "DELETE"],
+            methods=["GET", "POST", "PUT", "DELETE"],
         )
 
     def run(self, **kwargs):

@@ -12,14 +12,12 @@
 import os
 import json
 import logging
-from dataclasses import dataclass
+
 from datetime import datetime, UTC
 from glob import glob
 from math import inf
 
 from dateutil.parser import parse as dt_parse
-
-from src.utils import deep_update
 
 # constants controlling the subdirectory where new vs. existing Profiles are saved
 NEW_SUBDIR = "new"
@@ -29,7 +27,6 @@ DEFAULT_DATA_SOURCE = "NBM"
 logger = logging.getLogger(__name__)
 
 
-@dataclass
 class CachedProfile:
     """Data class to hold Support Profile's data and metadata ("new" vs "existing" status),
     as well as some derived properties extracted from the `data` JSON (e.g.
@@ -41,13 +38,14 @@ class CachedProfile:
         is_new (bool): track if Support Profile has ever been processed. Ought to start as True
     """
 
-    # pylint: disable=invalid-name
-    data: dict
-    is_new: bool
+    def __init__(self, data: dict, is_new: bool):
+        self.data = data
+        self.is_new = is_new
 
     @property
     def id(self) -> str:
         """The Support Profile UUID"""
+        # pylint: disable=invalid-name
         return self.data.get("id")
 
     @property
@@ -116,7 +114,7 @@ class ProfileStore:
         logger.info("Scanning base directory for raw NWS Connect API response files: %s", base_dir)
         for response_filename in glob("*.json", root_dir=base_dir):
             response_filepath = os.path.join(base_dir, response_filename)
-            logger.warning("Loading profiles from raw API response file: %s", response_filepath)
+            logger.info("Loading profiles from raw API response file: %s", response_filepath)
 
             with open(response_filepath, "r", encoding="utf-8") as infile:
                 data: dict = json.load(infile)
@@ -131,16 +129,16 @@ class ProfileStore:
                         json.dump(profile, outfile)
 
         # populate cache of JSON data of all Support Profiles, marked as new vs. existing
-        existing_profiles = [
-            CachedProfile(profile, is_new=False)
+        existing_profiles = {
+            profile["id"]: CachedProfile(profile, is_new=False)
             for profile in self._load_profiles_from_filesystem(self._existing_dir)
-        ]
-        new_profiles = [
-            CachedProfile(profile, is_new=True)
+        }
+        new_profiles = {
+            profile["id"]: CachedProfile(profile, is_new=True)
             for profile in self._load_profiles_from_filesystem(self._new_dir)
-        ]
+        }
 
-        self.profile_cache = existing_profiles + new_profiles
+        self.profile_cache: dict[str, CachedProfile] = {**existing_profiles, **new_profiles}
 
     def get_all(self, data_source="ANY", is_new=False, include_inactive=False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
@@ -154,7 +152,7 @@ class ProfileStore:
         """
         profiles_by_status = [
             cached_profile
-            for cached_profile in self.profile_cache
+            for cached_profile in self.profile_cache.values()
             if (
                 # is new, if client requested new profiles, or is existing
                 cached_profile.is_new == is_new
@@ -186,31 +184,15 @@ class ProfileStore:
         logger.debug("Now saving new profile: %s", profile)
 
         # if profile ID is already in the cache, reject this save
-        existing_profile = next(
-            (
-                (
-                    cached_obj
-                    for cached_obj in self.profile_cache
-                    if cached_obj.id == profile.get("id")
-                )
-            ),
-            None,
-        )
-        if existing_profile:
+        if existing_profile := self.profile_cache.get(profile.get("id")):
             logger.warning("Cannot save profile; already exists %s", existing_profile.id)
             return None
 
         cached_profile = CachedProfile(profile, is_new=is_new)
-
-        # save Profile JSON to filesystem
-        file_dir = self._new_dir if is_new else self._existing_dir
-        filepath = os.path.join(file_dir, f"{cached_profile.id}.json")
-        logger.debug("Now saving profile to path: %s", filepath)
-        with open(filepath, "w", encoding="utf-8") as file:
-            json.dump(profile, file)
+        filepath = self._save_profile_to_filesystem(cached_profile)
 
         # add profile to in-memory cache
-        self.profile_cache.append(cached_profile)
+        self.profile_cache[cached_profile.id] = cached_profile
         logger.info("Saved profile to cache, file location: %s", filepath)
         return cached_profile.id
 
@@ -222,9 +204,7 @@ class ProfileStore:
             bool: True on success. False if JSON with this profile_id not found on filesystem
         """
         # find the profile data from the new_profiles cache and move it to existing_profiles
-        cached_profile = next(
-            (profile for profile in self.profile_cache if profile.id == profile_id), None
-        )
+        cached_profile = self.profile_cache.get(profile_id)
         if not cached_profile:
             # profile is not in cache; it must not exist
             logger.warning(
@@ -242,7 +222,9 @@ class ProfileStore:
         # move the JSON file from the "new" to the "existing" directory and update cache
         existing_filepath = os.path.join(self._existing_dir, f"{profile_id}.json")
         os.rename(new_filepath, existing_filepath)
+
         cached_profile.is_new = False
+        self.profile_cache[profile_id] = cached_profile
 
         return True
 
@@ -251,37 +233,40 @@ class ProfileStore:
 
         Args:
             profile_id (str): The UUID of the Support Profile to update
-            data (dict): The JSON attributes to apply. Can be partial Support Profile
+            data (dict): The JSON attributes to apply. Must be complete Support Profile
 
         Returns:
-            dict: the latest version of the Profile, with all attribute changes applied
+            dict: the latest version of the Profile, with the profile overwritten by `data`, or
+                `None` on error (existing profile will be unchanged)
 
         Raises:
             FileNotFoundError: if no Support Profile exists with the provided id
         """
-        logger.info("Updating profile_id %s with new attributes: %s", profile_id, data)
+        logger.info("Updating profile_id %s with new data: %s", profile_id, data)
 
-        # find the profile data from the new_profiles cache, then apply updates and save over it
-        cached_profile = next(
-            (profile for profile in self.profile_cache if profile.id == profile_id), None
-        )
+        # find the profile data from the new_profiles cache, then save over it
+        cached_profile = self.profile_cache.get(profile_id)
         if not cached_profile:
             raise FileNotFoundError  # Profile with this ID does not exist in cache
 
-        # Apply dict of edits on top of existing cached profile (combining any nested attributes)
-        new_profile_data = deep_update(cached_profile.data, data)
-        is_new_profile = cached_profile.is_new
+        if profile_id != data.get("id"):
+            raise ValueError(
+                (
+                    f"Refusing to overwrite existing profile ID {profile_id} with mismatched data "
+                    f"including id {data.get('id')}"
+                )
+            )
 
-        # a bit hacky, but the fastest and least duplicative way to update a Profile
-        # in cache + disk is to delete the existing profile and re-save with modified JSON data
-        self.delete(profile_id)
-        update_success = self.save(new_profile_data, is_new_profile)
-
-        if not update_success:
+        updated_profile = CachedProfile(data, cached_profile.is_new)
+        # update disk with latest data; if the write fails, reject update
+        saved_file = self._save_profile_to_filesystem(updated_profile)
+        if not saved_file:
             logger.warning("Unable to update Profile ID %s for some reason", profile_id)
             return None
 
-        return new_profile_data
+        # update in-memory cache to overwrite previous profile by ID
+        self.profile_cache[profile_id] = updated_profile
+        return updated_profile.data
 
     def delete(self, profile_id: str) -> bool:
         """Delete a Support Profile profile from storage, based on its UUID.
@@ -305,18 +290,39 @@ class ProfileStore:
                 )
                 return False
 
+        # drop profile from disk
         logger.debug("Attempting to delete profile at path: %s", filepath)
         os.remove(filepath)
-
         # drop profile from cache
-        self.profile_cache = [
-            cached_profile
-            for cached_profile in self.profile_cache
-            if cached_profile.id != profile_id
-        ]
+        del self.profile_cache[profile_id]
         return True
 
-    def _load_profiles_from_filesystem(self, dir_: str) -> list[dict]:
+    def _save_profile_to_filesystem(self, profile: CachedProfile) -> str | None:
+        """Save CachedProfile data (dict) to filesystem so it persists through service restarts"""
+        profile_id = profile.data.get("id")
+        if not profile_id:
+            raise ValueError("Cannot save CachedProfile to file that has no `id` attribute")
+
+        file_dir = self._new_dir if profile.is_new else self._existing_dir
+        filepath = os.path.join(file_dir, f"{profile_id}.json")
+        logger.debug("Now saving profile to path: %s", filepath)
+        try:
+            with open(filepath, "w", encoding="utf-8") as file:
+                json.dump(profile.data, file)
+        except (PermissionError, json.JSONDecodeError, TypeError) as exc:
+            logger.error(
+                "Failed to save Profile %s to file %s due to: (%s) %s",
+                profile_id,
+                filepath,
+                type(exc),
+                str(exc),
+            )
+            return None
+
+        return filepath
+
+    @staticmethod
+    def _load_profiles_from_filesystem(dir_: str) -> list[dict]:
         """Read all JSON files from one of this ProfileStore's subdirectories, and return list of
         the discovered files' json data.
 
