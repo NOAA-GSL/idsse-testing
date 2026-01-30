@@ -79,4 +79,4 @@ jobs:
 
       - name: Push Image to Dev Registry
         run: |
-          docker push ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:{{env.BRANCH}}
+          docker push ${{env.DEV_REGISTRY}}/${{env.APP_LOWERCASE}}:${{env.BRANCH}}
