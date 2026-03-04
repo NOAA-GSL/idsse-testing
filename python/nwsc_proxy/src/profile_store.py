@@ -13,7 +13,7 @@ import os
 import json
 import logging
 
-from datetime import datetime, UTC
+from datetime import datetime, timedelta, UTC
 from glob import glob
 from math import inf
 
@@ -74,20 +74,34 @@ class CachedProfile:
         if self.start_timestamp == inf:
             return inf  # infinite start time, so infinite end time as well
         timing: dict[str, int] = self.data["setting"]["timing"]
-        # look up durationInMinutes, or deprecated duration, or None
-        profile_duration = timing.get("durationInMinutes", timing.get("duration", inf))
-        return self.start_timestamp + profile_duration * 60 * 1000  # convert mins to ms
+        # look up durationInMinutes, or deprecated duration
+        duration_minutes = timing.get("durationInMinutes", timing.get("duration", 0))
+        if duration_minutes <= 0:
+            return inf  # 0 minutes or None is treated as never-ending
+
+        # convert durationInMinutes to ms
+        return (
+            datetime.fromtimestamp(self.start_timestamp) + timedelta(minutes=duration_minutes)
+        ).timestamp()
 
     @property
     def data_sources(self) -> list[str]:
         """The weather products used by any parts of this Support Profile (e.g. NBM, HRRR, MRMS)"""
         try:
-            return [
-                # treat any profiles with empty string dataSource as default 'NBM'
-                _map["dataSource"] if _map["dataSource"] != "" else DEFAULT_DATA_SOURCE
-                for phrase in self.data["nonImpactThresholds"]["phrasesForAllSeverities"].values()
-                for _map in phrase["map"].values()
-            ]
+            return list(
+                set(
+                    (
+                        phrase_map["dataSource"]
+                        if phrase_map.get("dataSource", "") != ""
+                        # treat any profiles with empty string dataSource as default 'NBM'
+                        else DEFAULT_DATA_SOURCE
+                    )
+                    for phrase in self.data["nonImpactThresholds"][
+                        "phrasesForAllSeverities"
+                    ].values()
+                    for phrase_map in phrase["map"].values()
+                )
+            )
         except KeyError:
             return [DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources, so just default to NBM
 

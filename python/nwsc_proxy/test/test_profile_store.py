@@ -11,6 +11,7 @@
 # ----------------------------------------------------------------------------------
 # pylint: disable=missing-function-docstring,redefined-outer-name
 import json
+import math
 import os
 import shutil
 from copy import deepcopy
@@ -40,6 +41,10 @@ def _empty_directory(dir_path: str):
             os.rmdir(filepath)
         else:
             os.remove(filepath)
+
+
+def _to_iso(datetime_: datetime) -> str:
+    return datetime_.strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
 
 # fixtures
@@ -102,6 +107,44 @@ def test_store_loads_jsons_from_new(store: ProfileStore):
     new_profile_list = new_store.get_all(is_new=True)
     assert len(new_profile_list) == 1
     assert len(new_store.profile_cache) == 4  # 3 existing, 1 new
+
+
+def test_profile_attributes(store: ProfileStore):
+    expected_dts = {
+        # one day long
+        "a08370c6-ab87-4808-bd51-a8597e58410d": {
+            "start": datetime(2025, 1, 1, 12, tzinfo=UTC),
+            "end": datetime(2025, 1, 2, 12, tzinfo=UTC),
+        },
+        # roughly 2 months long
+        "e1033860-f198-4c6a-a91b-beaec905132f": {
+            "start": datetime(2026, 1, 1, 13, tzinfo=UTC),
+            "end": datetime(2026, 3, 1, 12, tzinfo=UTC),
+        },
+        # never-ending
+        "fd35adec-d2a0-49a9-a320-df20a7b6d681": {
+            "start": datetime(2024, 12, 31, tzinfo=UTC),
+            "end": None,
+        },
+    }
+    # update ProfileStore objects to have not-null start and end times
+    for id_, dts in expected_dts.items():
+        profile_with_timing = deepcopy(store.profile_cache[id_])
+        profile_with_timing.data["setting"]["timing"]["start"] = _to_iso(dts["start"])
+        profile_with_timing.data["setting"]["timing"]["durationInMinutes"] = (
+            round((dts["end"] - dts["start"]).total_seconds() / 60) if dts.get("end") else 0
+        )
+        store.profile_cache[id_] = profile_with_timing
+
+    # confirm that properties like .start_timestamp and .end_timestamp calculate correctly
+    for cache_id, cache_obj in store.profile_cache.items():
+        assert cache_obj.start_timestamp == expected_dts[cache_id]["start"].timestamp()
+        expected_end_ts = (
+            expected_dts[cache_id]["end"].timestamp()
+            if expected_dts[cache_id].get("end")
+            else math.inf
+        )
+        assert cache_obj.end_timestamp == expected_end_ts
 
 
 def test_get_all_profiles(store: ProfileStore):
