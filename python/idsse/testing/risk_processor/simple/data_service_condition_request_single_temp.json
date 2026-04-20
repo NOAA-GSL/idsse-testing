@@ -25,8 +25,8 @@
                     "sourceType": "slice",
                     "sourceObj": {
                       "sliceCoords": [[-106.6083, 35.0389]],
-                      "minSize": [400, 300],
-                      "minBuff": 50,
+                      "minSize": [40, 30],
+                      "minBuff": 10,
                       "source": {
                         "sourceType": "data",
                         "sourceObj": {

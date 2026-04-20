@@ -108,8 +108,8 @@
                       [-76.204629, 42.984165],
                       [-76.074273, 43.086121]
                     ],
-                    "minSize": [400, 300],
-                    "minBuff": 50,
+                    "minSize": [40, 30],
+                    "minBuff": 10,
                     "source": {
                       "sourceType": "data",
                       "sourceObj": {
@@ -149,8 +149,8 @@
                       [-76.204629, 42.984165],
                       [-76.074273, 43.086121]
                     ],
-                    "minSize": [400, 300],
-                    "minBuff": 50,
+                    "minSize": [40, 30],
+                    "minBuff": 10,
                     "source": {
                       "sourceType": "data",
                       "sourceObj": {
