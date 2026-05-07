@@ -1,0 +1,54 @@
+{
+  "shape": [
+    71,
+    1597,
+    2345
+  ],
+  "data_type": "float32",
+  "chunk_grid": {
+    "name": "regular",
+    "configuration": {
+      "chunk_shape": [
+        1,
+        1597,
+        2345
+      ]
+    }
+  },
+  "chunk_key_encoding": {
+    "name": "default",
+    "configuration": {
+      "separator": "/"
+    }
+  },
+  "fill_value": "NaN",
+  "codecs": [
+    {
+      "name": "numcodecs.pcodec",
+      "configuration": {
+        "level": 8,
+        "mode_spec": "auto"
+      }
+    },
+    {
+      "name": "zstd",
+      "configuration": {
+        "level": 0,
+        "checksum": false
+      }
+    }
+  ],
+  "attributes": {
+    "units": "m s**-1",
+    "coordinates": "inventory latitude reference_time longitude",
+    "_FillValue": "AAAAAAAA+H8="
+  },
+  "dimension_names": [
+    "valid_time",
+    "y",
+    "x"
+  ],
+  "zarr_format": 3,
+  "node_type": "array",
+  "storage_transformers": []
+}
