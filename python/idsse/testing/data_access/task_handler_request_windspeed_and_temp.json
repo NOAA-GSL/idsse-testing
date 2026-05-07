@@ -1,67 +1,57 @@
 {
-    "label": "data_requested",
-    "sourceType": "join",
-    "sourceObj": {
-        "join": "AND",
-        "sources": [
-            {
-                "sourceType": "condition",
-                "sourceObj": {
-                  "mapping": {
-                    "controlPoints": [
-                      "-Infinity",
-                      "30.000",
-                      "60.000",
-                      "Infinity"
-                    ],
-                    "startWeight": [0, 1, 0],
-                    "endWeight": [0, 1, 0]
-                  },
-                  "relational": "GT",
-                  "thresh": 45.0,
-                  "source": {
-                    "sourceType": "data",
-                    "sourceObj": {
-                      "product": "NBM",
-                      "field": "WINDSPEED",
-                      "region": "CONUS",
-                      "slice": "[910:1010,829:929]",
-                      "issueDt": "2023-01-10T08:00:00.000Z",
-                      "validDt": "2023-01-11T06:00:00.000Z",
-                      "units": "MilesPerHour"
-                    }
-                  }
-                }
-            },
-            {
-                "sourceType": "condition",
-                "sourceObj": {
-                  "mapping": {
-                    "controlPoints": [
-                      "-Infinity",
-                      "15.000",
-                      "45.000",
-                      "Infinity"
-                    ],
-                    "startWeight": [0, 1, 0],
-                    "endWeight": [0, 1, 0]
-                  },
-                  "relational": "LTE",
-                  "thresh": 30.0,
-                  "source": {
-                    "sourceType": "data",
-                    "sourceObj": {
-                      "product": "NBM",
-                      "field": "TEMP",
-                      "region": "CONUS",
-                      "slice": "[829:929,910:1010]",
-                      "issueDt": "2023-01-10T08:00:00Z",
-                      "validDt": "2023-01-11T06:00:00Z",
-                      "units": "Fahrenheit"
-                    }
-                  }
-                }
+  "label": "data_requested",
+  "sourceType": "join",
+  "sourceObj": {
+    "join": "AND",
+    "sources": [
+      {
+        "sourceType": "condition",
+        "sourceObj": {
+          "mapping": {
+            "controlPoints": ["-Infinity", 30.0, 60.0, "Infinity"],
+            "startWeight": [0, 1, 0],
+            "endWeight": [0, 1, 0]
+          },
+          "relational": "GT",
+          "thresh": 45.0,
+          "source": {
+            "sourceType": "data",
+            "sourceObj": {
+              "product": "NBM",
+              "units": "MilesPerHour",
+              "region": "CONUS",
+              "field": "WINDSPEED",
+              "issueDt": "2023-01-10T08:00:00.000Z",
+              "validDt": ["2023-01-11T06:00:00.000Z"],
+              "slice": "[910:1010,829:929]"
             }
-        ]
-    }
+          }
+        }
+      },
+      {
+        "sourceType": "condition",
+        "sourceObj": {
+          "mapping": {
+            "controlPoints": ["-Infinity", 15.0, 45.0, "Infinity"],
+            "startWeight": [0, 1, 0],
+            "endWeight": [0, 1, 0]
+          },
+          "relational": "LTE",
+          "thresh": 30.0,
+          "source": {
+            "sourceType": "data",
+            "sourceObj": {
+              "product": "NBM",
+              "units": "F",
+              "region": "CONUS",
+              "field": "TEMP",
+              "issueDt": "2023-01-10T08:00:00.000Z",
+              "validDt": ["2023-01-11T06:00:00.000Z"],
+              "slice": "[910:1010,829:929]"
+            }
+          }
+        }
+      }
+    ]
+  }
 }
