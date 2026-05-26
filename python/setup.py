@@ -27,6 +27,7 @@ setup(
         "idsse.testing.data_access.data_cache",
         "idsse.testing.data_access.mrms_nssl_grib",
         "idsse.testing.data_access.nbm_aws_grib",
+        "idsse.testing.data_access.nbm_aws_zarr",
         "idsse.testing.data_access.validation",
         "idsse.testing.event_portfolios",
         "idsse.testing.idsse_common",
