@@ -64,8 +64,17 @@ setup(
         ),
     ],
     include_package_data=True,
-    package_data={"": ["*.csv", "*.json", "*.nc", "*.grib2*"]},
-    install_requires=["pika", "jsonschema", "netcdf4", "h5netcdf", "python-logging-rabbitmq"],
+    package_data={"": ["*.csv", "*.json", "*.nc", "*.grib2*", "*.zip"]},
+    install_requires=[
+        "pika",
+        "jsonschema",
+        "netcdf4",
+        "h5netcdf",
+        "python-logging-rabbitmq",
+        "zarr",
+        "xarray",
+        "dask",
+    ],
     extras_require={
         "develop": [
             "pytest",
