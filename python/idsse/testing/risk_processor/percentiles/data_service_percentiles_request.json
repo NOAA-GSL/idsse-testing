@@ -37,7 +37,7 @@
                   "field": "Snow:1HR:[DTRM,p010,p090]",
                   "region": "CONUS",
                   "units": "INCHES",
-                  "validDt": "2025-01-28T13:00:00.000Z",
+                  "validDt": "2025-01-28T13:00:00.000Z,2025-01-28T15:00:00.000Z",
                   "issueDt": "2025-01-28T12:00:00.000Z"
                 }
               }
