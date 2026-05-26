@@ -62,6 +62,7 @@ setup(
             "idsse.testing.data_access.validation",
             package_files("idsse/testing/data_access/validation"),
         ),
+        ("idsse.testing.risk_processor", package_files("idsse/testing/risk_processor")),
     ],
     include_package_data=True,
     package_data={"": ["*.csv", "*.json", "*.nc", "*.grib2*", "*.zip"]},
