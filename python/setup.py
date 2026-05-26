@@ -55,6 +55,10 @@ setup(
             package_files("idsse/testing/data_access/nbm_aws_grib"),
         ),
         (
+            "idsse.testing.data_access.nbm_aws_zarr",
+            package_files("idsse/testing/data_access/nbm_aws_zarr"),
+        ),
+        (
             "idsse.testing.data_access.validation",
             package_files("idsse/testing/data_access/validation"),
         ),
