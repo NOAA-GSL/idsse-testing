@@ -9,7 +9,7 @@
     "validDt": ["2025-01-28T13:00:00.000Z", "2025-01-28T14:00:00.000Z", "2025-01-28T15:00:00.000Z"],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
     "product": "NBM.AWS.GRIB",
     "dataName": "Snowfall: 1HR accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -27,7 +27,7 @@
     "validDt": ["2025-01-28T13:00:00.000Z", "2025-01-28T14:00:00.000Z", "2025-01-28T15:00:00.000Z"],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
     "product": "NBM.AWS.GRIB",
     "dataName": "Snowfall: 1HR accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -43,7 +43,7 @@
     "validDt": ["2025-01-28T13:00:00.000Z", "2025-01-28T14:00:00.000Z", "2025-01-28T15:00:00.000Z"],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
     "product": "NBM.AWS.GRIB",
     "dataName": "OR(Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW))",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -82,7 +82,7 @@
                   [-75.82261820803978, 42.120569061969576]
                 ],
                 "minSize": [40, 30],
-                "minBuff": 10,
+                "minBuff": 20,
                 "source": {
                   "sourceType": "data",
                   "sourceObj": {

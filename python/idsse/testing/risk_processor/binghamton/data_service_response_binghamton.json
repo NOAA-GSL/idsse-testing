@@ -20,7 +20,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
     "dataName": "Snowfall: 1hr accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
     "units": "Inches",
@@ -48,7 +48,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
     "dataName": "Snowfall: 1hr accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
     "units": "ThreatLevel",
@@ -76,7 +76,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
     "dataName": "Snowfall: 1hr accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
     "units": "ThreatLevel",
@@ -118,7 +118,7 @@
                   [-75.82261820803978, 42.177520971578645]
                 ],
                 "minSize": [40, 30],
-                "minBuff": 10,
+                "minBuff": 20,
                 "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
                 "issueDt": "2022-12-23T12:00:00.000Z"
               }

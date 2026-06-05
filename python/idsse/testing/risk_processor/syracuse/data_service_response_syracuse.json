@@ -20,7 +20,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
     "units": "Fahrenheit",
     "dataName": "Temperature: 2m (Ensemble mean)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -48,7 +48,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
     "units": "ThreatLevel",
     "dataName": "Temperature: 2m (Ensemble mean)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -76,7 +76,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
     "units": "MilesPerHour",
     "dataName": "Wind guest: 10m",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -104,7 +104,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
     "units": "ThreatLevel",
     "dataName": "Wind guest: 10m",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -132,7 +132,7 @@
     ],
     "projName": "NBM CONUS",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
     "units": "ThreatLevel",
     "dataName": "AND(Temperature: 2m (Ensemble mean), Wind guest: 10m)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
@@ -174,7 +174,7 @@
                       [-76.074273, 43.086121]
                     ],
                     "minSize": [40, 30],
-                    "minBuff": 10,
+                    "minBuff": 20,
                     "source": {
                       "sourceType": "data",
                       "sourceObj": {
@@ -215,7 +215,7 @@
                       [-76.074273, 43.086121]
                     ],
                     "minSize": [40, 30],
-                    "minBuff": 10,
+                    "minBuff": 20,
                     "source": {
                       "sourceType": "data",
                       "sourceObj": {

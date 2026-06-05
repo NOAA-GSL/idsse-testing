@@ -22,7 +22,7 @@
     "region": "CONUS",
     "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "Fahrenheit",
     "dataName": "Temperature: 2m (Ensemble mean)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
@@ -50,7 +50,7 @@
     "region": "CONUS",
     "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "ThreatLevel",
     "dataName": "Temperature: 2m (Ensemble mean)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
@@ -78,7 +78,7 @@
     "region": "CONUS",
     "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "Inches",
     "dataName": "Rainfall: 1hr accum (APCP)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
@@ -106,7 +106,7 @@
     "region": "CONUS",
     "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "ThreatLevel",
     "dataName": "Rainfall: 1hr accum (APCP)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
@@ -134,7 +134,7 @@
     "region": "CONUS",
     "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=400 +h=300 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "ThreatLevel",
     "dataName": "AND(Temperature: 2m (Ensemble mean), Rainfall: 1hr accum (APCP))",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
