@@ -455,7 +455,7 @@
   ],
   "tags": {
     "values": [],
-    "keyValues": { "name": "Syracuse, Cold and Windy", "nwsOffice": "BGM" }
+    "keyValues": { "name": "Syracuse, Cold and Windy", "nwsOffice": "BGM", "status": "COMPLETE" }
   },
   "riskResults": [
     {
