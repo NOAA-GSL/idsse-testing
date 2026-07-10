@@ -22,7 +22,7 @@ from python.nwsc_proxy.ncp_web_service import (
     AppWrapper,
     Flask,
     Namespace,
-    ProfileStore,
+    SupportProfileStore,
     create_app,
     datetime,
     GSL_KEY,
@@ -45,8 +45,8 @@ def mock_datetime(monkeypatch: MonkeyPatch) -> Mock:
 
 @fixture
 def mock_profile_store(monkeypatch: MonkeyPatch) -> Mock:
-    mock_obj = Mock(name="MockProfileStore", spec=ProfileStore)
-    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.ProfileStore", mock_obj)
+    mock_obj = Mock(name="MockProfileStore", spec=SupportProfileStore)
+    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.SupportProfileStore", mock_obj)
     return mock_obj
 
 
@@ -94,7 +94,7 @@ def test_create_app(mock_profile_store: Mock):
 
     assert isinstance(_app, Flask)
     endpoint_dict = _app.view_functions
-    assert sorted(list(endpoint_dict.keys())) == ["events", "health"]
+    assert sorted(list(endpoint_dict.keys())) == ["events", "health", "vulnerabilities"]
 
 
 def test_health_route(wrapper: AppWrapper, mock_datetime: Mock):

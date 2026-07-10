@@ -1,4 +1,4 @@
-"""Tests for src/profile_store.py"""
+"""Tests for src/support_profile_store.py"""
 
 # ----------------------------------------------------------------------------------
 # Created on Wed Dec 18 2024
@@ -19,7 +19,12 @@ from glob import glob
 
 from pytest import fixture, raises
 
-from python.nwsc_proxy.src.profile_store import ProfileStore, NEW_SUBDIR, EXISTING_SUBDIR, dt_parse
+from python.nwsc_proxy.src.support_profile_store import (
+    SupportProfileStore,
+    NEW_SUBDIR,
+    EXISTING_SUBDIR,
+    dt_parse,
+)
 
 # constants
 STORE_BASE_DIR = os.path.join(os.path.dirname(__file__), "temp")
@@ -68,11 +73,11 @@ def startup_and_teardown():
 
 @fixture
 def store():
-    return ProfileStore(STORE_BASE_DIR)
+    return SupportProfileStore(STORE_BASE_DIR)
 
 
 # tests
-def test_profile_store_loads_api_responses(store: ProfileStore):
+def test_profile_store_loads_api_responses(store: SupportProfileStore):
     assert sorted(list(store.profile_cache.keys())) == [
         "a08370c6-ab87-4808-bd51-a8597e58410d",
         "e1033860-f198-4c6a-a91b-beaec905132f",
@@ -89,14 +94,14 @@ def test_profile_store_loads_api_responses(store: ProfileStore):
     assert os.listdir(os.path.join(STORE_BASE_DIR, NEW_SUBDIR)) == []
 
 
-def test_store_loads_jsons_from_new(store: ProfileStore):
+def test_store_loads_jsons_from_new(store: SupportProfileStore):
     # create a pre-existing "new" profile as well as the 3 "existing" profiles
     profile = deepcopy(store.get_all()[0])
     profile["id"] = EXAMPLE_UUID  # give copied profile a unique identifier
     store.save(profile)
 
     # simulate starting ProfileStore process fresh, with existing JSONs on filesystem
-    new_store = ProfileStore(STORE_BASE_DIR)
+    new_store = SupportProfileStore(STORE_BASE_DIR)
 
     # newly created ProfileStore should have correctly loaded and labeled "new" Profile
     new_profile_list = new_store.get_all(is_new=True)
@@ -104,7 +109,7 @@ def test_store_loads_jsons_from_new(store: ProfileStore):
     assert len(new_store.profile_cache) == 4  # 3 existing, 1 new
 
 
-def test_get_all_profiles(store: ProfileStore):
+def test_get_all_profiles(store: SupportProfileStore):
     result = store.get_all()
     assert len(result) == 3
 
@@ -112,7 +117,7 @@ def test_get_all_profiles(store: ProfileStore):
     assert len(result) == 0
 
 
-def test_save_adds_to_new_profiles(store: ProfileStore):
+def test_save_adds_to_new_profiles(store: SupportProfileStore):
     new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
     new_profile["id"] = EXAMPLE_UUID
 
@@ -131,7 +136,7 @@ def test_save_adds_to_new_profiles(store: ProfileStore):
     assert os.path.exists(os.path.join(STORE_BASE_DIR, NEW_SUBDIR, f"{new_profile_id}.json"))
 
 
-def test_save_rejects_existing_profile(store: ProfileStore):
+def test_save_rejects_existing_profile(store: SupportProfileStore):
     new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)  # use Support Profile that already exists
 
     new_profile_id = store.save(new_profile)
@@ -146,7 +151,7 @@ def test_save_rejects_existing_profile(store: ProfileStore):
     )
 
 
-def test_move_to_existing_success(store: ProfileStore):
+def test_move_to_existing_success(store: SupportProfileStore):
     new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
     new_profile["id"] = EXAMPLE_UUID
     store.save(new_profile)
@@ -162,7 +167,7 @@ def test_move_to_existing_success(store: ProfileStore):
     assert EXAMPLE_UUID in [p["id"] for p in existing_profiles]  # now Profile is in existing list
 
 
-def test_delete_profile(store: ProfileStore):
+def test_delete_profile(store: SupportProfileStore):
     existing_profile_list = store.get_all()
     profile_id = existing_profile_list[0]["id"]
 
@@ -175,14 +180,14 @@ def test_delete_profile(store: ProfileStore):
     assert not os.path.exists(os.path.join(STORE_BASE_DIR, EXISTING_SUBDIR, f"{profile_id}.json"))
 
 
-def test_delete_profile_failure(store: ProfileStore):
+def test_delete_profile_failure(store: SupportProfileStore):
     profile_id = "11111111-2222-3333-444444444444"  # fake ID does not exist in ProfileStore
 
     success = store.delete(profile_id)
     assert not success
 
 
-def test_update_profile_success(store: ProfileStore):
+def test_update_profile_success(store: SupportProfileStore):
     profile_id = EXAMPLE_SUPPORT_PROFILE["id"]
     new_start_dt = "2026-01-01T12:00:00Z"
     new_name = "A different name"
@@ -201,7 +206,7 @@ def test_update_profile_success(store: ProfileStore):
     assert datetime.fromtimestamp(refetched_profile.start_timestamp, UTC) == dt_parse(new_start_dt)
 
 
-def test_update_profile_error_rollback(store: ProfileStore):
+def test_update_profile_error_rollback(store: SupportProfileStore):
     profile_id = EXAMPLE_SUPPORT_PROFILE["id"]
     new_name = "A different name"
     new_profile = deepcopy(EXAMPLE_SUPPORT_PROFILE)
@@ -217,7 +222,7 @@ def test_update_profile_error_rollback(store: ProfileStore):
     assert refetched_profile.name != new_name
 
 
-def test_update_profile_not_found(store: ProfileStore):
+def test_update_profile_not_found(store: SupportProfileStore):
     profile_id = "11111111-2222-3333-444444444444"  # fake ID does not exist in ProfileStore
     new_profile_data = {"name": "A different name"}
 

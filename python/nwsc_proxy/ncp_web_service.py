@@ -16,7 +16,7 @@ from argparse import ArgumentParser, Namespace
 
 from flask import Flask, Response, current_app, request, jsonify
 
-from src.profile_store import ProfileStore
+from src.support_profile_store import SupportProfileStore
 
 # constants
 GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
@@ -48,11 +48,11 @@ class HealthRoute:
         )
 
 
-class EventsRoute:
+class ProfilesRoute:
     """Handle requests to /all-events endpoint"""
 
     def __init__(self, base_dir: str):
-        self.profile_store = ProfileStore(base_dir)
+        self.profile_store = SupportProfileStore(base_dir)
 
     def handler(self):
         """Logic for requests to /all-events."""
@@ -77,9 +77,10 @@ class EventsRoute:
         # Default to False if param not present (only return profiles where isLive: true)
         include_inactive = request.args.get("includeInactive", default=False, type=bool)
 
+        # profiles = self.profile_store.get_all(data_source, include_inactive=include_inactive)
+
         if profile_status == "existing":
             profiles = self.profile_store.get_all(data_source, include_inactive=include_inactive)
-
         elif profile_status == "new":
             profiles = self.profile_store.get_all(
                 data_source, is_new=True, include_inactive=include_inactive
@@ -89,13 +90,10 @@ class EventsRoute:
             current_app.logger.info("Got all new profiles: %s", profiles)
             for profile in profiles:
                 self.profile_store.mark_as_existing(profile["id"])
-
         else:
             # status query param should have been 'existing' or 'new'
-            return (
-                jsonify({"profiles": [], "errors": [f"Invalid profile status: {profile_status}"]}),
-                400,
-            )
+            errors = [f"Invalid profile status: {profile_status}"]
+            return (jsonify({"profiles": [], "errors": errors}), 400)
 
         return jsonify({"profiles": profiles, "errors": []}), 200
 
@@ -161,14 +159,21 @@ class AppWrapper:
         self.app.config["GSL_KEY"] = GSL_KEY
 
         health_route = HealthRoute()
-        events_route = EventsRoute(base_dir)
+        profiles_route = ProfilesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
+        # DEPRECATED: will be removed after NCG NewData Consumer migrates to vulnerabilities format
         self.app.add_url_rule(
             "/all-events",
             "events",
-            view_func=events_route.handler,
+            view_func=profiles_route.handler,
             methods=["GET", "POST", "PUT", "DELETE"],
+        )
+        self.app.add_url_rule(
+            "/vulnerabilities",
+            "vulnerabilities",
+            view_func=profiles_route.handler,
+            methods=["GET", "POST", "PATCH", "DELETE"],
         )
 
     def run(self, **kwargs):

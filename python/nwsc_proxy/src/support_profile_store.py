@@ -1,4 +1,4 @@
-"""Profile store that does CRUD operations on filesystem to simulate NWS Connect storage"""
+"""SupportProfile store that does CRUD operations on filesystem to simulate NWS Connect storage"""
 
 # ----------------------------------------------------------------------------------
 # Created on Tues Dec 17 2024
@@ -9,6 +9,8 @@
 #     Mackenzie Grimes (1)
 #
 # ----------------------------------------------------------------------------------
+# pylint: disable=duplicate-code
+
 import os
 import json
 import logging
@@ -27,7 +29,7 @@ DEFAULT_DATA_SOURCE = "NBM"
 logger = logging.getLogger(__name__)
 
 
-class CachedProfile:
+class CachedSupportProfile:
     """Data class to hold Support Profile's data and metadata ("new" vs "existing" status),
     as well as some derived properties extracted from the `data` JSON (e.g.
     `CachedProfile.is_active` or `CachedProfile.start_timestamp`) that make it easier to query
@@ -99,7 +101,7 @@ class CachedProfile:
         )
 
 
-class ProfileStore:
+class SupportProfileStore:
     """Data storage using JSON files on filesystem that simulates CRUD operations"""
 
     def __init__(self, base_dir: str):
@@ -130,15 +132,15 @@ class ProfileStore:
 
         # populate cache of JSON data of all Support Profiles, marked as new vs. existing
         existing_profiles = {
-            profile["id"]: CachedProfile(profile, is_new=False)
+            profile["id"]: CachedSupportProfile(profile, is_new=False)
             for profile in self._load_profiles_from_filesystem(self._existing_dir)
         }
         new_profiles = {
-            profile["id"]: CachedProfile(profile, is_new=True)
+            profile["id"]: CachedSupportProfile(profile, is_new=True)
             for profile in self._load_profiles_from_filesystem(self._new_dir)
         }
 
-        self.profile_cache: dict[str, CachedProfile] = {**existing_profiles, **new_profiles}
+        self.profile_cache: dict[str, CachedSupportProfile] = {**existing_profiles, **new_profiles}
 
     def get_all(self, data_source="ANY", is_new=False, include_inactive=False) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
@@ -188,7 +190,7 @@ class ProfileStore:
             logger.warning("Cannot save profile; already exists %s", existing_profile.id)
             return None
 
-        cached_profile = CachedProfile(profile, is_new=is_new)
+        cached_profile = CachedSupportProfile(profile, is_new=is_new)
         filepath = self._save_profile_to_filesystem(cached_profile)
 
         # add profile to in-memory cache
@@ -257,7 +259,7 @@ class ProfileStore:
                 )
             )
 
-        updated_profile = CachedProfile(data, cached_profile.is_new)
+        updated_profile = CachedSupportProfile(data, cached_profile.is_new)
         # update disk with latest data; if the write fails, reject update
         saved_file = self._save_profile_to_filesystem(updated_profile)
         if not saved_file:
@@ -297,7 +299,7 @@ class ProfileStore:
         del self.profile_cache[profile_id]
         return True
 
-    def _save_profile_to_filesystem(self, profile: CachedProfile) -> str | None:
+    def _save_profile_to_filesystem(self, profile: CachedSupportProfile) -> str | None:
         """Save CachedProfile data (dict) to filesystem so it persists through service restarts"""
         profile_id = profile.data.get("id")
         if not profile_id:
