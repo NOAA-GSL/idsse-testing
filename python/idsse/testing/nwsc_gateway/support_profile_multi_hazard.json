@@ -1,0 +1,126 @@
+{
+  "profiles": [
+    {
+      "id": "e1033860-f198-4c6a-a91b-beaec905132f",
+      "name": "Boston Heat",
+      "associatedOfficeId": "GSL",
+      "profileType": "LIMITED_EPISODIC",
+      "lifecycleStatus": "UNDEF",
+      "submissionStatus": "APPROVED",
+      "setting": {
+        "id": "989d35f8-3991-4438-adb0-c24d8bf1f449",
+        "name": "Boston (BOS) Airport + 5 mi",
+        "driverType": "EVENT",
+        "locations": [
+          {
+            "createdAt": "2024-01-26T20:33:08.274198Z",
+            "creationMethod": "DRAWLINE",
+            "editable": true,
+            "original": null,
+            "address": null,
+            "geometryType": "POLYGON",
+            "minElevation": 0,
+            "maxElevation": 0,
+            "lastModified": "2024-01-26T20:33:08.274202Z",
+            "name": "Boston (BOS) Airport + 5 mi",
+            "notes": "",
+            "userData": null,
+            "validTime": null,
+            "geoShapeCreationMethod": "DRAWLINE",
+            "geomAsString": "POLYGON ((-71.011252 42.432466, -71.051178 42.426194, -71.08418 42.408468, -71.104545 42.38236, -71.108762 42.352391, -71.096125 42.323746, -71.068836 42.301372, -71.031616 42.28913, -70.990887 42.28913, -70.953667 42.301372, -70.926378 42.323746, -70.913741 42.352391, -70.917958 42.38236, -70.938323 42.408468, -70.971325 42.426194, -71.011252 42.432466))"
+          }
+        ],
+        "timing": {
+          "start": "2026-07-01T22:00:00Z",
+          "durationInMinutes": 43500,
+          "rrule": ""
+        },
+        "nationalSecurity": false,
+        "website": "",
+        "numberOfPeople": 0
+      },
+      "impacts": [],
+      "nonImpactThresholds": {
+        "phrasesForAllSeverities": {
+          "MINOR": {
+            "severity": "MINOR",
+            "encodedRepresentation": "A OR B",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "AppTemp",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "90",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "F",
+                "dataSource": "NBM",
+                "dataParameter": ""
+              },
+              "B": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "B",
+                "probability": 0,
+                "environmentalConditionType": "WindGust",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "20",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "NBM",
+                "dataParameter": ""
+              }
+            }
+          },
+          "MODERATE": {
+            "severity": "MODERATE",
+            "encodedRepresentation": "A OR B",
+            "map": {
+              "A": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "A",
+                "probability": 0,
+                "environmentalConditionType": "AppTemp",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "100",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "F",
+                "dataSource": "NBM",
+                "dataParameter": ""
+              },
+              "B": {
+                "type": "TYPE_AND_THRESH",
+                "phraseId": "B",
+                "probability": 0,
+                "environmentalConditionType": "WindGust",
+                "wwaProduct": "UNDEF",
+                "condition": "GREATER_THAN_OR_EQUAL_TO",
+                "value": "40",
+                "timeFrame": "PT0S",
+                "minDuration": "PT0S",
+                "units": "MPH",
+                "dataSource": "NBM",
+                "dataParameter": ""
+              }
+            }
+          }
+        },
+        "allTypesAsStrings": ["AppTemp", "WindGust"]
+      },
+      "maxLeadTime": 168,
+      "isLive": true,
+      "requestedServices": [],
+      "timeBuffer": 0,
+      "geoBuffer": 3.0,
+      "profileLevelActionPlans": [],
+      "maxLeadTimeAsString": "7 d"
+    }
+  ],
+  "errors": []
+}
