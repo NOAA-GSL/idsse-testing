@@ -116,18 +116,8 @@ def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
     assert result[1] == 401
 
 
-def test_get_bad_status(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "NOT REAL STATUS"})
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    response, status_code = result
-    assert status_code == 400
-    assert response.json == {"profiles": [], "errors": ["Invalid profile status: NOT REAL STATUS"]}
-
-
 def test_get_existing_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "existing"})
+    mock_request.args = MultiDict({"dataSource": "NBM"})
     example_profile_list = [{"id": EXAMPLE_UUID, "name": "My Profile"}]
     mock_profile_store.return_value.get_all.return_value = example_profile_list
 
@@ -140,63 +130,18 @@ def test_get_existing_profiles(wrapper: AppWrapper, mock_request: Mock, mock_pro
     mock_profile_store.return_value.get_all.assert_called_with("NBM", include_inactive=False)
 
 
-def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "new"})
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_profile_store.return_value.get_all.return_value = [example_profile]
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    response, status_code = result
-    assert status_code == 200
-    assert response.json == {"profiles": [example_profile], "errors": []}
-
-    get_call_args = mock_profile_store.return_value.get_all.mock_calls
-    # called with is_new set to True
-    assert get_call_args[0][1:] == (("NBM",), {"is_new": True, "include_inactive": False})
-
-    # expect that we told ProfileStore to label this profile as not new
-    mark_existing_call_args = mock_profile_store.return_value.mark_as_existing.mock_calls
-    assert mark_existing_call_args[0][1][0] == example_profile["id"]
-
-
-def test_create_profile_new(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "POST"
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "new", "data": example_profile}
-    mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 201
-    # should have saved profile with is_new: True
-    mock_profile_store.return_value.save.assert_called_once_with(example_profile, True)
-
-
 def test_create_profile_existing(
     wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock
 ):
     mock_request.method = "POST"
     example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "existing", "data": example_profile}
+    mock_request.json = {"data": example_profile}
     mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
 
     result: tuple[Response, int] = wrapper.app.view_functions["events"]()
 
     assert result[1] == 201
-    # should have saved profile with is_new: False
-    mock_profile_store.return_value.save.assert_called_once_with(example_profile, False)
-
-
-def test_create_profile_invalid(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "POST"
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "foobar", "data": example_profile}
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 400
-    mock_profile_store.return_value.save.assert_not_called()
+    mock_profile_store.return_value.save.assert_called_once_with(example_profile)
 
 
 def test_create_previous_profile_failure(
