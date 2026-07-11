@@ -73,8 +73,8 @@ class VulnerabilitiesRoute:
         # otherwise, must be 'GET' operation
         data_source = request.args.get("dataSource", None, type=str)
 
-        # let request control if `isLive: false` profiles are included in response.
-        # Default to False if param not present (only return profiles where isLive: true)
+        # let request control if `isDeleted: true` profiles are included in response.
+        # Default to False if param not present (only return profiles where isDeleted: false)
         include_inactive = request.args.get("includeInactive", default=False, type=bool)
 
         profiles = self._profile_store.get_all(data_source, include_inactive=include_inactive)

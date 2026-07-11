@@ -1,9 +1,9 @@
 """Profile store that does CRUD operations on filesystem to simulate NWS Connect storage"""
 
 # ----------------------------------------------------------------------------------
-# Created on Tues Dec 17 2024
+# Created on Fri Jul 10 2026
 #
-# Copyright (c) 2024 Colorado State University. All rights reserved.             (1)
+# Copyright (c) 2026 Colorado State University. All rights reserved.             (1)
 #
 # Contributors:
 #     Mackenzie Grimes (1)
@@ -28,32 +28,43 @@ logger = logging.getLogger(__name__)
 
 
 class CachedProfile:
-    """Data class to hold Profile's data as well as some derived properties extracted from the
-    `data` JSON (e.g. `CachedProfile.is_deleted` or `CachedProfile.start_timestamp`) that make it
-    easier to query and filter the Profiles.
+    """Data class to hold Profile's data, plus some derived properties extracted from the `data`
+    JSON (e.g. `CachedProfile.is_deleted` or `CachedProfile.start_timestamp`) that make it
+    easier to query and filter multiple Profiles.
 
     Args:
         data (dict): full JSON data of this Profile
     """
 
+    # properties at root of Profile object that are minimum required to assume acceptably formatted
+    REQUIRED_PROPERTIES = ["id", "name", "office", "hazards", "activeTime"]
+
     def __init__(self, data: dict):
+        """
+        Raises:
+            ValueError:  if data is not dictionary with minimum expected properties to be Profile
+        """
+        for prop in self.REQUIRED_PROPERTIES:
+            if not data.get(prop):
+                raise ValueError(f"JSON not valid Profile format; missing property {prop}")
+
         self.data = data
 
     @property
     def id(self) -> str:
         """The Profile UUID"""
         # pylint: disable=invalid-name
-        return self.data.get("id")
+        return self.data["id"]
 
     @property
     def name(self) -> str:
         """The Profile name"""
-        return self.data.get("name")
+        return self.data["name"]
 
     @property
     def office(self) -> str:
         """The Profile's NWS 'office" tag"""
-        return self.data.get("primaryOfficeId")
+        return self.data["primaryOfficeId"]
 
     @property
     def is_deleted(self) -> bool:
@@ -65,7 +76,7 @@ class CachedProfile:
         """The Profile event's start in Unix time (milliseconds since the epoch).
         math.inf if Profile is never-ending
         """
-        profile_start: str | None = self.data["activeTime"].get("startTime")
+        profile_start: str | None = self.data["activeTime"]["startTime"]
         return dt_parse(profile_start).timestamp() if profile_start else inf
 
     @property
@@ -75,12 +86,13 @@ class CachedProfile:
         """
         if self.start_timestamp == inf:
             return inf  # infinite start time, so infinite end time as well
-        profile_end: str | None = self.data["activeTime"].get("endTime")
+        profile_end: str | None = self.data["activeTime"]["endTime"]
         return dt_parse(profile_end).timestamp() if profile_end else inf
 
     @property
     def data_sources(self) -> list[str]:
         """The weather products used by any parts of this Profile (e.g. NBM, HRRR, MRMS)"""
+        # TODO: rewrite me for Vulnerabilities format
         try:
             return [
                 # treat any profiles with empty string dataSource as default 'NBM'
@@ -109,21 +121,41 @@ class ProfileStore:
 
         # load any NWS Connect response files dumped into the base_dir
         logger.info("Scanning base directory for raw NWS Connect API response files: %s", base_dir)
-        for response_filename in glob("*.json", root_dir=base_dir):
-            response_filepath = os.path.join(base_dir, response_filename)
-            logger.info("Loading profiles from raw API response file: %s", response_filepath)
+        for filename in glob("*.json", root_dir=base_dir):
+            abs_path = os.path.join(base_dir, filename)
+            logger.info("Loading profiles from raw API response file: %s", abs_path)
 
-            with open(response_filepath, "r", encoding="utf-8") as infile:
+            with open(abs_path, "r", encoding="utf-8") as infile:
                 data: dict = json.load(infile)
 
-                # loop through all profiles in this file,
-                # save them to "existing" directory as individual profiles
-                for profile in data.get("profiles", []):
-                    profile_filepath = os.path.join(self._profile_dir, f'{profile["id"]}.json')
-                    logger.info("Saving existing profile to file: %s", profile_filepath)
+                if isinstance(data, dict):
+                    profiles = data.get("profiles", [])
+                elif isinstance(data, list):
+                    profiles = data
+                else:
+                    raise RuntimeError(
+                        f"Expected list or object with `profiles` property in file: {abs_path}"
+                    )
 
+                # loop through all profiles in this file,
+                # save them to subdirectory as individual profiles
+                for profile_data in profiles:
+                    try:
+                        _ = CachedProfile(profile_data)
+                    except ValueError:
+                        logger.warning(
+                            "Rejecting profile in file %s: not expected Profile format. ID: %s",
+                            abs_path,
+                            profile_data.get("id"),
+                        )
+                        continue
+
+                    profile_filepath = os.path.join(
+                        self._profile_dir, f'{profile_data["id"]}.json'
+                    )
+                    logger.info("Saving existing profile to file: %s", profile_filepath)
                     with open(profile_filepath, "w", encoding="utf-8") as outfile:
-                        json.dump(profile, outfile)
+                        json.dump(profile_data, outfile)
 
         # populate cache of JSON data of all Profiles
         self._cache: dict[str, CachedProfile] = {
@@ -132,9 +164,7 @@ class ProfileStore:
         }
 
     def get_all(self, data_source="ANY", include_inactive=False) -> list[dict]:
-        """Get all Profile JSONs persisted in this API, filtering by status='new'
-        (if Profile has never been returned in an API request before) or status='existing'
-        otherwise.
+        """Get all Profile JSONs persisted in this API.
 
         Args:
             data_source (optional, str): `data_source` of Profiles to filter on. Defaults to "ANY"
@@ -253,7 +283,6 @@ class ProfileStore:
         if not profile_id:
             raise ValueError("Cannot save CachedProfile to file that has no `id` attribute")
 
-        # file_dir = self._new_dir if profile.is_new else self._existing_dir
         filepath = os.path.join(self._profile_dir, f"{profile_id}.json")
         logger.debug("Now saving profile to path: %s", filepath)
         try:
