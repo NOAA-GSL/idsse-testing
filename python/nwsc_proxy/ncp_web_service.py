@@ -17,7 +17,7 @@ from argparse import ArgumentParser, Namespace
 from flask import Flask, Response, current_app, request, jsonify
 
 from src.support_profile_store import SupportProfileStore
-from src.profile_store import ProfileStore
+from src.vulnerability_store import VulnerabilityStore
 
 # constants
 GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
@@ -53,9 +53,9 @@ class VulnerabilitiesRoute:
     """Handle requests to /vulnerabilities endpoint"""
 
     def __init__(self, base_dir: str):
-        self._profile_store = ProfileStore(base_dir)
+        self._profile_store = VulnerabilityStore(base_dir)
 
-    def handler(self):
+    def documents(self):
         """Logic for any HTTP request to /vulnerabilities."""
         # check that this request has proper key to get or add data
         if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
@@ -64,65 +64,71 @@ class VulnerabilitiesRoute:
         if request.method == "POST":
             return self._handle_create()
 
-        if request.method == "DELETE":
-            return self._handle_delete()
-
-        if request.method == "PATCH":
-            return self._handle_update()
-
         # otherwise, must be 'GET' operation
-        data_source = request.args.get("dataSource", None, type=str)
 
         # let request control if `isDeleted: true` profiles are included in response.
         # Default to False if param not present (only return profiles where isDeleted: false)
-        include_inactive = request.args.get("includeInactive", default=False, type=bool)
+        include_is_deleted = request.args.get("isDeleted", default=False, type=bool)
 
-        profiles = self._profile_store.get_all(data_source, include_inactive=include_inactive)
-        return jsonify({"profiles": profiles, "errors": []}), 200
+        profiles = self._profile_store.get_all(include_inactive=include_is_deleted)
+        return jsonify(profiles), 200
 
-    def _handle_delete(self) -> Response:
-        """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
-        success, 404 otherwise."""
-        profile_id = request.args.get("id", request.args.get("uuid"))
-        is_deleted = self._profile_store.delete(profile_id)
-        if not is_deleted:
-            return jsonify({"message": f"Profile {profile_id} not found"}), 404
-        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
+    def document(self, profile_id):
+        """Logic for HTTP requests to /vulnerabilities/:profile_id"""
+
+        # pylint: disable=duplicate-code
+        # check that this request has proper key to get or add data
+        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+            return jsonify({"message": "ERROR: Unauthorized"}), 401
+        # pylint: enable=duplicate-code
+
+        if request.method == "DELETE":
+            return self._handle_delete(profile_id)
+
+        if request.method == "PATCH":
+            return self._handle_update(profile_id)
+
+        # otherwise, must be 'GET' operation
+        if profile := self._profile_store.get(profile_id):
+            return jsonify(profile), 200
+
+        return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
     def _handle_create(self) -> Response:
-        """Logic for POST requests to /all-events. Returns Response with status_code: 201 on
+        """Logic for POST requests to /vulnerabilities. Returns Response with status_code: 201 on
         success, 400 otherwise."""
-        request_body: dict = request.json
-
-        profile_data: dict | None = request_body.get("data")
-        if not profile_data:
-            return jsonify({"message": "Missing one of required attributes: [data, status]"}), 400
+        profile_data: dict = request.json
 
         profile_id = self._profile_store.save(profile_data)
         if not profile_id:
-            return jsonify({"message": f'Profile {profile_data.get("id")} already exists'}), 400
+            return jsonify({"message": f'Profile {profile_data.get("id")} may exist'}), 400
 
         return jsonify({"message": f"Profile {profile_id} saved"}), 201
 
-    def _handle_update(self) -> Response:
+    def _handle_delete(self, profile_id: str) -> Response:
+        """Logic for DELETE requests to /vulnerabilities/:id.
+        Returns Response with status_code: 204 on success, 404 otherwise.
+        """
+        is_deleted = self._profile_store.delete(profile_id)
+        if not is_deleted:
+            return jsonify({"message": f"Profile {profile_id} not found"}), 404
+
+        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
+
+    def _handle_update(self, profile_id: str) -> Response:
         if not request.data:
             return jsonify({"message": "PUT requires request body"}), 400
 
         request_body: dict = request.json
-        profile_id = request.args.get("id", request.args.get("uuid"))
-
-        if not profile_id:
-            return jsonify({"message": "Missing required query parameter: id"}), 400
-
         try:
             updated_profile = self._profile_store.update(profile_id, request_body)
         except FileNotFoundError:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
-        return (
-            jsonify({"message": f"Profile {profile_id} updated", "profile": updated_profile}),
-            200,
-        )
+        if not updated_profile:
+            return jsonify({"message": "Internal Server Error"}), 500
+
+        return jsonify(updated_profile), 200
 
 
 class EventsRoute:  # pylint: disable=duplicate-code
@@ -224,8 +230,14 @@ class AppWrapper:
         self.app.add_url_rule(
             "/vulnerabilities",
             "vulnerabilities",
-            view_func=vulnerabilities_route.handler,
-            methods=["GET", "POST", "PATCH", "DELETE"],
+            view_func=vulnerabilities_route.documents,
+            methods=["GET", "POST"],
+        )
+        self.app.add_url_rule(
+            "/vulnerabilities/<profile_id>",
+            "vulnerability",
+            view_func=vulnerabilities_route.document,
+            methods=["GET", "PATCH", "DELETE"],
         )
 
     def run(self, **kwargs):
