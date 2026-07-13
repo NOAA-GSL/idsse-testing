@@ -21,10 +21,6 @@ from math import inf
 
 from dateutil.parser import parse as dt_parse
 
-# constants controlling the subdirectory where existing Profiles are saved
-PROFILE_DIR = "supportprofiles"
-DEFAULT_DATA_SOURCE = "NBM"
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,6 +32,9 @@ class CachedSupportProfile:
     Args:
         data (dict): full JSON data of this Support Profile
     """
+
+    # class-wide constants
+    DEFAULT_DATA_SOURCE = "NBM"
 
     def __init__(self, data: dict):
         self.data = data
@@ -82,12 +81,12 @@ class CachedSupportProfile:
         try:
             return [
                 # treat any profiles with empty string dataSource as default 'NBM'
-                _map["dataSource"] if _map["dataSource"] != "" else DEFAULT_DATA_SOURCE
+                _map["dataSource"] if _map["dataSource"] != "" else self.DEFAULT_DATA_SOURCE
                 for phrase in self.data["nonImpactThresholds"]["phrasesForAllSeverities"].values()
                 for _map in phrase["map"].values()
             ]
         except KeyError:
-            return [DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources, so just default to NBM
+            return [self.DEFAULT_DATA_SOURCE]  # couldn't lookup dataSources; just default to NBM
 
     def __str__(self):
         return (
@@ -100,9 +99,12 @@ class CachedSupportProfile:
 class SupportProfileStore:
     """Data storage using JSON files on filesystem that simulates CRUD operations"""
 
+    # constants controlling the subdirectory where existing Profiles are saved
+    PROFILE_DIR = "supportprofiles"
+
     def __init__(self, base_dir: str):
         # ensure that base directory and all expected subdirectories exist
-        self._profile_dir = os.path.join(base_dir, PROFILE_DIR)
+        self._profile_dir = os.path.join(base_dir, self.PROFILE_DIR)
         os.makedirs(self._profile_dir, exist_ok=True)
 
         # load any NWS Connect response files dumped into the base_dir
