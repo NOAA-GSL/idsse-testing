@@ -99,11 +99,11 @@ class VulnerabilitiesRoute:
         success, 400 otherwise."""
         profile_data: dict = request.json
 
-        profile_id = self._profile_store.save(profile_data)
-        if not profile_id:
-            return jsonify({"message": f'Profile {profile_data.get("id")} may exist'}), 400
+        saved_profile = self._profile_store.save(profile_data)
+        if not saved_profile:
+            return jsonify({"message": "Error creating profile, may be malformed"}), 400
 
-        return jsonify({"message": f"Profile {profile_id} saved"}), 201
+        return jsonify(saved_profile), 201
 
     def _handle_delete(self, profile_id: str) -> Response:
         """Logic for DELETE requests to /vulnerabilities/:id.
