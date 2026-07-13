@@ -9,7 +9,7 @@
 #     Mackenzie Grimes (1)
 #
 # ----------------------------------------------------------------------------------
-# pylint: disable=missing-function-docstring,redefined-outer-name
+# pylint: disable=missing-function-docstring,redefined-outer-name,duplicate-code
 import json
 import os
 import shutil
