@@ -65,15 +65,16 @@ class VulnerabilitiesRoute:
             return self._handle_create()
 
         # otherwise, must be 'GET' operation
+        office = request.args.get("officeId")
 
         # let request control if `isDeleted: true` profiles are included in response.
         # Default to False if param not present (only return profiles where isDeleted: false)
         include_is_deleted = request.args.get("isDeleted", default=False, type=bool)
 
-        profiles = self._profile_store.get_all(include_inactive=include_is_deleted)
+        profiles = self._profile_store.get_all(include_inactive=include_is_deleted, office=office)
         return jsonify(profiles), 200
 
-    def document(self, profile_id):
+    def document(self, profile_id: str):
         """Logic for HTTP requests to /vulnerabilities/:profile_id"""
 
         # pylint: disable=duplicate-code
