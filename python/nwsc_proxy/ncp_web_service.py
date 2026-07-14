@@ -16,7 +16,8 @@ from argparse import ArgumentParser, Namespace
 
 from flask import Flask, Response, current_app, request, jsonify
 
-from src.profile_store import ProfileStore
+from src.support_profile_store import SupportProfileStore
+from src.vulnerability_store import VulnerabilityStore
 
 # constants
 GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
@@ -48,11 +49,93 @@ class HealthRoute:
         )
 
 
-class EventsRoute:
+class VulnerabilitiesRoute:
+    """Handle requests to /vulnerabilities endpoint"""
+
+    def __init__(self, base_dir: str):
+        self._profile_store = VulnerabilityStore(base_dir)
+
+    def documents(self):
+        """Logic for any HTTP request to /vulnerabilities."""
+        # check that this request has proper key to get or add data
+        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+            return jsonify({"message": "ERROR: Unauthorized"}), 401
+
+        if request.method == "POST":
+            return self._handle_create()
+
+        # otherwise, must be 'GET' operation
+
+        # let request control if `isDeleted: true` profiles are included in response.
+        # Default to False if param not present (only return profiles where isDeleted: false)
+        include_is_deleted = request.args.get("isDeleted", default=False, type=bool)
+
+        profiles = self._profile_store.get_all(include_inactive=include_is_deleted)
+        return jsonify(profiles), 200
+
+    def document(self, profile_id):
+        """Logic for HTTP requests to /vulnerabilities/:profile_id"""
+
+        # pylint: disable=duplicate-code
+        # check that this request has proper key to get or add data
+        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+            return jsonify({"message": "ERROR: Unauthorized"}), 401
+        # pylint: enable=duplicate-code
+
+        if request.method == "DELETE":
+            return self._handle_delete(profile_id)
+
+        if request.method == "PATCH":
+            return self._handle_update(profile_id)
+
+        # otherwise, must be 'GET' operation
+        if profile := self._profile_store.get(profile_id):
+            return jsonify(profile), 200
+
+        return jsonify({"message": f"Profile {profile_id} not found"}), 404
+
+    def _handle_create(self) -> Response:
+        """Logic for POST requests to /vulnerabilities. Returns Response with status_code: 201 on
+        success, 400 otherwise."""
+        profile_data: dict = request.json
+
+        saved_profile = self._profile_store.save(profile_data)
+        if not saved_profile:
+            return jsonify({"message": "Error creating profile, may be malformed"}), 400
+
+        return jsonify(saved_profile), 201
+
+    def _handle_delete(self, profile_id: str) -> Response:
+        """Logic for DELETE requests to /vulnerabilities/:id.
+        Returns Response with status_code: 204 on success, 404 otherwise.
+        """
+        is_deleted = self._profile_store.delete(profile_id)
+        if not is_deleted:
+            return jsonify({"message": f"Profile {profile_id} not found"}), 404
+
+        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
+
+    def _handle_update(self, profile_id: str) -> Response:
+        if not request.data:
+            return jsonify({"message": "PUT requires request body"}), 400
+
+        request_body: dict = request.json
+        try:
+            updated_profile = self._profile_store.update(profile_id, request_body)
+        except FileNotFoundError:
+            return jsonify({"message": f"Profile {profile_id} not found"}), 404
+
+        if not updated_profile:
+            return jsonify({"message": "Internal Server Error"}), 500
+
+        return jsonify(updated_profile), 200
+
+
+class EventsRoute:  # pylint: disable=duplicate-code
     """Handle requests to /all-events endpoint"""
 
     def __init__(self, base_dir: str):
-        self.profile_store = ProfileStore(base_dir)
+        self._sp_store = SupportProfileStore(base_dir)
 
     def handler(self):
         """Logic for requests to /all-events."""
@@ -71,39 +154,19 @@ class EventsRoute:
 
         # otherwise, must be 'GET' operation
         data_source = request.args.get("dataSource", None, type=str)
-        profile_status = request.args.get("status", default="existing", type=str)
 
         # let request control if `isLive: false` profiles are included in response.
         # Default to False if param not present (only return profiles where isLive: true)
         include_inactive = request.args.get("includeInactive", default=False, type=bool)
 
-        if profile_status == "existing":
-            profiles = self.profile_store.get_all(data_source, include_inactive=include_inactive)
-
-        elif profile_status == "new":
-            profiles = self.profile_store.get_all(
-                data_source, is_new=True, include_inactive=include_inactive
-            )
-            # update ProfileStore to label all queried events as no longer "new";
-            # they've now been returned to IDSS Engine clients at least once
-            current_app.logger.info("Got all new profiles: %s", profiles)
-            for profile in profiles:
-                self.profile_store.mark_as_existing(profile["id"])
-
-        else:
-            # status query param should have been 'existing' or 'new'
-            return (
-                jsonify({"profiles": [], "errors": [f"Invalid profile status: {profile_status}"]}),
-                400,
-            )
-
+        profiles = self._sp_store.get_all(data_source, include_inactive=include_inactive)
         return jsonify({"profiles": profiles, "errors": []}), 200
 
     def _handle_delete(self) -> Response:
         """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
         success, 404 otherwise."""
         profile_id = request.args.get("id", request.args.get("uuid"))
-        is_deleted = self.profile_store.delete(profile_id)
+        is_deleted = self._sp_store.delete(profile_id)
         if not is_deleted:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
         return jsonify({"message": f"Profile {profile_id} deleted"}), 204
@@ -114,18 +177,10 @@ class EventsRoute:
         request_body: dict = request.json
 
         profile_data: dict | None = request_body.get("data")
-        status: str | None = request_body.get("status")
-        if not profile_data or not status:
+        if not profile_data:
             return jsonify({"message": "Missing one of required attributes: [data, status]"}), 400
 
-        if status == "new":
-            is_new = True
-        elif status == "existing":
-            is_new = False
-        else:
-            return jsonify({"message": "Status must be one of [new, existing]"}), 400
-
-        profile_id = self.profile_store.save(profile_data, is_new)
+        profile_id = self._sp_store.save(profile_data)
         if not profile_id:
             return jsonify({"message": f'Profile {profile_data.get("id")} already exists'}), 400
 
@@ -142,7 +197,7 @@ class EventsRoute:
             return jsonify({"message": "Missing required query parameter: id"}), 400
 
         try:
-            updated_profile = self.profile_store.update(profile_id, request_body)
+            updated_profile = self._sp_store.update(profile_id, request_body)
         except FileNotFoundError:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
@@ -162,13 +217,27 @@ class AppWrapper:
 
         health_route = HealthRoute()
         events_route = EventsRoute(base_dir)
+        vulnerabilities_route = VulnerabilitiesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
+        # DEPRECATED: will be removed after NCG NewData Consumer migrates to vulnerabilities format
         self.app.add_url_rule(
             "/all-events",
             "events",
             view_func=events_route.handler,
             methods=["GET", "POST", "PUT", "DELETE"],
+        )
+        self.app.add_url_rule(
+            "/vulnerabilities",
+            "vulnerabilities",
+            view_func=vulnerabilities_route.documents,
+            methods=["GET", "POST"],
+        )
+        self.app.add_url_rule(
+            "/vulnerabilities/<profile_id>",
+            "vulnerability",
+            view_func=vulnerabilities_route.document,
+            methods=["GET", "PATCH", "DELETE"],
         )
 
     def run(self, **kwargs):
