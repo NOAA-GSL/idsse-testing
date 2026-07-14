@@ -13,6 +13,7 @@
 import json
 from datetime import timedelta
 from unittest.mock import Mock
+from uuid import uuid4
 
 from flask import Request, Response
 from pytest import fixture, MonkeyPatch
@@ -232,6 +233,20 @@ def test_get_vulnerabilities(wrapper: AppWrapper, mock_store: Mock, mock_sp_stor
     assert actual_profile_list[0]["id"] == EXAMPLE_UUID
     mock_store.return_value.get_all.assert_called_once()
     mock_sp_store.return_value.get_all.assert_not_called()
+
+
+def test_get_vulnerabilities_office(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_office = "BOU"
+    example_profile_list = [{"id": EXAMPLE_UUID, "name": "My Profile", "primaryOfficeId": "BOU"}]
+    mock_store.return_value.get_all.return_value = example_profile_list
+    mock_request.args = MultiDict({"officeId": expected_office})
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
+
+    assert result[1] == 200
+    mock_store.return_value.get_all.assert_called_once_with(
+        include_inactive=False, office=expected_office
+    )
 
 
 def test_post_vulnerabilities(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
