@@ -13,7 +13,6 @@
 import json
 from datetime import timedelta
 from unittest.mock import Mock
-from uuid import uuid4
 
 from flask import Request, Response
 from pytest import fixture, MonkeyPatch
