@@ -79,7 +79,24 @@ python3 ncp_web_service.py --base_dir /path/to/some/dir
 On startup, the service creates 'existing' and 'new' subdirectories at the path location given by `--base_dir` if needed, then reads into its in-memory cache any existing JSON files in the base directory or either subdirectory.
 
 ### Endpoints
+The following endpoints should roughly match the [NWS Connect Parter Vulnerabilities API spec](https://vlab.noaa.gov/gitlab-licensed/NWS/Operations/STI/MDL/nwsconnect/foundation-api/api-fndn/-/blob/develop/documentation/PartnerVulnerabilitiesOpenAPI.yaml)
+
 - GET `/health`
+- GET `/vulnerabililities?officeId=SFO`
+  - Get list of existing Partner Vulnerabilities, optionally filtered by Vulnerabilities associated with a specific NWS office (e.g. BOU, SFO, etc.)
+- POST `/vulnerabilities`
+  - Create a new Partner Vulnerability to be stored by the API. `id` property from the client will be ignored--the API generates a unique ID on the fly and includes it in the response body. 
+  - Very minimal validation of the request body is completed; don't expect it to enforce anything other than the existence of `id`, `name`, `primaryOfficeId`, and `hazards`. This isn't a real database.
+- GET `/vulnerabilities/:id/`
+  - Get a specific Partner Vulnerability object, by id. 404 if id does not exist.
+- PATCH `/vulnerabilities/:id`
+  - Update an existing Vulnerability (partial update, adhering to the "JSON merge patch" standard). Returns `404` if no Vulnerability stored in the API matches the `id` provided
+- DELETE `/vulnerabilities/:id`
+  - Permanently delete a Vulnerability from the API. 
+
+#### Legacy endpoints
+The following endpoints rely on an outdated object model ("Support Profile") from 2023. They will be removed no earlier than Sept 2026.
+
 - GET `/all-events?dataSource=ANY&status=existing`
   - Get list of existing Support Profiles (not new). Will be formatted like `{ "profiles": [], "errors": []}`
 - GET `/all-events?dataSource=ANY&status=new`
@@ -91,4 +108,4 @@ On startup, the service creates 'existing' and 'new' subdirectories at the path 
 - DELETE `/all-events?uuid=<some id>`
   - Permanently remove an existing Support Profile from the API. `uuid` must match one of the saved Support Profile JSON's `id` attribute, otherwise it will return `404`.
 
-Note that all requests to the `/all-events` endpoint require an `X-Api-Key` header that must match the approved key, or the API will return `401`.
+Note that all requests to the `/all-events` and `/vulnerabilities` endpoints require an `X-Api-Key` header that must match the approved key, or the API will return `401`.
