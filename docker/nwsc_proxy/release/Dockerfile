@@ -1,5 +1,5 @@
 # NWSC Proxy Service using python commons base image
-FROM ghcr.io/noaa-gsl/idss/commons/python/python-base:main
+FROM ghcr.io/noaa-gsl/idss/commons/python/python-base:v1.4.0
 
 ARG maintainer
 LABEL maintainer ${maintainer}
