@@ -27,6 +27,7 @@ setup(
         "idsse.testing.data_access.data_cache",
         "idsse.testing.data_access.mrms_nssl_grib",
         "idsse.testing.data_access.nbm_aws_grib",
+        "idsse.testing.data_access.nbm_aws_zarr",
         "idsse.testing.data_access.validation",
         "idsse.testing.event_portfolios",
         "idsse.testing.idsse_common",
@@ -54,13 +55,27 @@ setup(
             package_files("idsse/testing/data_access/nbm_aws_grib"),
         ),
         (
+            "idsse.testing.data_access.nbm_aws_zarr",
+            package_files("idsse/testing/data_access/nbm_aws_zarr"),
+        ),
+        (
             "idsse.testing.data_access.validation",
             package_files("idsse/testing/data_access/validation"),
         ),
+        ("idsse.testing.risk_processor", package_files("idsse/testing/risk_processor")),
     ],
     include_package_data=True,
-    package_data={"": ["*.csv", "*.json", "*.nc", "*.grib2*"]},
-    install_requires=["pika", "jsonschema", "netcdf4", "h5netcdf", "python-logging-rabbitmq"],
+    package_data={"": ["*.csv", "*.json", "*.nc", "*.grib2*", "*.zip"]},
+    install_requires=[
+        "pika",
+        "jsonschema",
+        "netcdf4",
+        "h5netcdf",
+        "python-logging-rabbitmq",
+        "zarr",
+        "xarray",
+        "dask",
+    ],
     extras_require={
         "develop": [
             "pytest",

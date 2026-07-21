@@ -29,7 +29,7 @@
                 [-75.82261820803978, 42.120569061969576]
               ],
               "minSize": [40, 30],
-              "minBuff": 10,
+              "minBuff": 20,
               "source": {
                 "sourceType": "data",
                 "sourceObj": {
@@ -37,7 +37,7 @@
                   "field": "Snow:1HR:[DTRM,p010,p090]",
                   "region": "CONUS",
                   "units": "INCHES",
-                  "validDt": "2025-01-28T13:00:00.000Z",
+                  "validDt": "2025-01-28T13:00:00.000Z,2025-01-28T15:00:00.000Z",
                   "issueDt": "2025-01-28T12:00:00.000Z"
                 }
               }
