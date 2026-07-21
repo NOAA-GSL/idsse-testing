@@ -35,6 +35,7 @@ class CachedSupportProfile:
 
     # class-wide constants
     DEFAULT_DATA_SOURCE = "NBM"
+    REQUIRED_PROPERTIES = ["id", "name", "setting", "nonImpactThresholds"]
 
     def __init__(self, data: dict):
         self.data = data
@@ -46,14 +47,19 @@ class CachedSupportProfile:
         return self.data.get("id")
 
     @property
-    def name(self) -> str:
+    def name(self) -> str | None:
         """The Support Profile name"""
         return self.data.get("name")
 
     @property
+    def office(self) -> str | None:
+        """The office that this Support Profile is associated with"""
+        return self.data.get("associatedOfficeId")
+
+    @property
     def is_active(self) -> bool:
         """The Support Profile's active state (can be marked as inactive to halt processing)"""
-        return self.data.get("isLive")
+        return self.data.get("isLive", True)
 
     @property
     def start_timestamp(self) -> float:
@@ -109,16 +115,35 @@ class SupportProfileStore:
 
         # load any NWS Connect response files dumped into the base_dir
         logger.info("Scanning base directory for raw NWS Connect API response files: %s", base_dir)
-        for response_filename in glob("*.json", root_dir=base_dir):
-            response_filepath = os.path.join(base_dir, response_filename)
-            logger.info("Loading profiles from raw API response file: %s", response_filepath)
+        for filename in glob("*.json", root_dir=base_dir):
+            abs_path = os.path.join(base_dir, filename)
+            logger.info("Loading profiles from raw API response file: %s", abs_path)
 
-            with open(response_filepath, "r", encoding="utf-8") as infile:
+            with open(abs_path, "r", encoding="utf-8") as infile:
                 data: dict = json.load(infile)
+
+                if isinstance(data, dict):
+                    profiles: list[dict] = data.get("profiles", [])
+                elif isinstance(data, list):
+                    profiles: list[dict] = data
+                else:
+                    raise RuntimeError(
+                        f"Expected list, or object with `profiles` property, in JSON: {abs_path}"
+                    )
 
                 # loop through all profiles in this file,
                 # save them to "existing" directory as individual profiles
-                for profile in data.get("profiles", []):
+                for profile in profiles:
+                    try:
+                        _ = CachedSupportProfile(profile)
+                    except ValueError:
+                        logger.warning(
+                            "Rejecting profile in file %s: not expected Profile format. ID: %s",
+                            abs_path,
+                            profile.get("id"),
+                        )
+                        continue
+
                     profile_filepath = os.path.join(self._profile_dir, f'{profile["id"]}.json')
                     logger.info("Saving existing profile to file: %s", profile_filepath)
 
@@ -131,16 +156,22 @@ class SupportProfileStore:
             for profile in self._load_profiles_from_filesystem(self._profile_dir)
         }
 
-    def get_all(self, data_source="ANY", include_inactive=False) -> list[dict]:
+    def get_all(
+        self, data_source="ANY", include_inactive=False, office: str | None = None
+    ) -> list[dict]:
         """Get all Support Profile JSONs persisted in this API, filtering by status='new'
         (if Support Profile has never been returned in an API request before) or status='existing'
         otherwise.
 
         Args:
-            is_new (bool): if True, get only Support Profiles that have never been
-                returned to IDSS Engine on previous requests (never processed). Default is False:
-                return all existing profiles.
+            data_source (optional, str): `data_source` of Profiles to filter on. Defaults to "ANY"
+                (return all discovered Profiles).
+            include_inactive (optional, bool): if True, return all Profiles, even those marked as
+                `isDeleted: False`. Defaults to False (hide deleted profiles).
+            office (optional, str): the NWS office ID to filter Profiles, e.g. "BOU" or "SFO".
+                Not case sensitive. Defaults to None (return Profiles associated with any office).
         """
+
         profiles_by_status = [
             cached_profile
             for cached_profile in self.profile_cache.values()
@@ -149,6 +180,8 @@ class SupportProfileStore:
                 (include_inactive or cached_profile.is_active)
                 # the end_dt has not yet passed (or profile is never-ending)
                 and datetime.now(UTC).timestamp() <= cached_profile.end_timestamp
+                # is associated with requested office (or no office specified)
+                and (not office or office.upper().strip() == cached_profile.office.upper())
             )
         ]
         if data_source == "ANY":
@@ -157,6 +190,18 @@ class SupportProfileStore:
         return [
             profile.data for profile in profiles_by_status if data_source in profile.data_sources
         ]
+
+    def get(self, profile_id: str) -> dict | None:
+        """Get a single Profile JSON persisted in this API.
+
+        Args:
+            profile_id (str): the Profile UUID.
+
+        Returns:
+            dict | None: The Profile JSON data, or None if `profile_id` does not exist.
+        """
+        cached_profile = self.profile_cache.get(profile_id, None)
+        return cached_profile.data if cached_profile else None
 
     def save(self, profile: dict) -> str | None:
         """Persist a new Support Profile Profile to this API
