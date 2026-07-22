@@ -15,7 +15,6 @@ COPY ./python/nwsc_proxy/*.py /python/nwsc_proxy/
 COPY ./python/nwsc_proxy/src/*.py /python/nwsc_proxy/src/
 
 # Don't copy canned profiles for UAT, use criteria builder to generate needed profiles
-#COPY ./python/nwsc_proxy/src/profiles/*.json /python/profiles/
 
 # Setup the data volumes
 VOLUME /local_data
