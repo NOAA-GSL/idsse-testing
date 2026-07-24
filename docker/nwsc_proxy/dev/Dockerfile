@@ -15,7 +15,6 @@ COPY ./python/nwsc_proxy/*.py /python/nwsc_proxy/
 COPY ./python/nwsc_proxy/src/*.py /python/nwsc_proxy/src/
 
 # Copy canned NWSC Profile files to always run in dev environment
-COPY ./python/nwsc_proxy/src/supportprofiles/*.json /python/profiles/
 COPY ./python/nwsc_proxy/src/vulnerabilities/*.json /python/profiles/
 
 # The volume mapping here is kind of strange for k8s deployment, because if we map an empty volume to /criteria
