@@ -14,12 +14,12 @@ import os
 from datetime import datetime, UTC
 from argparse import ArgumentParser, Namespace
 
-from flask import Flask, Response, current_app, request, jsonify
+from flask import Flask, Response, request, jsonify
 
 from src.vulnerability_store import VulnerabilityStore
 
 # constants
-GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+# GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
 
 
 def to_iso(dt: datetime) -> str:
@@ -56,9 +56,8 @@ class VulnerabilitiesRoute:
 
     def documents(self):
         """Logic for any HTTP request to /vulnerabilities."""
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
 
         if request.method == "POST":
             return self._handle_create()
@@ -75,12 +74,8 @@ class VulnerabilitiesRoute:
 
     def document(self, profile_id: str):
         """Logic for HTTP requests to /vulnerabilities/:profile_id"""
-
-        # pylint: disable=duplicate-code
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
-        # pylint: enable=duplicate-code
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
 
         if request.method == "DELETE":
             return self._handle_delete(profile_id)
@@ -137,7 +132,7 @@ class AppWrapper:
     def __init__(self, base_dir: str):
         """Build Flask app instance, mapping handler to each endpoint"""
         self.app = Flask(__name__, static_folder=None)  # no need for a static folder
-        self.app.config["GSL_KEY"] = GSL_KEY
+        # self.app.config["GSL_KEY"] = GSL_KEY
 
         health_route = HealthRoute()
         vulnerabilities_route = VulnerabilitiesRoute(base_dir)

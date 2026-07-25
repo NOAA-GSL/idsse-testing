@@ -10,6 +10,7 @@
 #
 # ----------------------------------------------------------------------------------
 # pylint: disable=missing-function-docstring,redefined-outer-name,unused-argument
+
 import json
 from datetime import timedelta
 from unittest.mock import Mock
@@ -25,7 +26,6 @@ from python.nwsc_proxy.ncp_web_service import (
     VulnerabilityStore,
     create_app,
     datetime,
-    GSL_KEY,
 )
 
 # constants
@@ -61,22 +61,22 @@ def mock_jsonify(monkeypatch: MonkeyPatch) -> Mock:
     return mock_obj
 
 
-@fixture
-def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
-    mock_obj = Mock(name="MockCurrentApp", spec=Flask)
-    mock_obj.logger.info.return_value = None
-    mock_obj.logger.error.return_value = None
-    mock_obj.config = MultiDict({"GSL_KEY": GSL_KEY})
-    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.current_app", mock_obj)
-    return mock_obj
+# @fixture
+# def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
+#     mock_obj = Mock(name="MockCurrentApp", spec=Flask)
+#     mock_obj.logger.info.return_value = None
+#     mock_obj.logger.error.return_value = None
+#     # mock_obj.config = MultiDict({"GSL_KEY": GSL_KEY})
+#     monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.current_app", mock_obj)
+#     return mock_obj
 
 
 @fixture
-def mock_request(monkeypatch: MonkeyPatch, mock_current_app, mock_jsonify) -> Mock:
+def mock_request(monkeypatch: MonkeyPatch, mock_jsonify) -> Mock:
     mock_obj = Mock(name="MockFlaskRequest", spec=Request)
     mock_obj.origin = "http://example.com:5000"
     mock_obj.method = "GET"
-    mock_obj.headers = MultiDict({"X-Api-Key": GSL_KEY})
+    # mock_obj.headers = MultiDict({"X-Api-Key": GSL_KEY})
     monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.request", mock_obj)
     return mock_obj
 
@@ -109,12 +109,10 @@ def test_health_route(wrapper: AppWrapper, mock_datetime: Mock):
     assert response.json == {"startedAt": "2024-01-01T12:34:00.000Z", "uptime": 5 * 60}
 
 
-def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.headers = MultiDict({"X-Api-Key": "A_BAD_KEY"})
-
-    result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
-
-    assert result[1] == 401
+# def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
+#     mock_request.headers = MultiDict({"X-Api-Key": "A_BAD_KEY"})
+#     result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
+#     assert result[1] == 401
 
 
 # test /vulnerabilities and /vulnerabilities/:profile_id endpoints
