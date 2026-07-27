@@ -89,7 +89,7 @@ def wrapper(mock_store, mock_datetime, mock_request) -> AppWrapper:
 def test_create_app(mock_store):
     args = Namespace()
     args.base_dir = "/fake/base/dir"
-    expected_endpoints = ["health", "vulnerabilities", "vulnerability"]
+    expected_endpoints = ["health", "token", "vulnerabilities", "vulnerability"]
 
     _app = create_app(args)
 
@@ -225,3 +225,15 @@ def test_patch_vulnerability_fails(wrapper: AppWrapper, mock_store: Mock, mock_r
     result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
 
     assert result[1] == 500
+
+
+def test_token_path(wrapper: AppWrapper, mock_request):
+    mock_request.method = "POST"
+    mock_request.json = {"grant_type": "client_credentials", "client_secret": "foobar"}
+
+    result: tuple[Response, int] = wrapper.app.view_functions["token"]()
+
+    # fake token returned with 200 response
+    assert result[0].status_code == 200
+    response_body: dict = result[0].json
+    response_body.get("access_token").startswith("eyJ")

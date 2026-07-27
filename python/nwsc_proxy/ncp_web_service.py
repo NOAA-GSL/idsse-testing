@@ -20,6 +20,7 @@ from src.vulnerability_store import VulnerabilityStore
 
 # constants
 # GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+AUTH_PATH = "/auth/realms/nws-connect-core/protocol/openid-connect/token"
 
 
 def to_iso(dt: datetime) -> str:
@@ -53,6 +54,17 @@ class VulnerabilitiesRoute:
 
     def __init__(self, base_dir: str):
         self._profile_store = VulnerabilityStore(base_dir)
+
+    def token(self):
+        """Generate a fake JWT token and return to simulate /token OAauth server behavior"""
+        response = {
+            "access_token": "eyJFakeJWTToken",
+            "expires_in": 300,
+            "token_type": "Bearer",
+            "not-before-policy": 0,
+            "scope": "profile email",
+        }
+        return jsonify(response), 200
 
     def documents(self):
         """Logic for any HTTP request to /vulnerabilities."""
@@ -138,6 +150,10 @@ class AppWrapper:
         vulnerabilities_route = VulnerabilitiesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
+        # hard-code /token path of whatever openid framework NWS Connect uses
+        self.app.add_url_rule(
+            AUTH_PATH, "token", view_func=vulnerabilities_route.token, methods=["POST"]
+        )
         self.app.add_url_rule(
             "/vulnerabilities",
             "vulnerabilities",
