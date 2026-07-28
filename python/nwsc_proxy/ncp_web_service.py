@@ -154,14 +154,16 @@ class AppWrapper:
         self.app.add_url_rule(
             AUTH_PATH, "token", view_func=vulnerabilities_route.token, methods=["POST"]
         )
+        # the paths to the Vulnerabilities API specifically are nested under `/api/v1/...`
+        base_url = "/api/v1"
         self.app.add_url_rule(
-            "/vulnerabilities",
+            f"{base_url}/vulnerabilities",
             "vulnerabilities",
             view_func=vulnerabilities_route.documents,
             methods=["GET", "POST"],
         )
         self.app.add_url_rule(
-            "/vulnerabilities/<profile_id>",
+            f"{base_url}/vulnerabilities/<profile_id>",
             "vulnerability",
             view_func=vulnerabilities_route.document,
             methods=["GET", "PATCH", "DELETE"],
