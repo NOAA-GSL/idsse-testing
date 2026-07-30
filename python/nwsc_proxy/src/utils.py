@@ -11,6 +11,7 @@
 # ----------------------------------------------------------------------------------
 
 from copy import deepcopy
+from datetime import datetime, UTC
 
 
 def deep_update(original: dict, updates: dict) -> dict:
@@ -34,3 +35,13 @@ def deep_update(original: dict, updates: dict) -> dict:
         else:
             updated_dict[key] = value
     return updated_dict
+
+
+def to_iso(dt: datetime) -> str:
+    """Format a datetime instance to an ISO string. Copied from `idss-engine-commons` for now"""
+    # pylint: disable=invalid-name
+    return (
+        f'{dt.strftime("%Y-%m-%dT%H:%M")}:' f"{(dt.second + dt.microsecond / 1e6):06.3f}" "Z"
+        if dt.tzname() in [None, str(UTC)]
+        else dt.strftime("%Z")[3:]
+    )

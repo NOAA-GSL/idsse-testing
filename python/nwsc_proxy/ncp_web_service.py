@@ -17,20 +17,13 @@ from argparse import ArgumentParser, Namespace
 from flask import Flask, Response, request, jsonify
 
 from src.vulnerability_store import VulnerabilityStore
+from src.user_store import UserStore
+from src.utils import to_iso
 
 # constants
 # GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
 AUTH_PATH = "/auth/realms/nws-connect-core/protocol/openid-connect/token"
-
-
-def to_iso(dt: datetime) -> str:
-    """Format a datetime instance to an ISO string. Copied from `idss-engine-commons` for now"""
-    # pylint: disable=invalid-name
-    return (
-        f'{dt.strftime("%Y-%m-%dT%H:%M")}:' f"{(dt.second + dt.microsecond / 1e6):06.3f}" "Z"
-        if dt.tzname() in [None, str(UTC)]
-        else dt.strftime("%Z")[3:]
-    )
+USER_PATH = "/users/nws-users/me"
 
 
 # pylint: disable=too-few-public-methods
@@ -49,11 +42,11 @@ class HealthRoute:
         )
 
 
-class VulnerabilitiesRoute:
-    """Handle requests to /vulnerabilities endpoint"""
+class AuthenticationRoute:
+    """Handle requests to /oauth endpoint"""
 
-    def __init__(self, base_dir: str):
-        self._profile_store = VulnerabilityStore(base_dir)
+    def __init__(self):
+        self._user_store = UserStore()
 
     def token(self):
         """Generate a fake JWT token and return to simulate /token OAauth server behavior"""
@@ -65,6 +58,30 @@ class VulnerabilitiesRoute:
             "scope": "profile email",
         }
         return jsonify(response), 200
+
+    def user(self):
+        """Return a fake logged-in user to simulate NOAA SSO behavior"""
+        session_id = request.headers.get("JSESSIONID")
+        if request.method == "GET":
+            user = self._user_store.get_user(session_id)
+            return user
+
+        # handle POST request with json body
+        body: dict = request.json
+        new_settings = body.get("settings")
+        new_office_id = body.get("activeOfficeId")
+
+        updated_user = self._user_store.update_user_settings(
+            session_id, new_office_id, new_settings
+        )
+        return updated_user
+
+
+class VulnerabilitiesRoute:
+    """Handle requests to /vulnerabilities endpoint"""
+
+    def __init__(self, base_dir: str):
+        self._profile_store = VulnerabilityStore(base_dir)
 
     def documents(self):
         """Logic for any HTTP request to /vulnerabilities."""
@@ -147,12 +164,14 @@ class AppWrapper:
         # self.app.config["GSL_KEY"] = GSL_KEY
 
         health_route = HealthRoute()
+        auth_route = AuthenticationRoute()
         vulnerabilities_route = VulnerabilitiesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
         # hard-code /token path of whatever openid framework NWS Connect uses
+        self.app.add_url_rule(AUTH_PATH, "token", view_func=auth_route.token, methods=["POST"])
         self.app.add_url_rule(
-            AUTH_PATH, "token", view_func=vulnerabilities_route.token, methods=["POST"]
+            USER_PATH, "user", view_func=auth_route.user, methods=["GET", "POST"]
         )
         # the paths to the Vulnerabilities API specifically are nested under `/api/v1/...`
         base_url = "/api/v1"
