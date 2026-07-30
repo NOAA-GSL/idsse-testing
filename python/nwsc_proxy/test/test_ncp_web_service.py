@@ -192,7 +192,7 @@ def test_delete_vulnerability_missing(wrapper: AppWrapper, mock_store: Mock, moc
 def test_patch_vulnerability(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
     expected_id = EXAMPLE_UUID
     expected_request_body = {"name": "A different name", "hazards": []}
-    updated_profile = {**expected_request_body, "activeTime": {"startDate": "2026-01-01T12:00Z"}}
+    updated_profile = {**expected_request_body, "activeTime": {"startTime": "2026-01-01T12:00Z"}}
     mock_request.method = "PATCH"
     mock_request.json = expected_request_body
     # update() succeeds
