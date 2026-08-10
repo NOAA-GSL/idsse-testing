@@ -84,31 +84,8 @@
           ],
           "data": [
             {
-              "name": "Binghamton, Snow",
-              "type": "condition",
-              "validDt": [
-                "2025-01-28T13:00:00.000Z",
-                "2025-01-28T14:00:00.000Z",
-                "2025-01-28T15:00:00.000Z"
-              ],
-              "singleValue": [103.62, 0, 0],
-              "geoDist": [
-                {
-                  "0.0": 4,
-                  "103.62": 3
-                },
-                {
-                  "0.0": 7
-                },
-                {
-                  "0.0": 7
-                }
-              ],
-              "dataType": "multi"
-            },
-            {
               "name": "A",
-              "type": "criteria",
+              "type": "probability",
               "validDt": [
                 "2025-01-28T13:00:00.000Z",
                 "2025-01-28T14:00:00.000Z",
@@ -117,7 +94,8 @@
               "singleValue": [0, 0, 0],
               "geoDist": [
                 {
-                  "0.0": 7
+                  "0.0": 4,
+                  "23.6": 3
                 },
                 {
                   "0.0": 7
@@ -127,51 +105,6 @@
                 }
               ],
               "dataType": "dtrm"
-            },
-            {
-              "name": "A",
-              "type": "criteria",
-              "validDt": [
-                "2025-01-28T13:00:00.000Z",
-                "2025-01-28T14:00:00.000Z",
-                "2025-01-28T15:00:00.000Z"
-              ],
-              "singleValue": [0, 0, 0],
-              "geoDist": [
-                {
-                  "0.0": 7
-                },
-                {
-                  "0.0": 7
-                },
-                {
-                  "0.0": 7
-                }
-              ],
-              "dataType": "prctl_p010"
-            },
-            {
-              "name": "A",
-              "type": "criteria",
-              "validDt": [
-                "2025-01-28T13:00:00.000Z",
-                "2025-01-28T14:00:00.000Z",
-                "2025-01-28T15:00:00.000Z"
-              ],
-              "singleValue": [103.62, 0, 0],
-              "geoDist": [
-                {
-                  "0.0": 4,
-                  "103.62": 3
-                },
-                {
-                  "0.0": 7
-                },
-                {
-                  "0.0": 7
-                }
-              ],
-              "dataType": "prctl_p090"
             },
             {
               "name": "A",
@@ -254,54 +187,10 @@
       ],
       "metaData": [
         {
-          "name": "Binghamton, Snow",
-          "type": "condition",
-          "dataType": "multi",
-          "proximalThresh": 50,
-          "states": [
-            {
-              "durationInMin": 2,
-              "min": 100,
-              "minAt": "2025-01-28T13:02:05.767Z",
-              "max": 103.62,
-              "startDt": "2025-01-28T13:00:00.000Z",
-              "endDt": "2025-01-28T13:02:05.767Z",
-              "maxAt": "2025-01-28T13:00:00.000Z",
-              "empirical": "HIT",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            },
-            {
-              "durationInMin": 29,
-              "min": 50,
-              "minAt": "2025-01-28T13:31:02.884Z",
-              "max": 100,
-              "startDt": "2025-01-28T13:02:05.767Z",
-              "endDt": "2025-01-28T13:31:02.884Z",
-              "maxAt": "2025-01-28T13:02:05.767Z",
-              "empirical": "PROXIMAL",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            },
-            {
-              "durationInMin": 89,
-              "min": 0,
-              "minAt": "2025-01-28T14:00:00.000Z",
-              "max": 50,
-              "startDt": "2025-01-28T13:31:02.884Z",
-              "endDt": "2025-01-28T15:00:00.000Z",
-              "maxAt": "2025-01-28T13:31:02.884Z",
-              "empirical": "MISS",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            }
-          ]
-        },
-        {
           "name": "A",
-          "type": "criteria",
+          "type": "probability",
           "dataType": "dtrm",
-          "proximalThresh": 50,
+          "alertingThreshold": 25,
           "states": [
             {
               "durationInMin": 120,
@@ -311,70 +200,6 @@
               "startDt": "2025-01-28T13:00:00.000Z",
               "endDt": "2025-01-28T15:00:00.000Z",
               "maxAt": "2025-01-28T13:00:00.000Z",
-              "empirical": "MISS",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            }
-          ]
-        },
-        {
-          "name": "A",
-          "type": "criteria",
-          "dataType": "prctl_p010",
-          "proximalThresh": 50,
-          "states": [
-            {
-              "durationInMin": 120,
-              "min": 0,
-              "minAt": "2025-01-28T13:00:00.000Z",
-              "max": 0,
-              "startDt": "2025-01-28T13:00:00.000Z",
-              "endDt": "2025-01-28T15:00:00.000Z",
-              "maxAt": "2025-01-28T13:00:00.000Z",
-              "empirical": "MISS",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            }
-          ]
-        },
-        {
-          "name": "A",
-          "type": "criteria",
-          "dataType": "prctl_p090",
-          "proximalThresh": 50,
-          "states": [
-            {
-              "durationInMin": 2,
-              "min": 100,
-              "minAt": "2025-01-28T13:02:05.767Z",
-              "max": 103.62,
-              "startDt": "2025-01-28T13:00:00.000Z",
-              "endDt": "2025-01-28T13:02:05.767Z",
-              "maxAt": "2025-01-28T13:00:00.000Z",
-              "empirical": "HIT",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            },
-            {
-              "durationInMin": 29,
-              "min": 50,
-              "minAt": "2025-01-28T13:31:02.884Z",
-              "max": 100,
-              "startDt": "2025-01-28T13:02:05.767Z",
-              "endDt": "2025-01-28T13:31:02.884Z",
-              "maxAt": "2025-01-28T13:02:05.767Z",
-              "empirical": "PROXIMAL",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            },
-            {
-              "durationInMin": 89,
-              "min": 0,
-              "minAt": "2025-01-28T14:00:00.000Z",
-              "max": 50,
-              "startDt": "2025-01-28T13:31:02.884Z",
-              "endDt": "2025-01-28T15:00:00.000Z",
-              "maxAt": "2025-01-28T13:31:02.884Z",
               "empirical": "MISS",
               "geographical": "HIT",
               "temporal": "HIT"

@@ -17,12 +17,10 @@
     "region": "CONUS",
     "slice": "[1736:2136,760:1060]"
   },
-  "A:ThreatLevel": {
+  "A:Probability": {
     "filenames": {
-      "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1215459922.zarr",
-      "prctl_p010": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore-497177812.zarr",
-      "prctl_p090": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR/ThreatLevel/gridstore1474886692.zarr"
-    },
+      "dtrm": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/SNOW:1HR:DTRM.PROBABILITY/Percent/gridstore1215459922.zarr"
+     },
     "issueDt": "2025-01-28T12:00:00.000Z",
     "validDt": ["2025-01-28T13:00:00.000Z", "2025-01-28T14:00:00.000Z", "2025-01-28T15:00:00.000Z"],
     "projName": "NBM CONUS",
@@ -31,23 +29,7 @@
     "product": "NBM.AWS.GRIB",
     "dataName": "Snowfall: 1HR accum (ASNOW)",
     "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
-    "units": "ThreatLevel",
-    "region": "CONUS",
-    "slice": "[1736:2136,760:1060]"
-  },
-  "Binghamton, Snow": {
-    "filenames": {
-      "multi": "/Users/mackenzie.grimes/dev/deployment/cache/share/2025/01/28/NBM.AWS.GRIB/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-1728425781.zarr"
-    },
-    "issueDt": "2025-01-28T12:00:00.000Z",
-    "validDt": ["2025-01-28T13:00:00.000Z", "2025-01-28T14:00:00.000Z", "2025-01-28T15:00:00.000Z"],
-    "projName": "NBM CONUS",
-    "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=265.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.34437029433046 +lon_ll=-82.18050311441138",
-    "product": "NBM.AWS.GRIB",
-    "dataName": "OR(Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW), Snowfall: 1HR accum (ASNOW))",
-    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
-    "units": "ThreatLevel",
+    "units": "Percent",
     "region": "CONUS",
     "slice": "[1736:2136,760:1060]"
   },
@@ -57,43 +39,31 @@
       "uuid": "4899d220-beec-467b-a0e6-9d215b715b97",
       "issueDt": "2025-01-28T12:00:00.000Z"
     },
-    "label": "Binghamton, Snow (probabilistic)",
-    "sourceType": "join",
+    "sourceType": "probability",
+    "label": "A:Probability",
     "sourceObj": {
-      "join": "OR",
+      "relational": "GREATER THAN OR EQUAL",
+      "thresh": 0.01,
       "sources": [
         {
-          "sourceType": "condition",
-          "label": "A:ThreatLevel",
+          "label": "A:Raw",
+          "sourceType": "slice",
           "sourceObj": {
-            "relational": "GREATER THAN OR EQUAL",
-            "thresh": 0.01,
-            "mapping": {
-              "startWeight": [0, 1, 0],
-              "endWeight": [0, 1, 0],
-              "controlPoints": ["-Infinity", 0, 3, "Infinity"]
-            },
+            "sliceCoords": [
+              [-75.99682164316545, 42.100751285762954],
+              [-75.82261820803978, 42.120569061969576]
+            ],
+            "minSize": [40, 30],
+            "minBuff": 20,
             "source": {
-              "label": "A:Raw",
-              "sourceType": "slice",
+              "sourceType": "data",
               "sourceObj": {
-                "sliceCoords": [
-                  [-75.99682164316545, 42.100751285762954],
-                  [-75.82261820803978, 42.120569061969576]
-                ],
-                "minSize": [40, 30],
-                "minBuff": 20,
-                "source": {
-                  "sourceType": "data",
-                  "sourceObj": {
-                    "product": "NBM",
-                    "field": "Snow:1HR:[DTRM,p010,p090]",
-                    "region": "CONUS",
-                    "units": "INCHES",
-                    "validDt": "2025-01-28T13:00:00.000Z,2025-01-28T15:00:00.000Z",
-                    "issueDt": "2025-01-28T12:00:00.000Z"
-                  }
-                }
+                "product": "NBM",
+                "field": "Snow:1HR:[DTRM,p010,p090]",
+                "region": "CONUS",
+                "units": "INCHES",
+                "validDt": "2025-01-28T13:00:00.000Z,2025-01-28T15:00:00.000Z",
+                "issueDt": "2025-01-28T12:00:00.000Z"
               }
             }
           }
