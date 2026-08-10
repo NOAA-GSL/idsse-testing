@@ -95,7 +95,7 @@ The following endpoints should roughly match the [NWS Connect Parter Vulnerabili
   - Permanently delete a Vulnerability from the API. 
 
 #### Legacy endpoints
-The following endpoints rely on an outdated object model ("Support Profile") from 2023. They will be removed no earlier than Sept 2026.
+The following endpoints rely on an outdated object model ("Support Profile") from 2023. They were removed July 2026.
 
 - GET `/all-events?dataSource=ANY&status=existing`
   - Get list of existing Support Profiles (not new). Will be formatted like `{ "profiles": [], "errors": []}`
@@ -108,4 +108,4 @@ The following endpoints rely on an outdated object model ("Support Profile") fro
 - DELETE `/all-events?uuid=<some id>`
   - Permanently remove an existing Support Profile from the API. `uuid` must match one of the saved Support Profile JSON's `id` attribute, otherwise it will return `404`.
 
-Note that all requests to the `/all-events` and `/vulnerabilities` endpoints require an `X-Api-Key` header that must match the approved key, or the API will return `401`.
+<!-- Note that all requests to the `/all-events` and `/vulnerabilities` endpoints require an `X-Api-Key` header that must match the approved key, or the API will return `401`. -->

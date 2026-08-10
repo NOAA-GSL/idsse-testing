@@ -14,13 +14,13 @@ import os
 from datetime import datetime, UTC
 from argparse import ArgumentParser, Namespace
 
-from flask import Flask, Response, current_app, request, jsonify
+from flask import Flask, Response, request, jsonify
 
-from src.support_profile_store import SupportProfileStore
 from src.vulnerability_store import VulnerabilityStore
 
 # constants
-GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+# GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+AUTH_PATH = "/auth/realms/nws-connect-core/protocol/openid-connect/token"
 
 
 def to_iso(dt: datetime) -> str:
@@ -55,11 +55,21 @@ class VulnerabilitiesRoute:
     def __init__(self, base_dir: str):
         self._profile_store = VulnerabilityStore(base_dir)
 
+    def token(self):
+        """Generate a fake JWT token and return to simulate /token OAauth server behavior"""
+        response = {
+            "access_token": "eyJFakeJWTToken",
+            "expires_in": 300,
+            "token_type": "Bearer",
+            "not-before-policy": 0,
+            "scope": "profile email",
+        }
+        return jsonify(response), 200
+
     def documents(self):
         """Logic for any HTTP request to /vulnerabilities."""
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
 
         if request.method == "POST":
             return self._handle_create()
@@ -76,12 +86,8 @@ class VulnerabilitiesRoute:
 
     def document(self, profile_id: str):
         """Logic for HTTP requests to /vulnerabilities/:profile_id"""
-
-        # pylint: disable=duplicate-code
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
-        # pylint: enable=duplicate-code
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
 
         if request.method == "DELETE":
             return self._handle_delete(profile_id)
@@ -132,110 +138,32 @@ class VulnerabilitiesRoute:
         return jsonify(updated_profile), 200
 
 
-class EventsRoute:  # pylint: disable=duplicate-code
-    """Handle requests to /all-events endpoint"""
-
-    def __init__(self, base_dir: str):
-        self._sp_store = SupportProfileStore(base_dir)
-
-    def handler(self):
-        """Logic for requests to /all-events."""
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
-
-        if request.method == "POST":
-            return self._handle_create()
-
-        if request.method == "DELETE":
-            return self._handle_delete()
-
-        if request.method == "PUT":
-            return self._handle_update()
-
-        # otherwise, must be 'GET' operation
-        data_source = request.args.get("dataSource", None, type=str)
-
-        # let request control if `isLive: false` profiles are included in response.
-        # Default to False if param not present (only return profiles where isLive: true)
-        include_inactive = request.args.get("includeInactive", default=False, type=bool)
-
-        profiles = self._sp_store.get_all(data_source, include_inactive=include_inactive)
-        return jsonify({"profiles": profiles, "errors": []}), 200
-
-    def _handle_delete(self) -> Response:
-        """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
-        success, 404 otherwise."""
-        profile_id = request.args.get("id", request.args.get("uuid"))
-        is_deleted = self._sp_store.delete(profile_id)
-        if not is_deleted:
-            return jsonify({"message": f"Profile {profile_id} not found"}), 404
-        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
-
-    def _handle_create(self) -> Response:
-        """Logic for POST requests to /all-events. Returns Response with status_code: 201 on
-        success, 400 otherwise."""
-        request_body: dict = request.json
-
-        profile_data: dict | None = request_body.get("data")
-        if not profile_data:
-            return jsonify({"message": "Missing one of required attributes: [data, status]"}), 400
-
-        profile_id = self._sp_store.save(profile_data)
-        if not profile_id:
-            return jsonify({"message": f'Profile {profile_data.get("id")} already exists'}), 400
-
-        return jsonify({"message": f"Profile {profile_id} saved"}), 201
-
-    def _handle_update(self) -> Response:
-        if not request.data:
-            return jsonify({"message": "PUT requires request body"}), 400
-
-        request_body: dict = request.json
-        profile_id = request.args.get("id", request.args.get("uuid"))
-
-        if not profile_id:
-            return jsonify({"message": "Missing required query parameter: id"}), 400
-
-        try:
-            updated_profile = self._sp_store.update(profile_id, request_body)
-        except FileNotFoundError:
-            return jsonify({"message": f"Profile {profile_id} not found"}), 404
-
-        return (
-            jsonify({"message": f"Profile {profile_id} updated", "profile": updated_profile}),
-            200,
-        )
-
-
 class AppWrapper:
     """Web server class wrapping Flask operations"""
 
     def __init__(self, base_dir: str):
         """Build Flask app instance, mapping handler to each endpoint"""
         self.app = Flask(__name__, static_folder=None)  # no need for a static folder
-        self.app.config["GSL_KEY"] = GSL_KEY
+        # self.app.config["GSL_KEY"] = GSL_KEY
 
         health_route = HealthRoute()
-        events_route = EventsRoute(base_dir)
         vulnerabilities_route = VulnerabilitiesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
-        # DEPRECATED: will be removed after NCG NewData Consumer migrates to vulnerabilities format
+        # hard-code /token path of whatever openid framework NWS Connect uses
         self.app.add_url_rule(
-            "/all-events",
-            "events",
-            view_func=events_route.handler,
-            methods=["GET", "POST", "PUT", "DELETE"],
+            AUTH_PATH, "token", view_func=vulnerabilities_route.token, methods=["POST"]
         )
+        # the paths to the Vulnerabilities API specifically are nested under `/api/v1/...`
+        base_url = "/api/v1"
         self.app.add_url_rule(
-            "/vulnerabilities",
+            f"{base_url}/vulnerabilities",
             "vulnerabilities",
             view_func=vulnerabilities_route.documents,
             methods=["GET", "POST"],
         )
         self.app.add_url_rule(
-            "/vulnerabilities/<profile_id>",
+            f"{base_url}/vulnerabilities/<profile_id>",
             "vulnerability",
             view_func=vulnerabilities_route.document,
             methods=["GET", "PATCH", "DELETE"],
