@@ -4,10 +4,6 @@ FROM ghcr.io/noaa-gsl/idss/commons/python/python-base:v1.4.0
 ARG maintainer
 LABEL maintainer ${maintainer}
 
-# Install additional dependencies
-# RUN conda config --add channels conda-forge && \
-#    conda install -y flask=2.3.2
-
 WORKDIR /python/nwsc_proxy
 
 # Copy source files
