@@ -56,9 +56,7 @@
         }
     ],
     "tags": {
-        "values": [
-            "Abq TEMP"
-        ],
+        "values": [],
         "keyValues": {
             "name": "Albuquerque International Airport Temp",
             "nwsOffice": "BOU"
