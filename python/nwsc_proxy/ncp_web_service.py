@@ -62,11 +62,7 @@ class AuthenticationRoute:
         """Return a fake logged-in user to simulate NOAA SSO behavior"""
         cookie_header: str = request.headers.get("Cookie", "")
         # parse cookie header to extract JSESSIONID, if it exists
-        cookies = {}
-        for cookie in cookie_header.split(";"):
-            key, val = cookie.split("=", maxsplit=2)
-            cookies[key.strip()] = val.strip()
-
+        cookies = self._read_cookies(cookie_header)
         session_id = cookies.get("JSESSIONID")
 
         if request.method == "GET":
@@ -82,6 +78,20 @@ class AuthenticationRoute:
             session_id, new_office_id, new_settings
         )
         return jsonify(updated_user), 200
+
+    def _read_cookies(self, cookie_header: str) -> dict[str, str]:
+        if cookie_header == "":
+            return {}  # empty string, no cookies, nothing to do
+
+        cookies = {}
+        # cookies should be semi-colon separate string of key=value pattern
+        for cookie in cookie_header.split(";"):
+            if "=" not in cookie:
+                continue  # likely empty string
+            key, val = cookie.split("=", maxsplit=2)
+            cookies[key.strip()] = val.strip()
+
+        return cookies
 
 
 class VulnerabilitiesRoute:

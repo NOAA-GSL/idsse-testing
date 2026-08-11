@@ -262,6 +262,16 @@ def test_get_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock
     mock_user_store.return_value.get_user.assert_called_with(expected_session_id)
 
 
+def test_get_user_no_cookies(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    mock_request.headers = MultiDict({})
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # no cookies to parse, JSESSIONID is None but we survived
+    mock_user_store.return_value.get_user.assert_called_with(None)
+
+
 def test_update_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
     expected_office = "TWC"
     expected_session_id = "abc"
