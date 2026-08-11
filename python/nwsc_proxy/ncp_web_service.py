@@ -64,8 +64,8 @@ class AuthenticationRoute:
         # parse cookie header to extract JSESSIONID, if it exists
         cookies = {}
         for cookie in cookie_header.split(";"):
-            k, v = cookie.split("=", maxsplit=2)
-            cookies[k.strip()] = v.strip()
+            key, val = cookie.split("=", maxsplit=2)
+            cookies[key.strip()] = val.strip()
 
         session_id = cookies.get("JSESSIONID")
 
