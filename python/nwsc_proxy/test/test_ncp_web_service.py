@@ -23,6 +23,7 @@ from python.nwsc_proxy.ncp_web_service import (
     AppWrapper,
     Flask,
     Namespace,
+    UserStore,
     VulnerabilityStore,
     create_app,
     datetime,
@@ -31,6 +32,7 @@ from python.nwsc_proxy.ncp_web_service import (
 # constants
 EXAMPLE_DATETIME = datetime(2024, 1, 1, 12, 34)
 EXAMPLE_UUID = "9835b194-74de-4321-aa6b-d769972dc7cb"
+EXAMPLE_USER = {"firstName": "FirstName", "lastName": "LastName", "activeOfficeId": "BOU"}
 
 
 # fixtures
@@ -47,6 +49,15 @@ def mock_datetime(monkeypatch: MonkeyPatch) -> Mock:
 def mock_store(monkeypatch: MonkeyPatch) -> Mock:
     mock_obj = Mock(name="MockProfileStore", spec=VulnerabilityStore)
     monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.VulnerabilityStore", mock_obj)
+    return mock_obj
+
+
+@fixture
+def mock_user_store(monkeypatch: MonkeyPatch) -> Mock:
+    mock_obj = Mock(name="MockUserStore", spec=UserStore)
+    mock_obj.return_value.get_user.return_value = EXAMPLE_USER
+    mock_obj.return_value.update_user_settings.return_value = EXAMPLE_USER
+    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.UserStore", mock_obj)
     return mock_obj
 
 
@@ -82,14 +93,14 @@ def mock_request(monkeypatch: MonkeyPatch, mock_jsonify) -> Mock:
 
 
 @fixture
-def wrapper(mock_store, mock_datetime, mock_request) -> AppWrapper:
+def wrapper(mock_store, mock_user_store, mock_datetime, mock_request) -> AppWrapper:
     return AppWrapper("/fake/base/dir")
 
 
 def test_create_app(mock_store):
     args = Namespace()
     args.base_dir = "/fake/base/dir"
-    expected_endpoints = ["health", "token", "vulnerabilities", "vulnerability"]
+    expected_endpoints = ["health", "token", "user", "vulnerabilities", "vulnerability"]
 
     _app = create_app(args)
 
@@ -237,3 +248,32 @@ def test_token_path(wrapper: AppWrapper, mock_request):
     assert result[0].status_code == 200
     response_body: dict = result[0].json
     response_body.get("access_token").startswith("eyJ")
+
+
+def test_get_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    expected_session_id = "abc"
+    expected_cookies = f"foo=123;bar=456;JSESSIONID={expected_session_id}"
+    mock_request.headers = MultiDict({"Cookie": expected_cookies})
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # should have parse long cookie string to get JSESSIONID
+    mock_user_store.return_value.get_user.assert_called_with(expected_session_id)
+
+
+def test_update_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    expected_office = "TWC"
+    expected_session_id = "abc"
+    expected_cookies = f"foo=123;bar=456;JSESSIONID={expected_session_id}"
+    mock_request.headers = MultiDict({"Cookie": expected_cookies})
+    mock_request.json = {"activeOfficeId": expected_office}
+    mock_request.method = "PATCH"
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # should have passed activeOfficeId from body to UserStore
+    mock_user_store.return_value.update_user_settings.assert_called_with(
+        expected_session_id, expected_office, None
+    )

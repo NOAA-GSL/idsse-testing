@@ -23,7 +23,6 @@ from src.utils import to_iso
 # constants
 # GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
 AUTH_PATH = "/auth/realms/nws-connect-core/protocol/openid-connect/token"
-USER_PATH = "/users/nws-users/me"
 
 
 # pylint: disable=too-few-public-methods
@@ -61,10 +60,18 @@ class AuthenticationRoute:
 
     def user(self):
         """Return a fake logged-in user to simulate NOAA SSO behavior"""
-        session_id = request.headers.get("JSESSIONID")
+        cookie_header: str = request.headers.get("Cookie", "")
+        # parse cookie header to extract JSESSIONID, if it exists
+        cookies = {}
+        for cookie in cookie_header.split(";"):
+            k, v = cookie.split("=", maxsplit=2)
+            cookies[k.strip()] = v.strip()
+
+        session_id = cookies.get("JSESSIONID")
+
         if request.method == "GET":
             user = self._user_store.get_user(session_id)
-            return user
+            return jsonify(user), 200
 
         # handle POST request with json body
         body: dict = request.json
@@ -74,7 +81,7 @@ class AuthenticationRoute:
         updated_user = self._user_store.update_user_settings(
             session_id, new_office_id, new_settings
         )
-        return updated_user
+        return jsonify(updated_user), 200
 
 
 class VulnerabilitiesRoute:
@@ -170,11 +177,14 @@ class AppWrapper:
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
         # hard-code /token path of whatever openid framework NWS Connect uses
         self.app.add_url_rule(AUTH_PATH, "token", view_func=auth_route.token, methods=["POST"])
-        self.app.add_url_rule(
-            USER_PATH, "user", view_func=auth_route.user, methods=["GET", "POST"]
-        )
-        # the paths to the Vulnerabilities API specifically are nested under `/api/v1/...`
+        # the paths to Vulnerabilities and Users APIs are nested under `/api/v1/...`
         base_url = "/api/v1"
+        self.app.add_url_rule(
+            f"{base_url}/users/nws-users/me",
+            "user",
+            view_func=auth_route.user,
+            methods=["GET", "PATCH"],
+        )
         self.app.add_url_rule(
             f"{base_url}/vulnerabilities",
             "vulnerabilities",
