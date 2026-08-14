@@ -100,7 +100,7 @@ def wrapper(mock_store, mock_user_store, mock_datetime, mock_request) -> AppWrap
 def test_create_app(mock_store):
     args = Namespace()
     args.base_dir = "/fake/base/dir"
-    expected_endpoints = ["health", "token", "user", "vulnerabilities", "vulnerability"]
+    expected_endpoints = ["health", "logout", "token", "user", "vulnerabilities", "vulnerability"]
 
     _app = create_app(args)
 
