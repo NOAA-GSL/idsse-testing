@@ -59,6 +59,15 @@ class UserStore:
         session = self._create_session(session_id)
         return session.data
 
+    def delete_user(self, session_id: str | None) -> bool:
+        """Delete a user's settings session, if one exists.
+
+        Returns:
+            bool: True if session was found and deleted
+        """
+        existing_session = self._sessions.pop(session_id, None)
+        return existing_session is not None
+
     def update_user_settings(
         self, session_id: str, active_office: str | None = None, settings: dict | None = None
     ):
