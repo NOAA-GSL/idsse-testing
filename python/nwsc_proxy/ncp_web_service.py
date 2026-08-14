@@ -79,6 +79,17 @@ class AuthenticationRoute:
         )
         return jsonify(updated_user), 200
 
+    def logout(self):
+        """Logout a logged-in user (simulated NOAA SSO behavior)"""
+        cookie_header: str = request.headers.get("Cookie", "")
+        # parse cookie header to extract JSESSIONID, if it exists
+        cookies = self._read_cookies(cookie_header)
+        session_id = cookies.get("JSESSIONID")
+
+        # ignore return from store; we don't care about failures because nothing is real
+        self._user_store.delete_user(session_id)
+        return {}, 200
+
     def _read_cookies(self, cookie_header: str) -> dict[str, str]:
         if cookie_header == "":
             return {}  # empty string, no cookies, nothing to do
@@ -194,6 +205,9 @@ class AppWrapper:
             "user",
             view_func=auth_route.user,
             methods=["GET", "PATCH"],
+        )
+        self.app.add_url_rule(
+            f"{base_url}/session/logout", "logout", view_func=auth_route.logout, methods=["POST"]
         )
         self.app.add_url_rule(
             f"{base_url}/vulnerabilities",
