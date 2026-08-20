@@ -222,9 +222,16 @@ class AppWrapper:
             methods=["GET", "PATCH", "DELETE"],
         )
 
+        # catch all uncaught errors, return generic JSON (instead of Flask text/html default)
+        self.app.register_error_handler(500, self._generic_error)
+
     def run(self, **kwargs):
         """Start up web server"""
         self.app.run(**kwargs)
+
+    def _generic_error(self, exc: Exception) -> Response:
+        self.app.logger.error("Uncaught exception: (%s) %s", type(exc), exc)
+        return jsonify({"Error": "Internal server error"}), 500
 
 
 def create_app(args: Namespace = None) -> Flask:
