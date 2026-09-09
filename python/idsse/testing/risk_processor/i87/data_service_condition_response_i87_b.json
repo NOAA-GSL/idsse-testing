@@ -1,7 +1,7 @@
 {
-  "A:Raw": {
+  "B:Raw": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM/SNOW:1HR:DTRM/Inches/gridstore-907024368.zarr"
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN:1HR/Inches/gridstore1563243851.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
     "validDt": [
@@ -18,18 +18,18 @@
       "2022-12-23T23:00:00.000Z",
       "2022-12-24T00:00:00.000Z"
     ],
-    "projName": "NBM CONUS",
+    "projName": "NBM",
+    "region": "CONUS",
+    "slice": "[1801:2201,746:1046]",
     "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
-    "dataName": "Snowfall: 1hr accum (ASNOW)",
-    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
     "units": "Inches",
-    "region": "CONUS",
-    "slice": "[1736:2136,762:1062]"
+    "dataName": "Rainfall: 1hr accum (APCP)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
   },
-  "A:Probability": {
+  "B:Probability": {
     "filenames": {
-      "dtrm": "/share/2022/12/23/NBM/SNOW:1HR:DTRM.Probability/Percent/gridstore-401831466.zarr"
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/RAIN:1HR:DTRM.PROBABILITY/Percent/gridstore-85065583.nc"
     },
     "issueDt": "2022-12-23T12:00:00.000Z",
     "validDt": [
@@ -46,43 +46,43 @@
       "2022-12-23T23:00:00.000Z",
       "2022-12-24T00:00:00.000Z"
     ],
-    "projName": "NBM CONUS",
-    "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=39.3883615035761 +lon_ll=-82.17510536773516",
-    "dataName": "Snowfall: 1hr accum (ASNOW)",
-    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
-    "units": "Percent",
+    "projName": "NBM",
     "region": "CONUS",
-    "slice": "[1736:2136,762:1062]"
+    "slice": "[1801:2201,746:1046]",
+    "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=38.890989440701716 +lon_ll=-80.37708064973489",
+    "units": "Percent",
+    "dataName": "Rainfall: 1hr accum (APCP)",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:"
   },
   "request": {
     "corrId": {
       "originator": "IDSSe",
-      "uuid": "22222222-beec-467b-a0e6-9d215b715b97",
+      "uuid": "11111111-beec-467b-a0e6-9d215b715b97",
       "issueDt": "2022-12-23T12:00:00.000Z"
     },
     "sourceType": "probability",
-    "label": "A:Probability",
+    "label": "B:Probability",
     "sourceObj": {
       "relational": "GREATER THAN OR EQUAL",
       "thresh": 0.01,
       "sources": [
         {
-          "label": "A:Raw",
-          "sourceType": "data",
+          "label": "B:Raw",
+          "sourceType": "slice",
           "sourceObj": {
-            "product": "NBM",
-            "field": "Snow:1HR",
-            "region": "CONUS",
-            "units": "INCHES",
-            "sliceCoords": [
-              [-75.99682164316545, 42.100751285762954],
-              [-75.82261820803978, 42.177520971578645]
-            ],
-            "minSize": [40, 30],
-            "minBuff": 20,
-            "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
-            "issueDt": "2022-12-23T12:00:00.000Z"
+            "slice": "[1801:2201,746:1046]",
+            "source": {
+              "sourceType": "data",
+              "sourceObj": {
+                "product": "NBM",
+                "field": "Precip:1HR",
+                "units": "INCHES",
+                "region": "CONUS",
+                "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
+                "issueDt": "2022-12-23T12:00:00.000Z"
+              }
+            }
           }
         }
       ]

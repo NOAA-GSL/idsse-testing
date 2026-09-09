@@ -54,7 +54,7 @@
     }
   ],
   "tags": {
-    "values": ["Abq TEMP"],
+    "values": [],
     "keyValues": {
       "name": "Albuquerque International Airport Temp",
       "nwsOffice": "BOU",
@@ -74,25 +74,13 @@
           "validDt": ["2022-11-12T00:00:00.000Z", "2022-11-12T01:00:00.000Z", "2022-11-12T02:00:00.000Z"],
           "data": [
             {
-              "name": "Abq TEMP",
-              "type": "condition",
-              "validDt": ["2022-11-12T00:00:00.000Z", "2022-11-12T01:00:00.000Z", "2022-11-12T02:00:00.000Z"],
-              "singleValue": [129.56, 129.56, 129.56],
-              "geoDist": [
-                {
-                  "129.56": 1
-                }
-              ],
-              "dataType": "dtrm"
-            },
-            {
               "name": "A",
-              "type": "criteria",
+              "type": "probability",
               "validDt": ["2022-11-12T00:00:00.000Z", "2022-11-12T01:00:00.000Z", "2022-11-12T02:00:00.000Z"],
-              "singleValue": [129.56, 129.56, 129.56],
+              "singleValue": [100, 100, 100],
               "geoDist": [
                 {
-                  "129.56": 1
+                  "100": 1
                 }
               ],
               "dataType": "dtrm"
@@ -123,36 +111,16 @@
       ],
       "metaData": [
         {
-          "name": "Abq TEMP",
-          "type": "condition",
-          "dataType": "dtrm",
-          "proximalThresh": 50,
-          "states": [
-            {
-              "durationInMin": 120,
-              "min": 129.56,
-              "minAt": "2022-11-12T00:00:00.000Z",
-              "max": 129.56,
-              "startDt": "2022-11-12T00:00:00.000Z",
-              "endDt": "2022-11-12T02:00:00.000Z",
-              "maxAt": "2022-11-12T00:00:00.000Z",
-              "empirical": "HIT",
-              "geographical": "HIT",
-              "temporal": "HIT"
-            }
-          ]
-        },
-        {
           "name": "A",
-          "type": "criteria",
+          "type": "probability",
           "dataType": "dtrm",
-          "proximalThresh": 50,
+          "alertingThreshold": 25,
           "states": [
             {
               "durationInMin": 120,
-              "min": 129.56,
+              "min": 100,
               "minAt": "2022-11-12T00:00:00.000Z",
-              "max": 129.56,
+              "max": 100,
               "startDt": "2022-11-12T00:00:00.000Z",
               "endDt": "2022-11-12T02:00:00.000Z",
               "maxAt": "2022-11-12T00:00:00.000Z",
