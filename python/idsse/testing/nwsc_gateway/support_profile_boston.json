@@ -1,0 +1,178 @@
+{
+  "profiles": [
+    {
+      "associatedOfficeId": "GSL",
+      "geoBuffer": 0,
+      "id": "f177061e-4980-4299-9553-f2fe8cdd977f",
+      "impacts": [],
+      "isLive": true,
+      "lifecycleStatus": "UNDEF",
+      "maxLeadTime": 168,
+      "maxLeadTimeAsString": "7 d",
+      "name": "IDSSe E2E Test",
+      "nonImpactThresholds": {
+        "allTypesAsStrings": [
+          "ProbThdr:3HR",
+          "WindGust",
+          "Ceiling",
+          "Visibility",
+          "Temp"
+        ],
+        "phrasesForAllSeverities": {
+          "MODERATE": {
+            "encodedRepresentation": "A OR B OR C OR D OR E OR F OR G OR H",
+            "map": {
+              "A": {
+                "condition": "LESS_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "AppTemp",
+                "minDuration": "PT0S",
+                "phraseId": "A",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "F",
+                "value": "50",
+                "wwaProduct": "UNDEF"
+              },
+              "B": {
+                "condition": "GREATER_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "WindSpeed",
+                "minDuration": "PT0S",
+                "phraseId": "B",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "MPH",
+                "value": "10",
+                "wwaProduct": "UNDEF"
+              },
+              "C": {
+                "condition": "GREATER_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "WindGust",
+                "minDuration": "PT0S",
+                "phraseId": "C",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "MPH",
+                "value": "5",
+                "wwaProduct": "UNDEF"
+              },
+              "D": {
+                "condition": "GREATER_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "Precip:1HR",
+                "minDuration": "PT0S",
+                "phraseId": "D",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "INCH",
+                "value": "0.1",
+                "wwaProduct": "UNDEF"
+              },
+              "E": {
+                "condition": "LESS_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "ProbThdr:3HR",
+                "minDuration": "PT0S",
+                "phraseId": "E",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "PERCENT",
+                "value": "25",
+                "wwaProduct": "UNDEF"
+              },
+               "F": {
+                "condition": "LESS_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "RH",
+                "minDuration": "PT0S",
+                "phraseId": "F",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "PERCENT",
+                "value": "25",
+                "wwaProduct": "UNDEF"
+              },
+               "G": {
+                "condition": "GREATER_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "VISIBILITY",
+                "minDuration": "PT0S",
+                "phraseId": "G",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "MILES",
+                "value": "10",
+                "wwaProduct": "UNDEF"
+              },
+               "H": {
+                "condition": "GREATER_THAN_OR_EQUAL",
+                "dataParameter": "",
+                "dataSource": "NBM",
+                "environmentalConditionType": "DEWPOINT",
+                "minDuration": "PT0S",
+                "phraseId": "H",
+                "probability": 0,
+                "timeFrame": "PT0S",
+                "type": "TYPE_AND_THRESH",
+                "units": "F",
+                "value": "30",
+                "wwaProduct": "UNDEF"
+              }
+            },
+            "severity": "MODERATE"
+          }
+        }
+      },
+      "profileLevelActionPlans": [],
+      "profileType": "LIMITED_EPISODIC",
+      "requestedServices": [],
+      "setting": {
+        "driverType": "EVENT",
+        "id": "28bf4ee6-d6c9-43b1-8fe4-ab1b1ace5b9c",
+        "locations": [
+          {
+            "address": null,
+            "createdAt": "2026-05-29T16:59:25.427Z",
+            "creationMethod": "DRAWPOINT",
+            "editable": true,
+            "geoShapeCreationMethod": "DRAWPOINT",
+            "geomAsString": "POLYGON ((-71.011252 42.432466, -71.051178 42.426194, -71.08418 42.408468, -71.104545 42.38236, -71.108762 42.352391, -71.096125 42.323746, -71.068836 42.301372, -71.031616 42.28913, -70.990887 42.28913, -70.953667 42.301372, -70.926378 42.323746, -70.913741 42.352391, -70.917958 42.38236, -70.938323 42.408468, -70.971325 42.426194, -71.011252 42.432466))",
+            "geometryType": "POLYGON",
+            "lastModified": "2026-05-29T16:59:25.427",
+            "maxElevation": 0,
+            "minElevation": 0,
+            "name": "Boston Airport (BOS) + 5 mi",
+            "notes": "",
+            "original": null,
+            "userData": null,
+            "validTime": null
+          }
+        ],
+        "name": "IDSSe E2E Test",
+        "timing": {
+          "durationInMinutes": 300,
+          "rrule": "",
+          "start": "2025-11-24T22:00:00.000Z"
+        }
+      },
+      "submissionStatus": "APPROVED",
+      "timeBuffer": 0
+    }
+  ]
+}

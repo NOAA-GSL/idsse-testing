@@ -10,6 +10,7 @@
 #
 # ----------------------------------------------------------------------------------
 # pylint: disable=missing-function-docstring,redefined-outer-name,unused-argument
+
 import json
 from datetime import timedelta
 from unittest.mock import Mock
@@ -22,15 +23,16 @@ from python.nwsc_proxy.ncp_web_service import (
     AppWrapper,
     Flask,
     Namespace,
-    ProfileStore,
+    UserStore,
+    VulnerabilityStore,
     create_app,
     datetime,
-    GSL_KEY,
 )
 
 # constants
 EXAMPLE_DATETIME = datetime(2024, 1, 1, 12, 34)
 EXAMPLE_UUID = "9835b194-74de-4321-aa6b-d769972dc7cb"
+EXAMPLE_USER = {"firstName": "FirstName", "lastName": "LastName", "activeOfficeId": "BOU"}
 
 
 # fixtures
@@ -44,9 +46,18 @@ def mock_datetime(monkeypatch: MonkeyPatch) -> Mock:
 
 
 @fixture
-def mock_profile_store(monkeypatch: MonkeyPatch) -> Mock:
-    mock_obj = Mock(name="MockProfileStore", spec=ProfileStore)
-    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.ProfileStore", mock_obj)
+def mock_store(monkeypatch: MonkeyPatch) -> Mock:
+    mock_obj = Mock(name="MockProfileStore", spec=VulnerabilityStore)
+    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.VulnerabilityStore", mock_obj)
+    return mock_obj
+
+
+@fixture
+def mock_user_store(monkeypatch: MonkeyPatch) -> Mock:
+    mock_obj = Mock(name="MockUserStore", spec=UserStore)
+    mock_obj.return_value.get_user.return_value = EXAMPLE_USER
+    mock_obj.return_value.update_user_settings.return_value = EXAMPLE_USER
+    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.UserStore", mock_obj)
     return mock_obj
 
 
@@ -61,40 +72,41 @@ def mock_jsonify(monkeypatch: MonkeyPatch) -> Mock:
     return mock_obj
 
 
-@fixture
-def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
-    mock_obj = Mock(name="MockCurrentApp", spec=Flask)
-    mock_obj.logger.info.return_value = None
-    mock_obj.logger.error.return_value = None
-    mock_obj.config = MultiDict({"GSL_KEY": GSL_KEY})
-    monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.current_app", mock_obj)
-    return mock_obj
+# @fixture
+# def mock_current_app(monkeypatch: MonkeyPatch) -> Mock:
+#     mock_obj = Mock(name="MockCurrentApp", spec=Flask)
+#     mock_obj.logger.info.return_value = None
+#     mock_obj.logger.error.return_value = None
+#     # mock_obj.config = MultiDict({"GSL_KEY": GSL_KEY})
+#     monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.current_app", mock_obj)
+#     return mock_obj
 
 
 @fixture
-def mock_request(monkeypatch: MonkeyPatch, mock_current_app, mock_jsonify) -> Mock:
+def mock_request(monkeypatch: MonkeyPatch, mock_jsonify) -> Mock:
     mock_obj = Mock(name="MockFlaskRequest", spec=Request)
     mock_obj.origin = "http://example.com:5000"
     mock_obj.method = "GET"
-    mock_obj.headers = MultiDict({"X-Api-Key": GSL_KEY})
+    # mock_obj.headers = MultiDict({"X-Api-Key": GSL_KEY})
     monkeypatch.setattr("python.nwsc_proxy.ncp_web_service.request", mock_obj)
     return mock_obj
 
 
 @fixture
-def wrapper(mock_profile_store, mock_datetime, mock_request) -> AppWrapper:
+def wrapper(mock_store, mock_user_store, mock_datetime, mock_request) -> AppWrapper:
     return AppWrapper("/fake/base/dir")
 
 
-def test_create_app(mock_profile_store: Mock):
+def test_create_app(mock_store):
     args = Namespace()
     args.base_dir = "/fake/base/dir"
+    expected_endpoints = ["health", "logout", "token", "user", "vulnerabilities", "vulnerability"]
 
     _app = create_app(args)
 
     assert isinstance(_app, Flask)
     endpoint_dict = _app.view_functions
-    assert sorted(list(endpoint_dict.keys())) == ["events", "health"]
+    assert sorted(list(endpoint_dict.keys())) == expected_endpoints
 
 
 def test_health_route(wrapper: AppWrapper, mock_datetime: Mock):
@@ -108,158 +120,170 @@ def test_health_route(wrapper: AppWrapper, mock_datetime: Mock):
     assert response.json == {"startedAt": "2024-01-01T12:34:00.000Z", "uptime": 5 * 60}
 
 
-def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.headers = MultiDict({"X-Api-Key": "A_BAD_KEY"})
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 401
+# def test_events_bad_key(wrapper: AppWrapper, mock_request: Mock):
+#     mock_request.headers = MultiDict({"X-Api-Key": "A_BAD_KEY"})
+#     result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
+#     assert result[1] == 401
 
 
-def test_get_bad_status(wrapper: AppWrapper, mock_request: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "NOT REAL STATUS"})
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    response, status_code = result
-    assert status_code == 400
-    assert response.json == {"profiles": [], "errors": ["Invalid profile status: NOT REAL STATUS"]}
-
-
-def test_get_existing_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "existing"})
+# test /vulnerabilities and /vulnerabilities/:profile_id endpoints
+def test_get_vulnerabilities(wrapper: AppWrapper, mock_store: Mock):
     example_profile_list = [{"id": EXAMPLE_UUID, "name": "My Profile"}]
-    mock_profile_store.return_value.get_all.return_value = example_profile_list
+    mock_store.return_value.get_all.return_value = example_profile_list
 
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
 
-    response, status_code = result
-    assert status_code == 200
-    assert response.json == {"profiles": example_profile_list, "errors": []}
-    # filter_new_profiles not set
-    mock_profile_store.return_value.get_all.assert_called_with("NBM", include_inactive=False)
-
-
-def test_get_new_profiles(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.args = MultiDict({"dataSource": "NBM", "status": "new"})
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_profile_store.return_value.get_all.return_value = [example_profile]
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    response, status_code = result
-    assert status_code == 200
-    assert response.json == {"profiles": [example_profile], "errors": []}
-
-    get_call_args = mock_profile_store.return_value.get_all.mock_calls
-    # called with is_new set to True
-    assert get_call_args[0][1:] == (("NBM",), {"is_new": True, "include_inactive": False})
-
-    # expect that we told ProfileStore to label this profile as not new
-    mark_existing_call_args = mock_profile_store.return_value.mark_as_existing.mock_calls
-    assert mark_existing_call_args[0][1][0] == example_profile["id"]
+    response, status = result
+    assert status == 200
+    actual_profile_list = response.json
+    assert len(actual_profile_list) == 1
+    assert actual_profile_list[0]["id"] == EXAMPLE_UUID
+    mock_store.return_value.get_all.assert_called_once()
 
 
-def test_create_profile_new(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "POST"
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "new", "data": example_profile}
-    mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
+def test_get_vulnerabilities_office(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_office = "BOU"
+    example_profile_list = [{"id": EXAMPLE_UUID, "name": "My Profile", "primaryOfficeId": "BOU"}]
+    mock_store.return_value.get_all.return_value = example_profile_list
+    mock_request.args = MultiDict({"officeId": expected_office})
 
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 201
-    # should have saved profile with is_new: True
-    mock_profile_store.return_value.save.assert_called_once_with(example_profile, True)
-
-
-def test_create_profile_existing(
-    wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock
-):
-    mock_request.method = "POST"
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "existing", "data": example_profile}
-    mock_profile_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 201
-    # should have saved profile with is_new: False
-    mock_profile_store.return_value.save.assert_called_once_with(example_profile, False)
-
-
-def test_create_profile_invalid(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "POST"
-    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_request.json = {"status": "foobar", "data": example_profile}
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 400
-    mock_profile_store.return_value.save.assert_not_called()
-
-
-def test_create_previous_profile_failure(
-    wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock
-):
-    mock_request.method = "POST"
-    mock_request.json = {"id": EXAMPLE_UUID, "name": "My Profile"}
-    mock_profile_store.return_value.save.return_value = None  # save() rejected, profile must exist
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 400
-
-
-def test_delete_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "DELETE"
-    mock_request.args = MultiDict({"id": EXAMPLE_UUID})
-    mock_profile_store.return_value.delete.return_value = True  # delete worked
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 204
-
-
-def test_delete_profile_failure(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "DELETE"
-    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
-    # delete() was rejected, profile must exist
-    mock_profile_store.return_value.delete.return_value = False
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
-
-    assert result[1] == 404
-
-
-def test_update_profile_success(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "PUT"
-    mock_request.args = MultiDict({"id": EXAMPLE_UUID})
-    expected_data = {"id": EXAMPLE_UUID, "name": "Some new name"}
-    mock_request.json = expected_data
-    mock_profile_store.return_value.update.return_value = expected_data
-
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
 
     assert result[1] == 200
-    assert result[0].json["profile"] == expected_data
+    mock_store.return_value.get_all.assert_called_once_with(
+        include_inactive=False, office=expected_office
+    )
 
 
-def test_update_no_body(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "PUT"
-    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
-    mock_request.data = None
+def test_post_vulnerabilities(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    example_profile = {"id": EXAMPLE_UUID, "name": "My Profile", "hazards": []}
+    mock_request.json = example_profile
+    mock_request.method = "POST"
+    mock_store.return_value.save.return_value = EXAMPLE_UUID  # save() success
 
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerabilities"]()
 
-    assert result[1] == 400
+    _, status = result
+    assert status == 201
+    # request body JSON should have been passed in full to store's save() method
+    mock_store.return_value.save.assert_called_with(example_profile)
 
 
-def test_update_profile_missing(wrapper: AppWrapper, mock_request: Mock, mock_profile_store: Mock):
-    mock_request.method = "PUT"
-    mock_request.args = MultiDict({"uuid": EXAMPLE_UUID})
-    mock_profile_store.return_value.update.side_effect = FileNotFoundError
+def test_get_vulnerability(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    mock_store.return_value.get.return_value = {"id": expected_id, "name": "My Vulnerability"}
 
-    result: tuple[Response, int] = wrapper.app.view_functions["events"]()
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
+
+    assert result[1] == 200
+
+
+def test_delete_vulnerability(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    mock_request.method = "DELETE"
+    mock_store.return_value.delete.return_value = True  # delete() succeeds
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
+
+    _, status = result
+    assert status == 204
+
+
+def test_delete_vulnerability_missing(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    mock_request.method = "DELETE"
+    mock_store.return_value.delete.return_value = False  # delete() fails
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
+
+    _, status = result
+    assert status == 404
+
+
+def test_patch_vulnerability(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    expected_request_body = {"name": "A different name", "hazards": []}
+    updated_profile = {**expected_request_body, "activeTime": {"startTime": "2026-01-01T12:00Z"}}
+    mock_request.method = "PATCH"
+    mock_request.json = expected_request_body
+    # update() succeeds
+    mock_store.return_value.update.return_value = updated_profile
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
+
+    assert result[1] == 200
+    assert result[0].json == updated_profile
+    mock_store.return_value.update.assert_called_with(expected_id, expected_request_body)
+
+
+def test_patch_vulnerability_not_found(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    mock_request.method = "PATCH"
+    mock_request.json = {"name": "A different name", "hazards": []}
+    mock_store.return_value.update.side_effect = FileNotFoundError  # profile_id doesn't exist
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
 
     assert result[1] == 404
+
+
+def test_patch_vulnerability_fails(wrapper: AppWrapper, mock_store: Mock, mock_request: Mock):
+    expected_id = EXAMPLE_UUID
+    mock_request.method = "PATCH"
+    mock_request.json = {"name": "A different name", "hazards": []}
+    mock_store.return_value.update.return_value = None  # update() fails
+
+    result: tuple[Response, int] = wrapper.app.view_functions["vulnerability"](expected_id)
+
+    assert result[1] == 500
+
+
+def test_token_path(wrapper: AppWrapper, mock_request):
+    mock_request.method = "POST"
+    mock_request.json = {"grant_type": "client_credentials", "client_secret": "foobar"}
+
+    result: tuple[Response, int] = wrapper.app.view_functions["token"]()
+
+    # fake token returned with 200 response
+    assert result[0].status_code == 200
+    response_body: dict = result[0].json
+    response_body.get("access_token").startswith("eyJ")
+
+
+def test_get_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    expected_session_id = "abc"
+    expected_cookies = f"foo=123;bar=456;JSESSIONID={expected_session_id}"
+    mock_request.headers = MultiDict({"Cookie": expected_cookies})
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # should have parse long cookie string to get JSESSIONID
+    mock_user_store.return_value.get_user.assert_called_with(expected_session_id)
+
+
+def test_get_user_no_cookies(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    mock_request.headers = MultiDict({})
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # no cookies to parse, JSESSIONID is None but we survived
+    mock_user_store.return_value.get_user.assert_called_with(None)
+
+
+def test_update_user(wrapper: AppWrapper, mock_request: Mock, mock_user_store: Mock):
+    expected_office = "TWC"
+    expected_session_id = "abc"
+    expected_cookies = f"foo=123;bar=456;JSESSIONID={expected_session_id}"
+    mock_request.headers = MultiDict({"Cookie": expected_cookies})
+    mock_request.json = {"activeOfficeId": expected_office}
+    mock_request.method = "PATCH"
+
+    result: tuple[Response, int] = wrapper.app.view_functions["user"]()
+
+    assert result[0].status_code == 200
+    # should have passed activeOfficeId from body to UserStore
+    mock_user_store.return_value.update_user_settings.assert_called_with(
+        expected_session_id, expected_office, None
+    )

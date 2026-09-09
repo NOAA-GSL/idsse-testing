@@ -112,7 +112,7 @@
   ],
   "tags": {
     "values": [],
-    "keyValues": { "name": "Binghamton, Snow", "nwsOffice": "BGM" }
+    "keyValues": { "name": "Binghamton, Snow", "nwsOffice": "BGM", "status": "COMPLETE" }
   },
   "riskResults": [
     {

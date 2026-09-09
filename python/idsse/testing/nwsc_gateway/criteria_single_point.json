@@ -28,8 +28,10 @@
     {
       "name": "Minor",
       "severity": "MINOR",
+      "severityIndex": 1,
       "combined": "A",
-      "partsUsed": ["A"]
+      "partsUsed": ["A"],
+      "impactStatements": []
     }
   ],
   "parts": [

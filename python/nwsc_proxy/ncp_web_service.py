@@ -14,22 +14,15 @@ import os
 from datetime import datetime, UTC
 from argparse import ArgumentParser, Namespace
 
-from flask import Flask, Response, current_app, request, jsonify
+from flask import Flask, Response, request, jsonify
 
-from src.profile_store import ProfileStore
+from src.vulnerability_store import VulnerabilityStore
+from src.user_store import UserStore
+from src.utils import to_iso
 
 # constants
-GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
-
-
-def to_iso(dt: datetime) -> str:
-    """Format a datetime instance to an ISO string. Copied from `idss-engine-commons` for now"""
-    # pylint: disable=invalid-name
-    return (
-        f'{dt.strftime("%Y-%m-%dT%H:%M")}:' f"{(dt.second + dt.microsecond / 1e6):06.3f}" "Z"
-        if dt.tzname() in [None, str(UTC)]
-        else dt.strftime("%Z")[3:]
-    )
+# GSL_KEY = "8209c979-e3de-402e-a1f5-556d650ab889"
+AUTH_PATH = "/auth/realms/nws-connect-core/protocol/openid-connect/token"
 
 
 # pylint: disable=too-few-public-methods
@@ -48,108 +41,146 @@ class HealthRoute:
         )
 
 
-class EventsRoute:
-    """Handle requests to /all-events endpoint"""
+class AuthenticationRoute:
+    """Handle requests to /oauth endpoint"""
+
+    def __init__(self):
+        self._user_store = UserStore()
+
+    def token(self):
+        """Generate a fake JWT token and return to simulate /token OAauth server behavior"""
+        response = {
+            "access_token": "eyJFakeJWTToken",
+            "expires_in": 300,
+            "token_type": "Bearer",
+            "not-before-policy": 0,
+            "scope": "profile email",
+        }
+        return jsonify(response), 200
+
+    def user(self):
+        """Return a fake logged-in user to simulate NOAA SSO behavior"""
+        cookie_header: str = request.headers.get("Cookie", "")
+        # parse cookie header to extract JSESSIONID, if it exists
+        cookies = self._read_cookies(cookie_header)
+        session_id = cookies.get("JSESSIONID")
+
+        if request.method == "GET":
+            user = self._user_store.get_user(session_id)
+            return jsonify(user), 200
+
+        # handle POST request with json body
+        body: dict = request.json
+        new_settings = body.get("settings")
+        new_office_id = body.get("activeOfficeId")
+
+        updated_user = self._user_store.update_user_settings(
+            session_id, new_office_id, new_settings
+        )
+        return jsonify(updated_user), 200
+
+    def logout(self):
+        """Logout a logged-in user (simulated NOAA SSO behavior)"""
+        cookie_header: str = request.headers.get("Cookie", "")
+        # parse cookie header to extract JSESSIONID, if it exists
+        cookies = self._read_cookies(cookie_header)
+        session_id = cookies.get("JSESSIONID")
+
+        # ignore return from store; we don't care about failures because nothing is real
+        self._user_store.delete_user(session_id)
+        return {}, 200
+
+    def _read_cookies(self, cookie_header: str) -> dict[str, str]:
+        if cookie_header == "":
+            return {}  # empty string, no cookies, nothing to do
+
+        cookies = {}
+        # cookies should be semi-colon separate string of key=value pattern
+        for cookie in cookie_header.split(";"):
+            if "=" not in cookie:
+                continue  # likely empty string
+            key, val = cookie.split("=", maxsplit=2)
+            cookies[key.strip()] = val.strip()
+
+        return cookies
+
+
+class VulnerabilitiesRoute:
+    """Handle requests to /vulnerabilities endpoint"""
 
     def __init__(self, base_dir: str):
-        self.profile_store = ProfileStore(base_dir)
+        self._profile_store = VulnerabilityStore(base_dir)
 
-    def handler(self):
-        """Logic for requests to /all-events."""
-        # check that this request has proper key to get or add data
-        if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
+    def documents(self):
+        """Logic for any HTTP request to /vulnerabilities."""
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
 
         if request.method == "POST":
             return self._handle_create()
 
-        if request.method == "DELETE":
-            return self._handle_delete()
+        # otherwise, must be 'GET' operation
+        office = request.args.get("officeId")
 
-        if request.method == "PUT":
-            return self._handle_update()
+        # let request control if `isDeleted: true` profiles are included in response.
+        # Default to False if param not present (only return profiles where isDeleted: false)
+        include_is_deleted = request.args.get("isDeleted", default=False, type=bool)
+
+        profiles = self._profile_store.get_all(include_inactive=include_is_deleted, office=office)
+        return jsonify(profiles), 200
+
+    def document(self, profile_id: str):
+        """Logic for HTTP requests to /vulnerabilities/:profile_id"""
+        # if request.headers.get("X-Api-Key") != current_app.config["GSL_KEY"]:
+        #     return jsonify({"message": "ERROR: Unauthorized"}), 401
+
+        if request.method == "DELETE":
+            return self._handle_delete(profile_id)
+
+        if request.method == "PATCH":
+            return self._handle_update(profile_id)
 
         # otherwise, must be 'GET' operation
-        data_source = request.args.get("dataSource", None, type=str)
-        profile_status = request.args.get("status", default="existing", type=str)
+        if profile := self._profile_store.get(profile_id):
+            return jsonify(profile), 200
 
-        # let request control if `isLive: false` profiles are included in response.
-        # Default to False if param not present (only return profiles where isLive: true)
-        include_inactive = request.args.get("includeInactive", default=False, type=bool)
-
-        if profile_status == "existing":
-            profiles = self.profile_store.get_all(data_source, include_inactive=include_inactive)
-
-        elif profile_status == "new":
-            profiles = self.profile_store.get_all(
-                data_source, is_new=True, include_inactive=include_inactive
-            )
-            # update ProfileStore to label all queried events as no longer "new";
-            # they've now been returned to IDSS Engine clients at least once
-            current_app.logger.info("Got all new profiles: %s", profiles)
-            for profile in profiles:
-                self.profile_store.mark_as_existing(profile["id"])
-
-        else:
-            # status query param should have been 'existing' or 'new'
-            return (
-                jsonify({"profiles": [], "errors": [f"Invalid profile status: {profile_status}"]}),
-                400,
-            )
-
-        return jsonify({"profiles": profiles, "errors": []}), 200
-
-    def _handle_delete(self) -> Response:
-        """Logic for DELETE requests to /all-events. Returns Response with status_code: 204 on
-        success, 404 otherwise."""
-        profile_id = request.args.get("id", request.args.get("uuid"))
-        is_deleted = self.profile_store.delete(profile_id)
-        if not is_deleted:
-            return jsonify({"message": f"Profile {profile_id} not found"}), 404
-        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
+        return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
     def _handle_create(self) -> Response:
-        """Logic for POST requests to /all-events. Returns Response with status_code: 201 on
+        """Logic for POST requests to /vulnerabilities. Returns Response with status_code: 201 on
         success, 400 otherwise."""
-        request_body: dict = request.json
+        profile_data: dict = request.json
 
-        profile_data: dict | None = request_body.get("data")
-        status: str | None = request_body.get("status")
-        if not profile_data or not status:
-            return jsonify({"message": "Missing one of required attributes: [data, status]"}), 400
+        saved_profile = self._profile_store.save(profile_data)
+        if not saved_profile:
+            return jsonify({"message": "Error creating profile, may be malformed"}), 400
 
-        if status == "new":
-            is_new = True
-        elif status == "existing":
-            is_new = False
-        else:
-            return jsonify({"message": "Status must be one of [new, existing]"}), 400
+        return jsonify(saved_profile), 201
 
-        profile_id = self.profile_store.save(profile_data, is_new)
-        if not profile_id:
-            return jsonify({"message": f'Profile {profile_data.get("id")} already exists'}), 400
+    def _handle_delete(self, profile_id: str) -> Response:
+        """Logic for DELETE requests to /vulnerabilities/:id.
+        Returns Response with status_code: 204 on success, 404 otherwise.
+        """
+        is_deleted = self._profile_store.delete(profile_id)
+        if not is_deleted:
+            return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
-        return jsonify({"message": f"Profile {profile_id} saved"}), 201
+        return jsonify({"message": f"Profile {profile_id} deleted"}), 204
 
-    def _handle_update(self) -> Response:
+    def _handle_update(self, profile_id: str) -> Response:
         if not request.data:
             return jsonify({"message": "PUT requires request body"}), 400
 
         request_body: dict = request.json
-        profile_id = request.args.get("id", request.args.get("uuid"))
-
-        if not profile_id:
-            return jsonify({"message": "Missing required query parameter: id"}), 400
-
         try:
-            updated_profile = self.profile_store.update(profile_id, request_body)
+            updated_profile = self._profile_store.update(profile_id, request_body)
         except FileNotFoundError:
             return jsonify({"message": f"Profile {profile_id} not found"}), 404
 
-        return (
-            jsonify({"message": f"Profile {profile_id} updated", "profile": updated_profile}),
-            200,
-        )
+        if not updated_profile:
+            return jsonify({"message": "Internal Server Error"}), 500
+
+        return jsonify(updated_profile), 200
 
 
 class AppWrapper:
@@ -158,22 +189,49 @@ class AppWrapper:
     def __init__(self, base_dir: str):
         """Build Flask app instance, mapping handler to each endpoint"""
         self.app = Flask(__name__, static_folder=None)  # no need for a static folder
-        self.app.config["GSL_KEY"] = GSL_KEY
+        # self.app.config["GSL_KEY"] = GSL_KEY
 
         health_route = HealthRoute()
-        events_route = EventsRoute(base_dir)
+        auth_route = AuthenticationRoute()
+        vulnerabilities_route = VulnerabilitiesRoute(base_dir)
 
         self.app.add_url_rule("/health", "health", view_func=health_route.handler, methods=["GET"])
+        # hard-code /token path of whatever openid framework NWS Connect uses
+        self.app.add_url_rule(AUTH_PATH, "token", view_func=auth_route.token, methods=["POST"])
+        # the paths to Vulnerabilities and Users APIs are nested under `/api/v1/...`
+        base_url = "/api/v1"
         self.app.add_url_rule(
-            "/all-events",
-            "events",
-            view_func=events_route.handler,
-            methods=["GET", "POST", "PUT", "DELETE"],
+            f"{base_url}/users/nws-users/me",
+            "user",
+            view_func=auth_route.user,
+            methods=["GET", "PATCH"],
         )
+        self.app.add_url_rule(
+            f"{base_url}/session/logout", "logout", view_func=auth_route.logout, methods=["POST"]
+        )
+        self.app.add_url_rule(
+            f"{base_url}/vulnerabilities",
+            "vulnerabilities",
+            view_func=vulnerabilities_route.documents,
+            methods=["GET", "POST"],
+        )
+        self.app.add_url_rule(
+            f"{base_url}/vulnerabilities/<profile_id>",
+            "vulnerability",
+            view_func=vulnerabilities_route.document,
+            methods=["GET", "PATCH", "DELETE"],
+        )
+
+        # catch all uncaught errors, return generic JSON (instead of Flask text/html default)
+        self.app.register_error_handler(500, self._generic_error)
 
     def run(self, **kwargs):
         """Start up web server"""
         self.app.run(**kwargs)
+
+    def _generic_error(self, exc: Exception) -> Response:
+        self.app.logger.error("Uncaught exception: (%s) %s", type(exc), exc)
+        return jsonify({"Error": "Internal server error"}), 500
 
 
 def create_app(args: Namespace = None) -> Flask:

@@ -1,119 +1,142 @@
 {
+  "data_requested": {
+    "filenames": {
+      "dtrm": "/Users/mackenzie.grimes/dev/cache/das_internal/netcdf/2026/03/10/NBM.AWS.ZARR/CONUS/CRITERIA.DTRM/ThreatLevel/gridstore-900661562.zarr"
+    },
+    "issueDt": "2026-03-10T01:00:00.000Z",
+    "validDt": [
+      "2026-03-10T19:00:00.000Z",
+      "2026-03-10T20:00:00.000Z",
+      "2026-03-10T21:00:00.000Z",
+      "2026-03-10T22:00:00.000Z",
+      "2026-03-10T23:00:00.000Z"
+    ],
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lon_0=265.0 +lat_0=25.0 +lat_1=25.0 +a=6371200.0",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=42.592093572326924 +lon_ll=-108.56052221410145",
+    "product": "NBM.AWS.ZARR",
+    "dataName": "AND(Wind gust: 10m, Temperature: 2m (Ensemble mean))",
+    "dataLoc": "arn:aws:s3:::gsl-desi-2:NBM:",
+    "units": "ThreatLevel",
+    "region": "CONUS",
+    "slice": "[829:929,910:1010]"
+  },
+  "request": {
     "corrId": {
-        "issueDt": "2023-01-10T08:00:00Z",
-        "originator": "DASWebServer",
-        "uuid": "53430eaa-1db4-4095-bf13-a26e45223d9a"
+      "issueDt": "2026-03-10T01:00:00Z",
+      "originator": "DASWebServer",
+      "uuid": "53430eaa-1db4-4095-bf13-a26e45223d9a"
     },
-    "data_requested": {
-      "filenames": {
-        "dtrm": "/data/share/2023/01/10/NBM.AWS.GRIB/Criteria/Criteria/gridstore-1309066818.nc"
-      },
-      "gridSpec": "+dx=2539.703 +dy=2539.703 +w=100 +h=100 +lat_ll=41.05894633497196 +lon_ll=-106.02046021316575",
-      "issueDt": "2023-01-10T08:00:00Z",
-      "projName": "NBM",
-      "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
-      "units": "Criteria",
-      "vaildDt": "2023-01-11T06:00:00Z"
-    },
-    "request": {
-        "label": "data_requested",
-        "sourceObj": {
-            "join": "AND",
-            "sources": [
-                {
-                    "sourceObj": {
-                        "mapping": {
-                            "controlPoints": [
-                                "-Infinity",
-                                "0.000",
-                                "20.000",
-                                "Infinity"
-                            ],
-                            "endWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "startWeight": [
-                                0,
-                                1,
-                                0
-                            ]
-                        },
-                        "relational": "GT",
-                        "source": {
-                            "sourceObj": {
-                                "source": {
-                                    "sourceObj": {
-                                        "slice": "[829:929,910:1010]",
-                                        "source": {
-                                            "sourceObj": {
-                                                "field": "WINDSPEED",
-                                                "issueDt": "2023-01-10T08:00:00Z",
-                                                "product": "NBM",
-                                                "validDt": "2023-01-11T06:00:00Z"
-                                            },
-                                            "sourceType": "data"
-                                        }
-                                    },
-                                    "sourceType": "slice"
-                                },
-                                "units": "MilesPerHour"
-                            },
-                            "sourceType": "units"
-                        },
-                        "thresh": 5.0
-                    },
-                    "sourceType": "condition"
+    "label": "data_requested",
+    "sourceObj": {
+      "join": "AND",
+      "sources": [
+        {
+          "sourceObj": {
+            "mapping": {
+              "controlPoints": [
+                "-Infinity",
+                0,
+                20,
+                "Infinity"
+              ],
+              "endWeight": [
+                0,
+                1,
+                0
+              ],
+              "startWeight": [
+                0,
+                1,
+                0
+              ]
+            },
+            "relational": "GT",
+            "source": {
+              "sourceObj": {
+                "source": {
+                  "sourceObj": {
+                    "slice": "[829:929,910:1010]",
+                    "source": {
+                      "sourceObj": {
+                        "field": "WindGust",
+                        "issueDt": "2026-03-10T13:00:00Z",
+                        "product": "NBM",
+                        "validDt": [
+                          "2026-03-10T19:00:00Z",
+                          "2026-03-10T20:00:00Z",
+                          "2026-03-10T21:00:00Z",
+                          "2026-03-10T22:00:00Z",
+                          "2026-03-10T23:00:00Z"
+                        ]
+                      },
+                      "sourceType": "data"
+                    }
+                  },
+                  "sourceType": "slice"
                 },
-                {
-                    "sourceObj": {
-                        "mapping": {
-                            "controlPoints": [
-                                "-Infinity",
-                                "15.000",
-                                "45.000",
-                                "Infinity"
-                            ],
-                            "endWeight": [
-                                0,
-                                1,
-                                0
-                            ],
-                            "startWeight": [
-                                0,
-                                1,
-                                0
-                            ]
-                        },
-                        "relational": "LTE",
-                        "source": {
-                            "sourceObj": {
-                                "source": {
-                                    "sourceObj": {
-                                        "slice": "[829:929,910:1010]",
-                                        "source": {
-                                            "sourceObj": {
-                                                "field": "TEMP",
-                                                "issueDt": "2023-01-10T08:00:00Z",
-                                                "product": "NBM",
-                                                "validDt": "2023-01-11T06:00:00Z"
-                                            },
-                                            "sourceType": "data"
-                                        }
-                                    },
-                                    "sourceType": "slice"
-                                },
-                                "units": "Fahrenheit"
-                            },
-                            "sourceType": "units"
-                        },
-                        "thresh": 30.0
-                    },
-                    "sourceType": "condition"
-                }
-            ]
+                "units": "MilesPerHour"
+              },
+              "sourceType": "units"
+            },
+            "thresh": 5
+          },
+          "sourceType": "condition"
         },
-        "sourceType": "join"
-    }
+        {
+          "sourceObj": {
+            "mapping": {
+              "controlPoints": [
+                "-Infinity",
+                15,
+                45,
+                "Infinity"
+              ],
+              "endWeight": [
+                0,
+                1,
+                0
+              ],
+              "startWeight": [
+                0,
+                1,
+                0
+              ]
+            },
+            "relational": "LTE",
+            "source": {
+              "sourceObj": {
+                "source": {
+                  "sourceObj": {
+                    "slice": "[829:929,910:1010]",
+                    "source": {
+                      "sourceObj": {
+                        "field": "TEMP",
+                        "issueDt": "2026-03-10T13:00:00Z",
+                        "product": "NBM",
+                        "validDt": [
+                          "2026-03-10T19:00:00Z",
+                          "2026-03-10T20:00:00Z",
+                          "2026-03-10T21:00:00Z",
+                          "2026-03-10T22:00:00Z",
+                          "2026-03-10T23:00:00Z"
+                        ]
+                      },
+                      "sourceType": "data"
+                    }
+                  },
+                  "sourceType": "slice"
+                },
+                "units": "DEG F"
+              },
+              "sourceType": "units"
+            },
+            "thresh": 30
+          },
+          "sourceType": "condition"
+        }
+      ]
+    },
+    "sourceType": "join"
+  }
 }

@@ -93,7 +93,8 @@
         ],
         "keyValues": {
             "name": "I-87, Albany-Nyack, Icy Roads",
-            "nwsOffice": "ALY"
+            "nwsOffice": "ALY",
+            "status": "COMPLETE"
         }
     },
     "riskResults": [

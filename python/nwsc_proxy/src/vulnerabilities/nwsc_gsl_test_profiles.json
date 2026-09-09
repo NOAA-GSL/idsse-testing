@@ -1,0 +1,229 @@
+[
+  {
+    "id": "fd35adec-d2a0-49a9-a320-df20a7b6d681",
+    "name": "GSL Test 1",
+    "description": "",
+    "primaryOfficeId": "GSL",
+    "geometry": "MULTIPOLYGON (((-113.9585 46.8571, -113.958793 46.856393, -113.9595 46.8561, -113.960207 46.856393, -113.9605 46.8571, -113.960207 46.857807, -113.9595 46.8581, -113.958793 46.857807, -113.9585 46.8571)))",
+    "activeTime": { "startTime": null, "endTime": null, "recurrenceRule": "" },
+    "support": {
+      "briefings": [],
+      "summary": "",
+      "recipients": { "partners": [], "externals": [] },
+      "notes": ""
+    },
+    "notes": "",
+    "hazards": [
+      {
+        "id": "199d81e9-56d1-48b6-ade4-deb49b8c3dea",
+        "type": null,
+        "impactLevels": [
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "COLD",
+                "magnitude": 32,
+                "operator": "LESS_THAN",
+                "units": "DEG_F",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 1,
+            "impactStatements": []
+          }
+        ]
+      }
+    ],
+    "scheduledEventData": {
+      "url": "",
+      "dailyAttendance": 1,
+      "venueType": "OUTDOOR",
+      "venueAddress": {
+        "line1": "",
+        "line2": "",
+        "line3": "",
+        "city": "",
+        "state": "",
+        "zipCode": 0,
+        "countryCode": "US",
+        "geometry": null,
+        "elevation": 4124
+      },
+      "isNsseEvent": false,
+      "isSearEvent": false,
+      "searEventLevel": null,
+      "evacuationTimeMinutes": null,
+      "timezone": null,
+      "originalRequestId": "fd35adec-d2a0-49a9-a320-df20a7b6d681"
+    }
+  },
+  {
+    "id": "a08370c6-ab87-4808-bd51-a8597e58410d",
+    "name": "GSL Test 2",
+    "description": "",
+    "primaryOfficeId": "GSL",
+    "geometry": "MULTIPOLYGON (((-112.3037 46.6939, -112.116 46.8181, -111.7694 46.8181, -111.6377 46.6686, -111.6768 46.4775, -111.9862 46.3613, -112.2837 46.5134, -112.3037 46.6939)))",
+    "activeTime": { "startTime": null, "endTime": null, "recurrenceRule": "" },
+    "support": {
+      "briefings": [],
+      "summary": "",
+      "recipients": { "partners": [], "externals": [] },
+      "notes": ""
+    },
+    "notes": "",
+    "hazards": [
+      {
+        "id": "1219ef7b-0da1-4f15-84b0-fa4b6d101324",
+        "type": null,
+        "impactLevels": [
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "COLD",
+                "magnitude": 40,
+                "operator": "LESS_THAN_OR_EQUAL_TO",
+                "units": "DEG_F",
+                "minDurationHours": 0,
+                "source": "NBM"
+              },
+              {
+                "weatherElement": "WINDSPD",
+                "magnitude": 10,
+                "operator": "GREATER_THAN",
+                "units": "MPH",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 2,
+            "impactStatements": []
+          }
+        ]
+      }
+    ],
+    "scheduledEventData": {
+      "url": "",
+      "dailyAttendance": 2,
+      "venueType": "OUTDOOR",
+      "venueAddress": {
+        "line1": "",
+        "line2": "",
+        "line3": "",
+        "city": "",
+        "state": "",
+        "zipCode": 0,
+        "countryCode": "US",
+        "geometry": null,
+        "elevation": 3768
+      },
+      "isNsseEvent": false,
+      "isSearEvent": false,
+      "searEventLevel": null,
+      "evacuationTimeMinutes": null,
+      "timezone": null,
+      "originalRequestId": "a08370c6-ab87-4808-bd51-a8597e58410d"
+    }
+  },
+  {
+    "id": "e1033860-f198-4c6a-a91b-beaec905132f",
+    "name": "GSL Test 3",
+    "description": "",
+    "primaryOfficeId": "GSL",
+    "geometry": "MULTIPOLYGON (((-109.767394 41.55799, -108.081859 41.662998, -106.899046 41.72961, -105.246342 41.108709, -104.086248 41.164299, -104.085528 41.16404, -104.085201 41.163348, -104.08546 41.162628, -104.086152 41.162301, -105.246658 41.106691, -106.899354 41.72759, -108.081741 41.661002, -109.767006 41.55601, -111.019882 41.135152, -111.020645 41.135205, -111.021148 41.135782, -111.021095 41.136545, -111.020518 41.137048, -109.767394 41.55799)))",
+    "activeTime": { "startTime": null, "endTime": null, "recurrenceRule": "" },
+    "support": {
+      "briefings": [],
+      "summary": "",
+      "recipients": { "partners": [], "externals": [] },
+      "notes": ""
+    },
+    "notes": "",
+    "hazards": [
+      {
+        "id": "2b009516-fce4-4c99-b784-f988f8e63740",
+        "type": null,
+        "impactLevels": [
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "WINDGST",
+                "magnitude": 10,
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "units": "MPH",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 1,
+            "impactStatements": []
+          },
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "WINDGST",
+                "magnitude": 30,
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "units": "MPH",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 2,
+            "impactStatements": []
+          },
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "WINDGST",
+                "magnitude": 50,
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "units": "MPH",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 3,
+            "impactStatements": []
+          },
+          {
+            "thresholdSet": [
+              {
+                "weatherElement": "WINDGST",
+                "magnitude": 70,
+                "operator": "GREATER_THAN_OR_EQUAL_TO",
+                "units": "MPH",
+                "minDurationHours": 0,
+                "source": "NBM"
+              }
+            ],
+            "impactLevelValue": 4,
+            "impactStatements": []
+          }
+        ]
+      }
+    ],
+    "scheduledEventData": {
+      "url": "",
+      "dailyAttendance": 3,
+      "venueType": "OUTDOOR",
+      "venueAddress": {
+        "line1": "",
+        "line2": "",
+        "line3": "",
+        "city": "",
+        "state": "",
+        "zipCode": 0,
+        "countryCode": "US",
+        "geometry": null,
+        "elevation": 5393
+      },
+      "isNsseEvent": false,
+      "isSearEvent": false,
+      "searEventLevel": null,
+      "evacuationTimeMinutes": null,
+      "timezone": null,
+      "originalRequestId": "e1033860-f198-4c6a-a91b-beaec905132f"
+    }
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "B:Raw": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST/MilesPerHour/gridstore696460526.nc"
+    },
+    "issueDt": "2022-12-23T12:00:00.000Z",
+    "validDt": [
+      "2022-12-23T13:00:00.000Z",
+      "2022-12-23T14:00:00.000Z",
+      "2022-12-23T15:00:00.000Z",
+      "2022-12-23T16:00:00.000Z",
+      "2022-12-23T17:00:00.000Z",
+      "2022-12-23T18:00:00.000Z",
+      "2022-12-23T19:00:00.000Z",
+      "2022-12-23T20:00:00.000Z",
+      "2022-12-23T21:00:00.000Z",
+      "2022-12-23T22:00:00.000Z",
+      "2022-12-23T23:00:00.000Z",
+      "2022-12-24T00:00:00.000Z"
+    ],
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "units": "MilesPerHour",
+    "dataName": "Wind guest: 10m",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "region": "CONUS",
+    "slice": "[1722:2122,802:1102]"
+  },
+  "B:Probability": {
+    "filenames": {
+      "dtrm": "/share/2022/12/23/NBM.AWS.GRIB/WINDGUST:DTRM.Probability/Percent/gridstore43167307.nc"
+    },
+    "issueDt": "2022-12-23T12:00:00.000Z",
+    "validDt": [
+      "2022-12-23T13:00:00.000Z",
+      "2022-12-23T14:00:00.000Z",
+      "2022-12-23T15:00:00.000Z",
+      "2022-12-23T16:00:00.000Z",
+      "2022-12-23T17:00:00.000Z",
+      "2022-12-23T18:00:00.000Z",
+      "2022-12-23T19:00:00.000Z",
+      "2022-12-23T20:00:00.000Z",
+      "2022-12-23T21:00:00.000Z",
+      "2022-12-23T22:00:00.000Z",
+      "2022-12-23T23:00:00.000Z",
+      "2022-12-24T00:00:00.000Z"
+    ],
+    "projName": "NBM CONUS",
+    "projSpec": "+proj=lcc +lat_0=25.0 +lon_0=-95.0 +lat_1=25.0 +a=6371200",
+    "gridSpec": "+dx=2539.703 +dy=2539.703 +w=40 +h=30 +lat_ll=40.295046276641536 +lon_ll=-82.46804206629855",
+    "units": "Percent",
+    "dataName": "Wind guest: 10m",
+    "dataLoc": "arn:aws:s3:::noaa-nbm-grib2-pds:",
+    "region": "CONUS",
+    "slice": "[1722:2122,802:1102]"
+  },
+  "request": {
+    "corrId": {
+      "originator": "IDSSe",
+      "uuid": "33333333-beec-467b-a0e6-9d215b715b97",
+      "issueDt": "2022-12-23T12:00:00.000Z"
+    },      
+    "sourceType": "condition",
+    "label": "B:Probability",
+    "sourceObj": {
+      "relational": "GREATER THAN",
+      "thresh": 30,
+      "sources": [{
+        "sourceType": "units",
+        "label": "B:Raw",
+        "sourceObj": {
+          "units": "MilesPerHour",
+          "source": {
+            "sourceType": "slice",
+            "sourceObj": {
+              "sliceCoords": [
+                [-76.204629, 42.984165],
+                [-76.074273, 43.086121]
+              ],
+              "minSize": [40, 30],
+              "minBuff": 20,
+              "source": {
+                "sourceType": "data",
+                "sourceObj": {
+                  "product": "NBM",
+                  "field": "WindGust",
+                  "region": "CONUS",
+                  "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
+                  "issueDt": "2022-12-23T12:00:00.000Z"
+                }
+              }
+            }
+          }
+        }
+      }]
+    }
+  }
+}
