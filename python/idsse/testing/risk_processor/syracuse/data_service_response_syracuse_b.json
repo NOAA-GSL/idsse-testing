@@ -60,40 +60,42 @@
       "originator": "IDSSe",
       "uuid": "33333333-beec-467b-a0e6-9d215b715b97",
       "issueDt": "2022-12-23T12:00:00.000Z"
-    },      
+    },
     "sourceType": "condition",
     "label": "B:Probability",
     "sourceObj": {
       "relational": "GREATER THAN",
       "thresh": 30,
-      "sources": [{
-        "sourceType": "units",
-        "label": "B:Raw",
-        "sourceObj": {
-          "units": "MilesPerHour",
-          "source": {
-            "sourceType": "slice",
-            "sourceObj": {
-              "sliceCoords": [
-                [-76.204629, 42.984165],
-                [-76.074273, 43.086121]
-              ],
-              "minSize": [40, 30],
-              "minBuff": 20,
-              "source": {
-                "sourceType": "data",
-                "sourceObj": {
-                  "product": "NBM",
-                  "field": "WindGust",
-                  "region": "CONUS",
-                  "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
-                  "issueDt": "2022-12-23T12:00:00.000Z"
+      "sources": [
+        {
+          "sourceType": "units",
+          "label": "B:Raw",
+          "sourceObj": {
+            "units": "MilesPerHour",
+            "source": {
+              "sourceType": "slice",
+              "sourceObj": {
+                "sliceCoords": [
+                  [-76.204629, 42.984165],
+                  [-76.074273, 43.086121]
+                ],
+                "minSize": [40, 30],
+                "minBuff": 0,
+                "source": {
+                  "sourceType": "data",
+                  "sourceObj": {
+                    "product": "NBM",
+                    "field": "WindGust",
+                    "region": "CONUS",
+                    "validDt": "2022-12-23T13:00:00.000Z,2022-12-24T00:00:00.000Z",
+                    "issueDt": "2022-12-23T12:00:00.000Z"
+                  }
                 }
               }
             }
           }
         }
-      }]
+      ]
     }
   }
 }
