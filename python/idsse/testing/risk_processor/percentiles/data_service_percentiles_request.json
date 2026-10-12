@@ -19,7 +19,7 @@
             [-75.82261820803978, 42.120569061969576]
           ],
           "minSize": [40, 30],
-          "minBuff": 20,
+          "minBuff": 0,
           "source": {
             "sourceType": "data",
             "sourceObj": {
