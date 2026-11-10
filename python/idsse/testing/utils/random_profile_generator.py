@@ -481,7 +481,7 @@ class ProfileGenerator:
         """Return a GeoJSON geometry (stringified JSON) whose vertices lie within domain of
         the provided `region`. Shape will be between `min_width_miles` and `max_width_miles` wide.
         """
-        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-locals,invalid-name
         logger.info("Generating random geometry within NBM region %s", region)
 
         projection = self.NBM_PROJECTIONS[region]
@@ -738,8 +738,8 @@ def _parse_cookie_string(cookie: str | None) -> dict[str, str]:
 
     cookie_segments = cookie.split("; ")
     for cookie_segment in cookie_segments:
-        k, v = cookie_segment.split("=", maxsplit=2)
-        cookies_dict[k] = v
+        key, val = cookie_segment.split("=", maxsplit=2)
+        cookies_dict[key] = val
     return cookies_dict
 
 
