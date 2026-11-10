@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nwsc-proxy
-        image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:20261110182620
+        image: ghcr.io/noaa-gsl/idss/service/ims-gateway/proxy:20261110220756
         imagePullPolicy: Always
         env:
         - name: BASE_DIR
